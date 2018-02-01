@@ -1,6 +1,6 @@
 const commonConfig = {
   isProduction: false,
-  port: 3000,
+  port: 4000,
   baseURL: ''
 }
 
@@ -8,11 +8,11 @@ const environmentConfig = {
   development: {},
   staging: {
     isProduction: true,
-    port: 3001,
+    port: 4001,
   },
   production: {
     isProduction: true,
-    port: 3002
+    port: 4002
   }
 }
 

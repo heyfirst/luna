@@ -9,11 +9,13 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import chalk from 'chalk'
+import helmet from 'helmet'
 // ----------------------
 //     INITIAL SERVER
 // ----------------------
 const server = express()
 server.use(cors())
+server.use(helmet())
 server.use(bodyParser.urlencoded({ extended: true }))
 server.use(bodyParser.json())
 

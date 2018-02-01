@@ -1,7 +1,7 @@
 // --------------------
 //    ENV FILE CONFIG
 // --------------------
-require('dotenv').config()
+import config from './config'
 // -----------------------
 //   IMPORT DEPENDENCIES
 // -----------------------
@@ -22,9 +22,9 @@ const routes = require('./routes')
 server.use('/', routes)
 
 // LISTEN PORT 3001
-const app = server.listen(process.env.PORT, (err) => {
+const app = server.listen(config.port, (err) => {
   if (err) throw err
-  console.log(`${chalk.bgRed(' LUNAR-API ')} READY ON http://localhost:${chalk.inverse(process.env.PORT)}`)
+  console.log(`${chalk.bgRed(' LUNAR-API ')} READY ON http://localhost:${chalk.inverse(config.port)}`)
 })
 
 module.exports = server

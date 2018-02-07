@@ -1,0 +1,57 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl
+      - run:
+          name: Install & Build Project lunar-site
+          command: cd lunar-site && yarn install && yarn build
+      - run:
+          name: Install & Build project lunar-api
+          command: cd lunar-api && yarn install && yarn build
+      - run: 
+          name: Test Project
+          command: echo "This Test Space"
+      - setup_remote_docker: 
+          docker_layer_caching: true
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.12.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run: 
+          name: Build and Push Docker image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker build -t penthaizza/lunarproject:$SITE_TAG ./lunar-site
+            docker build -t penthaizza/lunarproject:$API_TAG ./lunar-api
+            docker push penthaizza/lunarproject:$SITE_TAG
+            docker push penthaizza/lunarproject:$API_TAG
+  deploy:
+    machine: true
+    steps:
+      - run: 
+          name: Deploy to Site-Server
+          command: | 
+            sudo apt-get update
+            sudo apt-get install sshpass
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "sudo docker stop lunar-site && sudo docker rm lunar-site && sudo docker rmi penthaizza/lunarproject:$SITE_TAG && sudo docker pull penthaizza/lunarproject:$SITE_TAG && sudo docker run -d -p 3000:3000 --name lunar-site penthaizza/lunarproject:$SITE_TAG"
+      - run:
+          name: Deploy to API-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "sudo docker stop lunar-api && sudo docker rm lunar-api && sudo docker rmi penthaizza/lunarproject:$API_TAG && sudo docker pull penthaizza/lunarproject:$API_TAG && sudo docker run -d -p 3001:4000 -e "NODE_ENV=development" --name lunar-api penthaizza/lunarproject:$API_TAG"
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build
+      - deploy:
+          requires:
+            - build       

@@ -1,18 +1,30 @@
-import React, { Component } from 'react'
+import React from 'react'
+import { injectGlobal } from 'styled-components'
+import {
+  BrowserRouter,
+  Route,
+  Switch,
+  Link, 
+} from 'react-router-dom'
 
-class App extends Component {
-  render () {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    )
+import 'semantic-ui-css/semantic.min.css'
+
+import Editor from './components/Editor'
+
+injectGlobal`
+  body {
+    background: #f7f7f7;
   }
-}
+`
+
+const App = props => (
+  <div>
+    <BrowserRouter>
+      <Switch location={props.location}>
+        <Route path="/editor" component={Editor} />
+      </Switch>
+    </BrowserRouter>
+  </div>
+)
 
 export default App

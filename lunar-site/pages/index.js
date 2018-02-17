@@ -1,4 +1,4 @@
-import Reatc from 'react'
+import React from 'react'
 
 const IndexPage = () => (
   <div>{`Hi, Lunar.`}</div>

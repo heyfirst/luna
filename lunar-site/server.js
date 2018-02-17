@@ -1,22 +1,23 @@
 const express = require('express')
-const next = require('next')
-const config = require('./config')
+const morgan = require('morgan')
+const path = require('path')
+const app = express()
 
-const dev = !config.isProduction
-const app = next({ dev })
+const config = require('./src/config')
 
-const handle = app.getRequestHandler()
+// Setup logger
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
 
-app.prepare()
-  .then(() => {
-    const server = express()
+// Serve static assets
+app.use(express.static(path.resolve(__dirname, '.', 'build')))
 
-    server.get('*', (req, res) => {
-      return handle(req, res)
-    })
+// Always return the main index.html, so react-router render the route in the client
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '.', 'build', 'index.html'))
+})
 
-    server.listen(config.port, (err) => {
-      if (err) throw err
-      console.log(`> Luxshop - SITE :: Ready at port ${config.port}.`)
-    })
-  })
+app.listen(config.port, () => {
+  console.log(`LUNAR :: listening on port ${config.port}!`)
+})
+
+module.exports = app

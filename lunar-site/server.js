@@ -4,10 +4,14 @@ const path = require('path')
 const app = express()
 
 const config = require('./src/config')
+const cors = require('cors')
+const chalk = require('chalk')
+const helmet = require('helmet')
 
 // Setup logger
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] :response-time ms'))
-
+app.use(cors())
+app.use(helmet())
 // Serve static assets
 app.use(express.static(path.resolve(__dirname, '.', 'build')))
 
@@ -17,7 +21,7 @@ app.get('*', (req, res) => {
 })
 
 app.listen(config.port, () => {
-  console.log(`LUNAR :: listening on port ${config.port}!`)
+  console.log(`${chalk.bgRed(' LUNAR-SITE ')} READY ON http://localhost:${chalk.inverse(config.port)}`)
 })
 
 module.exports = app

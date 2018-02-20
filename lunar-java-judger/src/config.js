@@ -1,7 +1,7 @@
 const commonConfig = {
-  projectName: 'LUNAR-API',
+  projectName: 'LUNAR-JAVA-JUDGER',
   isProduction: false,
-  port: 3010,
+  port: 3020,
   baseURL: ''
 }
 
@@ -9,11 +9,11 @@ const environmentConfig = {
   development: {},
   staging: {
     isProduction: true,
-    port: 3011
+    port: 3021
   },
   production: {
     isProduction: true,
-    port: 3012
+    port: 3022
   }
 }
 

@@ -10,6 +10,7 @@ import bodyParser from 'body-parser'
 import cors from 'cors'
 import chalk from 'chalk'
 import helmet from 'helmet'
+
 // ----------------------
 //     INITIAL SERVER
 // ----------------------
@@ -26,6 +27,7 @@ server.use('/', routes)
 // LISTEN PORT 3001
 const app = server.listen(config.port, (err) => {
   if (err) throw err
+
   console.log(`${chalk.bgRed(' LUNAR-API ')} READY ON http://localhost:${chalk.inverse(config.port)}`)
 })
 

@@ -2,10 +2,6 @@ import axios from 'axios'
 import tracer from '../utils/jeager'
 import { Tags, FORMAT_HTTP_HEADERS } from 'opentracing'
 
-const createApiInstance = () => (
-  axios.create()
-)
-
 export default {
   // axios.request('GET', 'http://example.com', body, headers, span).then(data => data)
   request: (method, url, body = {}, headers = {}, span) => {
@@ -14,7 +10,6 @@ export default {
     span.setTag(Tags.SPAN_KIND, Tags.SPAN_KIND_RPC_CLIENT)
     // Send span context via request headers (parent id etc.)
     tracer.inject(span, FORMAT_HTTP_HEADERS, headers)
-    console.log('hi')
     return axios
       .request({
         url,

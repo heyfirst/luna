@@ -1,5 +1,5 @@
 const commonConfig = {
-  projectName: 'LUNAR-JAVA-JUDGER',
+  projectName: 'LUNA-JAVA-JUDGER',
   isProduction: false,
   port: 3020,
   baseURL: ''

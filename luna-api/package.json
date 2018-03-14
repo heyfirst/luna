@@ -1,0 +1,37 @@
+{
+  "name": "luna-api",
+  "version": "1.0.0",
+  "main": "dist",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "test": "eslint src"
+  },
+  "devDependencies": {
+    "eslint": "^4.16.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "nodemon": "^1.14.11"
+  },
+  "dependencies": {
+    "@risingstack/jaeger": "^2.5.0",
+    "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
+    "chalk": "^2.3.0",
+    "compression": "^1.7.1",
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.0",
+    "express": "^4.16.2",
+    "helmet": "^3.10.0",
+    "http": "^0.0.0",
+    "jaeger-client": "^3.8.0",
+    "joi": "^13.1.1",
+    "opentracing": "^0.14.1",
+    "shelljs": "^0.8.1",
+    "winston": "^2.4.0"
+  }
+}

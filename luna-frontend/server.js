@@ -3,7 +3,7 @@ const morgan = require('morgan')
 const path = require('path')
 const app = express()
 
-const config = require('./src/config')
+const config = require('./config')
 const cors = require('cors')
 const chalk = require('chalk')
 const helmet = require('helmet')

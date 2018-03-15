@@ -4,12 +4,10 @@ import {
   BrowserRouter,
   Route,
   Switch,
-  Link, 
+  Link,
 } from 'react-router-dom'
 
-import 'semantic-ui-css/semantic.min.css'
-
-import Editor from './components/Editor'
+import HelloPage from './components/Hello'
 
 injectGlobal`
   body {
@@ -21,7 +19,7 @@ const App = props => (
   <div>
     <BrowserRouter>
       <Switch location={props.location}>
-        <Route path="/editor" component={Editor} />
+        <Route path="/hello" component={HelloPage} />
       </Switch>
     </BrowserRouter>
   </div>

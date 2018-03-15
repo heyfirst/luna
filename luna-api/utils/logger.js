@@ -33,13 +33,9 @@ const consoleTransport = new transports.Console({
 const logger = createLogger({
   level: 'info',
   format: format.json(),
-  transports: [errorFile, logFile],
+  transports: [errorFile, logFile, consoleTransport],
   exitOnError: false
 })
-
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(consoleTransport)
-}
 
 logger.stream = {
   write: (message, encoding) => {

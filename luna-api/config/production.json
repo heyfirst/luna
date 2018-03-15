@@ -1,4 +1,10 @@
 {
-  "port": 30010,
-  "projectName": "LUNA-API-PROD"
+  "port": 30020,
+  "projectName": "LUNA-API-PROD",
+  "database": {
+    "host": "...",
+    "username": "...",
+    "password": "...",
+    "database": "..."
+  }
 }

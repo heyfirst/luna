@@ -2,7 +2,7 @@ const commonConfig = {
   isProduction: false,
   apiPath: '_________________________',
   port: 3010,
-  baseURL: 'http://localhost:3000'
+  baseURL: 'http://localhost:3010'
 }
 
 const environmentConfig = {

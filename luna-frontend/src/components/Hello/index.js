@@ -1,11 +1,24 @@
 import React from 'react'
+import { compose } from 'recompose'
+import { connect } from 'react-redux'
+import { actions as helloAction } from '../../ducks/hello'
 
-const HelloPage = () => (
+const HelloPage = ({ text, setField, setHello }) => (
   <div>
-    { console.log(process.env.REACT_APP_API_PATH) }
-    <input type="text" />
-    <button onClick={() => console.log('hi')}>Submit</button>
+    <p>Hello Text: {text}</p>
+    <input type="text" onChange={e => setField('text', e.target.value)} />
+    <button onClick={() => setHello()}>Submit</button>
   </div>
 )
 
-export default HelloPage
+export default compose(
+  connect(
+    state => ({
+      text: state.hello.text
+    }),
+    {
+      setField: helloAction.setField,
+      setHello: helloAction.setHello
+    }
+  )
+)(HelloPage)

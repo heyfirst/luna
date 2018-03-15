@@ -1,11 +1,7 @@
 import React from 'react'
+import { compose } from 'recompose'
 import { injectGlobal } from 'styled-components'
-import {
-  BrowserRouter,
-  Route,
-  Switch,
-  Link,
-} from 'react-router-dom'
+import { withRouter, Route, Link, Redirect } from 'react-router-dom'
 
 import HelloPage from './components/Hello'
 
@@ -17,12 +13,10 @@ injectGlobal`
 
 const App = props => (
   <div>
-    <BrowserRouter>
-      <Switch location={props.location}>
-        <Route path="/hello" component={HelloPage} />
-      </Switch>
-    </BrowserRouter>
+    <Route path="/hello" exact component={HelloPage} />
   </div>
 )
 
-export default App
+export default compose(
+  withRouter
+)(App)

@@ -10,7 +10,6 @@ export default {
     span.setTag(Tags.SPAN_KIND, Tags.SPAN_KIND_RPC_CLIENT)
     // Send span context via request headers (parent id etc.)
     tracer.inject(span, FORMAT_HTTP_HEADERS, headers)
-    console.log('hi')
     return axios
       .request({
         url,

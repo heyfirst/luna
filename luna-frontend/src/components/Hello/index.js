@@ -7,7 +7,7 @@ const HelloPage = ({ text, setField, setHello }) => (
   <div>
     <p>Hello Text: {text}</p>
     <input type="text" onChange={e => setField('text', e.target.value)} />
-    <button onClick={() => setHello()}>Submit</button>
+    <button onClick={() => setHello(text)}>Submit</button>
   </div>
 )
 

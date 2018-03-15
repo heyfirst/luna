@@ -33,7 +33,7 @@ const consoleTransport = new transports.Console({
 const logger = createLogger({
   level: 'info',
   format: format.json(),
-  transports: [errorFile, logFile, consoleTransport],
+  transports: [consoleTransport, errorFile, logFile],
   exitOnError: false
 })
 

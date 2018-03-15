@@ -37,11 +37,11 @@ export default (state = initialState, action) => {
 export const actions = {
   setHello: (text) => ({
     type: SET_HELLO,
-    promise: axios.post('/hello', { text })
+    promise: axios.post('/hello/', { text }).then(resp => resp.data.text)
   }),
   getHello: () => ({
     type: GET_HELLO,
-    promise: axios.get('/hello').then((resp) => resp.data.text)
+    promise: axios.get('/hello/')
   }),
   setField: (field, value) => ({
     type: SET_FIELD,

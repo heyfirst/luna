@@ -10,7 +10,7 @@ export default () => next => (action) => {
     action.promise
       .then(response => {
         return resolve(
-          next({ ...action, type: action.type.RESOLVED, payload: response })
+          next({ ...action, type: action.type.RESOLVED, ...response })
         )
       }
       )

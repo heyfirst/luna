@@ -21,7 +21,7 @@ app.get('*', (req, res) => {
 })
 
 app.listen(config.port, () => {
-  console.log(`${chalk.bgRed(' LUNA-SITE ')} READY ON http://localhost:${chalk.inverse(config.port)}`)
+  console.log(`${chalk.bgRed(' LUNA-ADMIN ')} READY ON http://localhost:${chalk.inverse(config.port)}`)
 })
 
 module.exports = app

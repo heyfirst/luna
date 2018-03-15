@@ -7,21 +7,21 @@ import {
   Link, 
 } from 'react-router-dom'
 
-import 'semantic-ui-css/semantic.min.css'
-
-import Editor from './components/Editor'
-
 injectGlobal`
   body {
     background: #f7f7f7;
   }
 `
 
+const Home = props => (
+  <div>{`LUNA ADMIN`}</div>
+)
+
 const App = props => (
   <div>
     <BrowserRouter>
       <Switch location={props.location}>
-        <Route path="/editor" component={Editor} />
+        <Route path="/" component={Home} />
       </Switch>
     </BrowserRouter>
   </div>

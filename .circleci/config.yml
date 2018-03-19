@@ -13,7 +13,7 @@ jobs:
           command: cd luna-frontend && yarn install && CI=false yarn build 
       - run:
           name: Install & Build project luna-api
-          command: cd luna-api && yarn install && yarn build
+          command: cd luna-api && yarn install
       - run: 
           name: Test Project
           command: echo "This Test Space"

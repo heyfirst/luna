@@ -35,7 +35,7 @@ jobs:
             docker build -t penthaizza/lunaproject:$API_TAG ./luna-api
             docker push penthaizza/lunaproject:$SITE_TAG
             docker push penthaizza/lunaproject:$API_TAG
-  deploy:
+  deploy-to-dev:
     machine: true
     steps:
       - run: 
@@ -47,14 +47,32 @@ jobs:
       - run:
           name: Deploy to DEV-API-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker stop luna-api && sudo docker rm luna-api && sudo docker rmi penthaizza/lunaproject:$API_TAG && sudo docker pull penthaizza/lunaproject:$API_TAG && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:$API_TAG"
+  deploy-to-prod:
+    machine: true
+    steps:
+      - run: 
+          name: Deploy to Prod-Site-Server
+          command: | 
+            sudo apt-get update
+            sudo apt-get install sshpass
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker stop luna-site && sudo docker rm luna-site && sudo docker rmi penthaizza/lunaproject:$SITE_TAG && sudo docker pull penthaizza/lunaproject:$SITE_TAG && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:$SITE_TAG"
+      - run:
+          name: Deploy to Prod-API-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker stop luna-api && sudo docker rm luna-api && sudo docker rmi penthaizza/lunaproject:$API_TAG && sudo docker pull penthaizza/lunaproject:$API_TAG && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:$API_TAG"
 workflows:
   version: 2
   build-test-deploy:
     jobs:
       - build
-      - deploy:
+      - deploy-to-dev:
           requires:
             - build
+          filters:
+            branches:
+                only: develop
+      - deploy-to-prod:
+          requires:
+            - deploy-to-dev
           filters:
             branches:
                 only: develop

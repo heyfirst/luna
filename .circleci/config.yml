@@ -31,11 +31,13 @@ jobs:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunaproject:site-$(git rev-parse --short HEAD) ./luna-frontend
-            docker tag penthaizza/lunaproject:$site-$(git rev-parse --short HEAD) penthaizza/lunaproject:site-latest
+            SITE=site-$(git rev-parse --short HEAD)
+            docker build -t penthaizza/lunaproject:echo $SITE ./luna-frontend
+            docker tag penthaizza/lunaproject:echo $SITE penthaizza/lunaproject:site-latest
             docker push penthaizza/lunaproject
-            docker build -t penthaizza/lunaproject:api-$(git rev-parse --short HEAD) ./luna-api
-            docker tag penthaizza/lunaproject:api-$(git rev-parse --short HEAD) penthaizza/lunaproject:api-latest 
+            API=api-$(git rev-parse --short HEAD)
+            docker build -t penthaizza/lunaproject:echo $API ./luna-api
+            docker tag penthaizza/lunaproject:echo $API penthaizza/lunaproject:api-latest 
             docker push penthaizza/lunaproject
   deploy-to-dev:
     machine: true

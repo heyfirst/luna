@@ -31,11 +31,11 @@ jobs:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunaproject:$SITE_TAG $(git rev-parse --short HEAD) ./luna-frontend
-            docker tag penthaizza/lunaproject:$SITE_TAG $(git rev-parse --short HEAD) penthaizza/lunaproject:$SITE_TAG latest
+            docker build -t penthaizza/lunaproject:site-$(git rev-parse --short HEAD) ./luna-frontend
+            docker tag penthaizza/lunaproject:$site-$(git rev-parse --short HEAD) penthaizza/lunaproject:site-latest
             docker push penthaizza/lunaproject
-            docker build -t penthaizza/lunaproject:$API_TAG $(git rev-parse --short HEAD) ./luna-api
-            docker tag penthaizza/lunaproject:$API_TAG $(git rev-parse --short HEAD) penthaizza/lunaproject:$API_TAG latest 
+            docker build -t penthaizza/lunaproject:api-$(git rev-parse --short HEAD) ./luna-api
+            docker tag penthaizza/lunaproject:api-$(git rev-parse --short HEAD) penthaizza/lunaproject:api-latest 
             docker push penthaizza/lunaproject
   deploy-to-dev:
     machine: true
@@ -45,10 +45,10 @@ jobs:
           command: | 
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:$SITE_TAG $(git rev-parse --short HEAD)"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-$(git rev-parse --short HEAD)"
       - run:
           name: Deploy to DEV-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:$API_TAG $(git rev-parse --short HEAD)"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-$(git rev-parse --short HEAD)"
   deploy-to-prod:
     machine: true
     steps:
@@ -57,10 +57,10 @@ jobs:
           command: | 
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:$SITE_TAG $(git rev-parse --short HEAD)"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-$(git rev-parse --short HEAD)"
       - run:
           name: Deploy to Prod-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:$API_TAG $(git rev-parse --short HEAD)"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-$(git rev-parse --short HEAD)"
 workflows:
   version: 2
   build-test-deploy:

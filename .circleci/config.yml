@@ -7,7 +7,7 @@ jobs:
       - checkout
       - run:
           name: Add Dependencies
-          command: apk add --no-cache curl
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-site
           command: cd luna-frontend && yarn install && CI=false yarn build 

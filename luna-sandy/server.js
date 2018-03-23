@@ -1,7 +1,7 @@
 // --------------------
 //    ENV FILE CONFIG
 // --------------------
-const config = require('config')
+require('dotenv').config()
 
 // -----------------------
 //   REQUIRE DEPENDENCY
@@ -12,8 +12,8 @@ const cors = require('cors')
 const chalk = require('chalk')
 const helmet = require('helmet')
 const morgan = require('morgan')
-const logger = require('./utils/logger')
-const errorHandlers = require('./utils/errorHandlers')
+const logger = require('./libs/logger')
+const errorHandlers = require('./libs/errorHandlers')
 // ----------------------
 //     INITIAL SERVER
 // ----------------------
@@ -30,9 +30,9 @@ server.use('/', routes)
 server.use(errorHandlers)
 
 // LISTEN PORT 3001
-const app = server.listen(config.port, (err) => {
+const app = server.listen(process.env.PORT, (err) => {
   if (err) throw err
-  logger.info(`${chalk.bgRed(` ${config.projectName} `)} READY ON http://localhost:${chalk.inverse(config.port)}`)
+  logger.info(`${chalk.bgRed(` ${process.env.PROJECT_NAME} `)} READY ON http://localhost:${chalk.inverse(process.env.PORT)}`)
 })
 
 module.exports = server

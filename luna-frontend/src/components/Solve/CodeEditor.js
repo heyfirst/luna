@@ -2,23 +2,31 @@ import React from 'react'
 import brace from 'brace'
 import AceEditor from 'react-ace'
 
+import { connect } from 'react-redux'
+import { actions } from '../../ducks/reducers/solve'
+
 import 'brace/mode/java'
 import 'brace/theme/github'
 
-export default class CodeEditor extends React.Component {
-  state = {
-    code: ''
-  }
-
-  onChange = value => this.setState({ code: value })
+class CodeEditor extends React.Component {
+  onChange = value => this.props.setField('code', value)
 
   render () {
     return <AceEditor
       mode="java"
       theme="github"
       onChange={this.onChange}
-      value={this.state.code}
+      value={this.props.code}
       editorProps={{ $blockScrolling: true }}
     />
   }
 }
+
+export default connect(
+  state => ({
+    code: state.solve.code
+  }),
+  {
+    setField: actions.setField
+  }
+)(CodeEditor)

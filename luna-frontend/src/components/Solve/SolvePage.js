@@ -2,6 +2,9 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import CodeEditor from './CodeEditor'
 
+import { connect } from 'react-redux'
+import { actions } from '../../ducks/reducers/solve'
+
 const SolvePage = () => (
   <div>
     <Helmet>
@@ -10,14 +13,21 @@ const SolvePage = () => (
     <div>
       <CodeEditor />
     </div>
+    <button className="btn btn-dark mt-2 ml-2">
+      {`Run Test`}
+    </button>
+    <button className="btn btn-dark mt-2 ml-2">
+      {`Submit`}
+    </button>
   </div>
 )
 
-class SolvePageContainer extends React.Component {
-  render () {
-    console.log(this.props)
-    return <SolvePage />
-  }
-}
+export default connect(
+  state => ({
 
-export default SolvePageContainer
+  }),
+  {
+    runTest: actions.runTest,
+    submit: actions.submit
+  }
+)(SolvePage)

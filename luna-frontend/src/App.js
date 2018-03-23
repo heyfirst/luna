@@ -7,6 +7,9 @@ import HelloPage from './components/Hello'
 import BasicPage from './components/Basic'
 import SolveRoutes from './components/Solve'
 
+// Add Bootstrap.
+import './static/css/bootstrap.min.css'
+
 injectGlobal`
   body {
     background: #f7f7f7;

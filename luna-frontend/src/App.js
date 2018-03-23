@@ -4,6 +4,7 @@ import { injectGlobal } from 'styled-components'
 import { withRouter, Route, Link, Redirect } from 'react-router-dom'
 
 import HelloPage from './components/Hello'
+import BasicPage from './components/Basic'
 
 injectGlobal`
   body {
@@ -14,6 +15,7 @@ injectGlobal`
 const App = props => (
   <div>
     <Route path="/hello" exact component={HelloPage} />
+    <Route path="/" exact component={BasicPage} />
   </div>
 )
 

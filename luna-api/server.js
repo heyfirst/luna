@@ -12,8 +12,8 @@ const cors = require('cors')
 const chalk = require('chalk')
 const helmet = require('helmet')
 const morgan = require('morgan')
-const logger = require('./utils/logger')
-const errorHandlers = require('./utils/errorHandlers')
+const logger = require('./libs/logger')
+const errorHandlers = require('./libs/errorHandlers')
 // ----------------------
 //     INITIAL SERVER
 // ----------------------

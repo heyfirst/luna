@@ -1,5 +1,5 @@
-import actionCreator from '../libs/actionCreator'
-import axios from '../libs/axios'
+import actionCreator from '../../libs/actionCreator'
+import axios from '../../libs/axios'
 
 const helloAction = actionCreator('hello')
 

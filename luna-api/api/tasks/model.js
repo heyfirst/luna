@@ -1,3 +1,5 @@
+const knex = require('../../sql/knex')
+
 const testcase = [
   {
     id: 1,
@@ -19,5 +21,24 @@ const tasks = [
 module.exports = {
   getAll: () => {
     return tasks
+  },
+  getOne: async (id) => {
+    let task = await knex('tasks')
+      .where({
+        task_id: id
+      })
+      .select()
+      .first()
+
+    let testcases = await knex('testcase')
+      .where({
+        task_id: id
+      })
+      .select()
+
+    return {
+      ...task,
+      testcases
+    }
   }
 }

@@ -16,9 +16,11 @@ module.exports = {
     const id = req.params.id
     try {
       const task = model.getOne(id)
-      res.status(200).send({
-        task
-      })
+      setTimeout(() => {
+        res.status(200).send({
+          task
+        })
+      }, 1000)
     } catch (err) {
       next(err)
     }

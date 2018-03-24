@@ -5,10 +5,10 @@ import CodeEditor from './CodeEditor'
 import { connect } from 'react-redux'
 import { actions } from '../../ducks/reducers/solve'
 
-const SolvePage = ({ submit, runTest, code }) => (
+const SolvePage = ({ submit, runTest, code, task }) => (
   <div>
     <Helmet>
-      <title>{`Luna | Solve`}</title>
+      <title>{`Luna | Task: ${task.name}`}</title>
     </Helmet>
     <div>
       <CodeEditor />
@@ -35,15 +35,18 @@ class SolvePageContainer extends React.Component {
   }
 
   render () {
+    if (this.props.loading) return (<div>Loading ...</div>)
     return (<SolvePage
       runTest={this.props.runTest}
       submit={this.props.submit}
+      task={this.props.task}
     />)
   }
 }
 
 export default connect(
   state => ({
+    loading: state.solve.loading,
     code: state.solve.code,
     task: state.solve.task
   }),

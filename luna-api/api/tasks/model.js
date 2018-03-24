@@ -12,6 +12,24 @@ const testcase = [
     task_id: 1,
     input: '6 3',
     expectedValue: '9'
+  },
+  {
+    id: 2,
+    task_id: 1,
+    input: '100 200',
+    expectedValue: '300'
+  },
+  {
+    id: 2,
+    task_id: 1,
+    input: '1234 4343',
+    expectedValue: '5577'
+  },
+  {
+    id: 2,
+    task_id: 1,
+    input: '9999 9999',
+    expectedValue: '19998'
   }
 ]
 

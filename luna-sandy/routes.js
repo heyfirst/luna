@@ -49,7 +49,11 @@ router.post('/run', async (req, res, next) => {
 
   const result = testcase.map(async (tc, index) => {
     const result = await runningTest(tc.input)
-    return result.stdout === tc.expectedValue
+    return {
+      testcaseID: tc.id,
+      output: result.stdout,
+      status: result.stdout === tc.expectedValue
+    }
   })
 
   Promise.all(result).then((resp) => {

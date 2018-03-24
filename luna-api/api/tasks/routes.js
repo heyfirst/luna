@@ -4,6 +4,6 @@ const router = Router()
 const TaskController = require('./controller')
 
 router.get('/', TaskController.getTasks)
-// router.get('/:id', TaskController.getTask)
+router.get('/:id', TaskController.getTask)
 
 module.exports = router

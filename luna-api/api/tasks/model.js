@@ -23,22 +23,23 @@ module.exports = {
     return tasks
   },
   getOne: async (id) => {
-    let task = await knex('tasks')
-      .where({
-        task_id: id
-      })
-      .select()
-      .first()
+    return tasks[id - 1]
+    // let task = await knex('tasks')
+    //   .where({
+    //     task_id: id
+    //   })
+    //   .select()
+    //   .first()
 
-    let testcases = await knex('testcase')
-      .where({
-        task_id: id
-      })
-      .select()
+    // let testcases = await knex('testcase')
+    //   .where({
+    //     task_id: id
+    //   })
+    //   .select()
 
-    return {
-      ...task,
-      testcases
-    }
+    // return {
+    //   ...task,
+    //   testcases
+    // }
   }
 }

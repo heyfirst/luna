@@ -1,7 +1,7 @@
 import React from 'react'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
-import { actions as helloAction } from '../../ducks/hello'
+import { actions as helloAction } from '../../ducks/reducers/hello'
 
 const HelloPage = ({ text, setField, setHello }) => (
   <div>

@@ -3,6 +3,7 @@ const router = Router()
 
 const helloRoutes = require('./api/hello/routes')
 const solveRoutes = require('./api/solve/routes')
+const topicRoutes = require('./api/topic/routes')
 
 router.get('/', async (req, res) => {
   res.status(200).send({
@@ -12,5 +13,6 @@ router.get('/', async (req, res) => {
 
 router.use('/hello', helloRoutes)
 router.use('/solve', solveRoutes)
+router.use('/topics', topicRoutes)
 
 module.exports = router

@@ -34,7 +34,9 @@
     "http-status": "^1.0.1",
     "jaeger-client": "^3.8.0",
     "joi": "^13.1.1",
+    "knex": "^0.14.4",
     "morgan": "^1.9.0",
+    "mysql": "^2.15.0",
     "opentracing": "^0.14.1",
     "shelljs": "^0.8.1",
     "winston": "^3.0.0-rc2"

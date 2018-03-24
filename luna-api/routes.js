@@ -3,8 +3,8 @@ const router = Router()
 
 const helloRoutes = require('./api/hello/routes')
 const solveRoutes = require('./api/solve/routes')
-// const tasksRoutes = require('./api/tasks/routes')
 const topicRoutes = require('./api/topic/routes')
+const tasksRoutes = require('./api/tasks/routes')
 
 router.get('/', async (req, res) => {
   res.status(200).send({
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.use('/hello', helloRoutes)
 router.use('/solve', solveRoutes)
-// router.use('/tasks', tasksRoutes)
 router.use('/topics', topicRoutes)
+router.use('/tasks', tasksRoutes)
 
 module.exports = router

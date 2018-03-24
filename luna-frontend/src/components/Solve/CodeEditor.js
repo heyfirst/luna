@@ -1,5 +1,5 @@
 import React from 'react'
-import brace from 'brace'
+import 'brace'
 import AceEditor from 'react-ace'
 
 import { connect } from 'react-redux'

@@ -4,37 +4,44 @@ import axios from '../../libs/axios'
 const solveAction = actionCreator('hello')
 
 const SET_FIELD = solveAction('SET_FIELD')
+const GET_TASK = solveAction('GET_TASK', true)
 const RUN_TEST = solveAction('RUN_TEST', true)
 const SUBMIT = solveAction('RUN_TEST', true)
 
 let initialState = {
+  // Task
+  task: {},
+
   // Editor
-  code: '',
+  code: 'class Sandbox { public static void main(String[] args) { int result = addition(args[0], args[1]); System.out.print(result); } public int addition(int a, int b) { return a + b; } }',
 
   // Result
-  loading: false,
+  loading: true,
   error: {},
   result: {}
 }
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    // -------------------
-    //       COMMON
-    // -------------------
     case SET_FIELD:
       return {
         ...state,
         [action.field]: action.value
       }
-    // ---------------------
-    //  RUN TEST AND SUBMIT
-    // ---------------------
+
+    case GET_TASK.PENDING:
     case RUN_TEST.PENDING:
     case SUBMIT.PENDING:
       return {
         ...state,
         loading: true
+      }
+
+    case GET_TASK.RESOLVED:
+      return {
+        ...state,
+        loading: false,
+        task: action.payload
       }
     case RUN_TEST.RESOLVED:
       return {
@@ -48,6 +55,8 @@ export default (state = initialState, action) => {
         loading: false,
         result: action.payload
       }
+
+    case GET_TASK.REJECTED:
     case RUN_TEST.REJECTED:
     case SUBMIT.REJECTED:
       return {
@@ -61,6 +70,16 @@ export default (state = initialState, action) => {
 }
 
 export const actions = {
+  getTask: (taskID) => ({
+    type: GET_TASK,
+    promise: axios.get(`/tasks/${taskID}`)
+      .then(resp => {
+        console.log(resp.data.task)
+        return {
+          payload: resp.data.task
+        }
+      })
+  }),
   setField: (field, value) => ({
     type: SET_FIELD,
     field,

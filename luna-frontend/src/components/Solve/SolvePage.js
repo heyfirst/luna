@@ -28,12 +28,28 @@ const SolvePage = ({ submit, runTest, code }) => (
   </div>
 )
 
+class SolvePageContainer extends React.Component {
+  componentWillMount () {
+    const taskID = this.props.match.params.taskID
+    this.props.getTask(taskID)
+  }
+
+  render () {
+    return (<SolvePage
+      runTest={this.props.runTest}
+      submit={this.props.submit}
+    />)
+  }
+}
+
 export default connect(
   state => ({
-    code: state.solve.code
+    code: state.solve.code,
+    task: state.solve.task
   }),
   {
+    getTask: actions.getTask,
     runTest: actions.runTest,
     submit: actions.submit
   }
-)(SolvePage)
+)(SolvePageContainer)

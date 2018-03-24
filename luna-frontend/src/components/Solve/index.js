@@ -7,14 +7,14 @@ import SolvePage from './SolvePage'
 const SolveRoutes = props => (
   <Layout>
     <Switch>
-      <Route
+      {/* <Route
         exact
         path={`${props.match.path}/`}
         component={SolvePage}
-      />
+      /> */}
       <Route
         exact
-        path={`${props.match.path}/:id`}
+        path={`${props.match.path}/:taskID`}
         component={SolvePage}
       />
     </Switch>

@@ -13,7 +13,7 @@ let initialState = {
   task: {},
 
   // Editor
-  code: 'public int addition(int a, int b) {\n\treturn a + b;\n}',
+  code: 'class Sandbox { public static void main(String[] args) { int result = addition(args[0], args[1]); System.out.print(result); } public int addition(int a, int b) { return a + b; } }',
 
   // Result
   loading: true,
@@ -40,7 +40,7 @@ export default (state = initialState, action) => {
     case GET_TASK.RESOLVED:
       return {
         ...state,
-        loading: false,        
+        loading: false,
         task: action.payload
       }
     case RUN_TEST.RESOLVED:

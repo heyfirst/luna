@@ -5,7 +5,7 @@ import CodeEditor from './CodeEditor'
 import { connect } from 'react-redux'
 import { actions } from '../../ducks/reducers/solve'
 
-const SolvePage = ({ submit, runTest, code, task }) => (
+const SolvePage = ({ onSubmit, onRunTest, code, task }) => (
   <div>
     <Helmet>
       <title>{`Luna | Task: ${task.name}`}</title>
@@ -15,13 +15,13 @@ const SolvePage = ({ submit, runTest, code, task }) => (
     </div>
     <button
       className="btn btn-dark mt-2 ml-2"
-      onClick={() => runTest('1', code)}
+      onClick={() => onRunTest()}
     >
       {`Run Test`}
     </button>
     <button
       className="btn btn-dark mt-2 ml-2"
-      onClick={() => submit('1', code)}
+      onClick={() => onSubmit()}
     >
       {`Submit`}
     </button>
@@ -34,11 +34,19 @@ class SolvePageContainer extends React.Component {
     this.props.getTask(taskID)
   }
 
+  onRunTest = async () => {
+    this.props.runTest(this.props.task.id, this.props.code)
+  }
+
+  onSubmit = async () => {
+
+  }
+
   render () {
     if (this.props.loading) return (<div>Loading ...</div>)
     return (<SolvePage
-      runTest={this.props.runTest}
-      submit={this.props.submit}
+      onRunTest={this.onRunTest}
+      onSubmit={this.onSubmit}
       task={this.props.task}
     />)
   }

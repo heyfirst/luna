@@ -1,25 +1,17 @@
+const taskModel = require('../tasks/model')
 const axios = require('../../libs/axios')
 
 module.exports = {
   runTest: async (req, res, next) => {
     try {
       console.log(req.body)
-
-      // get Task
+      // Get Task
+      const task = taskModel.getOne(1)
 
       // send to [Sandbox]
       const formData = {
         code: req.body.code,
-        testcase: [
-          {
-            input: '1 2',
-            expectedOutput: '3'
-          },
-          {
-            input: '6 7',
-            expectedOutput: '13'
-          }
-        ]
+        testcase: task.testcase
       }
 
       const result = await axios

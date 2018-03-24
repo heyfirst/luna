@@ -4,10 +4,14 @@ import axios from '../../libs/axios'
 const solveAction = actionCreator('hello')
 
 const SET_FIELD = solveAction('SET_FIELD')
+const GET_TASK = solveAction('GET_TASK', true)
 const RUN_TEST = solveAction('RUN_TEST', true)
 const SUBMIT = solveAction('RUN_TEST', true)
 
 let initialState = {
+  // Task
+  task: {},
+
   // Editor
   code: '',
 
@@ -26,6 +30,14 @@ export default (state = initialState, action) => {
       return {
         ...state,
         [action.field]: action.value
+      }
+    // ---------------------
+    //  RUN TEST AND SUBMIT
+    // ---------------------
+    case GET_TASK:
+      return {
+        ...state,
+        task: action.payload
       }
     // ---------------------
     //  RUN TEST AND SUBMIT
@@ -61,6 +73,16 @@ export default (state = initialState, action) => {
 }
 
 export const actions = {
+  getTask: (taskID) => ({
+    type: GET_TASK,
+    promise: axios.get(`/tasks/${taskID}`)
+      .then(resp => {
+        console.log(resp.data.task)
+        return {
+          payload: resp.data.task
+        }
+      })
+  }),
   setField: (field, value) => ({
     type: SET_FIELD,
     field,

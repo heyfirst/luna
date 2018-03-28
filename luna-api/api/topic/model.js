@@ -19,7 +19,7 @@ module.exports = {
     getAll: () => {
         return topic
     },
-    getOne: () => {
-        return topic[0]
+    getOne: (id) => {
+        return topic.filter(t => t.topicID == id)[0]
     }
 }

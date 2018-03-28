@@ -46,7 +46,7 @@ module.exports = {
   getAll: () => {
     return tasks
   },
-  getOne: (id) => {
+  getOne: id => {
     return tasks[0]
     // let task = await knex('tasks')
     //   .where({

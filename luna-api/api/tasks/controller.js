@@ -1,4 +1,3 @@
-const axios = require('../../libs/axios')
 const model = require('./model')
 
 module.exports = {

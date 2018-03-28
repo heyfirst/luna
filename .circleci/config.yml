@@ -226,7 +226,7 @@ workflows:
                   - master
       - test-unit-site:
           requires:
-            - install-site
+            - test-lint-site
           filters:
             branches:
                 only: 
@@ -234,7 +234,7 @@ workflows:
                   - master
       - test-coverage-site:
           requires:
-            - install-site
+            - test-unit-site
           filters:
             branches:
                 only:
@@ -251,7 +251,7 @@ workflows:
                   - master
       - test-unit-api:
           requires:
-            - install-api
+            - test-lint-api
           filters:
             branches:
                 only:
@@ -259,7 +259,7 @@ workflows:
                   - master
       - test-coverage-api:
           requires:
-            - install-api
+            - test-unit-api
           filters:
             branches:
                 only:
@@ -268,7 +268,14 @@ workflows:
       
       - deploy-to-dev:
           requires:
-            - build
+            - install-site
+            - test-lint-site
+            - test-unit-site
+            - test-coverage-site
+            - install-api
+            - test-lint-api
+            - test-unit-api
+            - test-coverage-api
           filters:
             branches:
                 only:

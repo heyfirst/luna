@@ -266,16 +266,34 @@ workflows:
                   - develop
                   - master
       
-      - deploy-to-dev:
+      - build-docker-site:
           requires:
             - install-site
             - test-lint-site
             - test-unit-site
             - test-coverage-site
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
+
+      - build-docker-api:
+          requires:
             - install-api
             - test-lint-api
             - test-unit-api
-            - test-coverage-api
+            - test-coverage-api       
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
+
+      - deploy-to-dev:
+          requires:
+            - build-docker-site
+            - build-docker-api
           filters:
             branches:
                 only:

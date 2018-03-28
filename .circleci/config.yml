@@ -7,25 +7,13 @@ jobs:
       - checkout
       - run:
           name: Add Dependencies
-          command: apk add --no-cache curl
-      - restore_cache:
-          key: site-cache-{{ checksum "./lunar-site/package.json" }}
+          command: apk add --no-cache curl git
       - run:
-          name: Install & Build Project lunar-site
-          command: cd lunar-site && yarn install && yarn build
-      - save_cache:
-          key: site-cache-{{ checksum "./lunar-site/package.json" }}
-          paths:
-            - ./lunar-site/node_modules
-      - restore_cache:
-          key: api-cache-{{ checksum "./lunar-api/package.json" }}
+          name: Install & Build Project luna-site
+          command: cd luna-frontend && yarn install && CI=false yarn build 
       - run:
-          name: Install & Build project lunar-api
-          command: cd lunar-api && yarn install && yarn build
-      - save_cache:
-          key: site-cache-{{ checksum "./lunar-api/package.json" }}
-          paths:
-            - ./lunar-api/node_modules
+          name: Install & Build project luna-api
+          command: cd luna-api && yarn install
       - run: 
           name: Test Project
           command: echo "This Test Space"
@@ -43,27 +31,50 @@ jobs:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunarproject:$SITE_TAG ./lunar-site
-            docker build -t penthaizza/lunarproject:$API_TAG ./lunar-api
-            docker push penthaizza/lunarproject:$SITE_TAG
-            docker push penthaizza/lunarproject:$API_TAG
-  deploy:
+            docker build -t penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) ./luna-frontend
+            docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
+            docker push penthaizza/lunaproject
+            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api
+            docker tag penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:api-latest 
+            docker push penthaizza/lunaproject
+  deploy-to-dev:
     machine: true
     steps:
       - run: 
-          name: Deploy to Site-Server
+          name: Deploy to DEV-Site-Server
           command: | 
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "sudo docker stop lunar-site && sudo docker rm lunar-site && sudo docker rmi penthaizza/lunarproject:$SITE_TAG && sudo docker pull penthaizza/lunarproject:$SITE_TAG && sudo docker run -d -p 3000:3000 --name lunar-site penthaizza/lunarproject:$SITE_TAG"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
       - run:
-          name: Deploy to API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "sudo docker stop lunar-api && sudo docker rm lunar-api && sudo docker rmi penthaizza/lunarproject:$API_TAG && sudo docker pull penthaizza/lunarproject:$API_TAG && sudo docker run -d -p 3001:4000 -e "NODE_ENV=development" --name lunar-api penthaizza/lunarproject:$API_TAG"
+          name: Deploy to DEV-API-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
+  deploy-to-prod:
+    machine: true
+    steps:
+      - run: 
+          name: Deploy to Prod-Site-Server
+          command: | 
+            sudo apt-get update
+            sudo apt-get install sshpass
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
+      - run:
+          name: Deploy to Prod-API-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
 workflows:
   version: 2
   build-test-deploy:
     jobs:
       - build
-      - deploy:
+      - deploy-to-dev:
           requires:
-            - build       
+            - build
+          filters:
+            branches:
+                only: develop
+      - deploy-to-prod:
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: develop

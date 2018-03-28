@@ -1,0 +1,17 @@
+{
+  "extends": ["standard", "standard-react"],
+  "parser": "babel-eslint",
+  "rules": {
+    "object-curly-spacing": ["error", "always"],
+    "space-before-function-paren": ["error", "always"],
+    "react/prop-types": "off",
+    "react/jsx-filename-extension": "off",
+    "jsx-quotes": "off"
+  },
+  "globals": {
+    "React": false
+  },
+  "env": {
+    "jest": true
+  }
+}

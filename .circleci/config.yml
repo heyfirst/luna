@@ -84,92 +84,92 @@ jobs:
           name: Test-lint Project
           command: echo "This Test-lint Space"
 
-    test-unit-api:
-      docker:
-        - image: node:8.9.4-alpine
-      steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk add --no-cache curl git
-        - run:
-            name: Install & Build project luna-api
-            command: cd luna-api && yarn install
-        - run: 
-            name: Test-unit Project
-            command: echo "This Test-unit Space"
+  test-unit-api:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build project luna-api
+          command: cd luna-api && yarn install
+      - run: 
+          name: Test-unit Project
+          command: echo "This Test-unit Space"
             
-    test-coverage-api:
-      docker:
-        - image: node:8.9.4-alpine
-      steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk add --no-cache curl git
-        - run:
-            name: Install & Build project luna-api
-            command: cd luna-api && yarn install
-        - run: 
-            name: Test-coverage Project
-            command: echo "This Test-coverage Space"
+  test-coverage-api:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build project luna-api
+          command: cd luna-api && yarn install
+      - run: 
+          name: Test-coverage Project
+          command: echo "This Test-coverage Space"
 
-    build-docker-site:
-      docker:
-        - image: node:8.9.4-alpine
-      steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk add --no-cache curl git
-        - run:
-            name: Install & Build Project luna-site
-            command: cd luna-frontend && yarn install && CI=false yarn build
-        - setup_remote_docker: 
-            docker_layer_caching: true
-        - run:
-            name: Install Docker client
-            command: |
-              set -x
-              VER="17.12.0-ce"
-              curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-              tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-              mv /tmp/docker/* /usr/bin
-        - run: 
-            name: Build and Push Docker image
-            command: |
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
-              docker build -t penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) ./luna-frontend
-              docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
-              docker push penthaizza/lunaproject
-    build-docker-api:
-      docker:
-        - image: node:8.9.4-alpine
-      steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk add --no-cache curl git
-        - run:
-            name: Install & Build Project luna-site
-            command: cd luna-frontend && yarn install && CI=false yarn build
-        - setup_remote_docker: 
-            docker_layer_caching: true
-        - run:
-            name: Install Docker client
-            command: |
-              set -x
-              VER="17.12.0-ce"
-              curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-              tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-              mv /tmp/docker/* /usr/bin
-        - run: 
-            name: Build and Push Docker image
-            command: |
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
-              docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api
-              docker tag penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:api-latest 
-              docker push penthaizza/lunaproject
+  build-docker-site:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-site
+          command: cd luna-frontend && yarn install && CI=false yarn build
+      - setup_remote_docker: 
+          docker_layer_caching: true
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.12.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run: 
+          name: Build and Push Docker image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker build -t penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) ./luna-frontend
+            docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
+            docker push penthaizza/lunaproject
+  build-docker-api:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-site
+          command: cd luna-frontend && yarn install && CI=false yarn build
+      - setup_remote_docker: 
+          docker_layer_caching: true
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.12.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run: 
+          name: Build and Push Docker image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api
+            docker tag penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:api-latest 
+            docker push penthaizza/lunaproject
                         
   deploy-to-dev:
     machine: true

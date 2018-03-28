@@ -6,17 +6,24 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "eslint src"
+    "lint": "eslint api libs middlewares sql server.js routes.js",
+    "prettier": "prettier-standard \"!(node_modules)/**/*.js\"",
+    "test": "jest --coverage"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
+    "babel-jest": "^22.4.3",
     "eslint": "^4.16.0",
     "eslint-config-standard": "^11.0.0-beta.0",
     "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.15.0",
     "eslint-plugin-node": "^5.2.1",
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-standard": "^3.0.1",
-    "nodemon": "^1.14.11"
+    "jest": "^22.4.3",
+    "nodemon": "^1.14.11",
+    "prettier": "^1.11.1",
+    "prettier-standard": "^8.0.0"
   },
   "dependencies": {
     "@risingstack/jaeger": "^2.5.0",

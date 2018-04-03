@@ -6,6 +6,7 @@ import { withRouter, Route } from 'react-router-dom'
 import HelloPage from './components/Hello'
 import BasicPage from './components/Basic'
 import SolveRoutes from './components/Solve'
+import TopicPage from './components/Topic'
 
 // Add Bootstrap.
 import './static/css/bootstrap.min.css'
@@ -21,6 +22,7 @@ const App = props => (
     <Route path="/" exact component={BasicPage} />
     <Route path="/hello" component={HelloPage} />
     <Route path="/solve" component={SolveRoutes} />
+    <Route path="/topic" component={TopicPage} />
   </div>
 )
 

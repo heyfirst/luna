@@ -1,8 +1,9 @@
-const { getOne } = require('./model')
+const { getOne,getAll } = require('./model')
 
 module.exports = {
   getAllTopics: async (req, res, next) => {
-    res.status(200).send(topic) 
+    const allResult = await getAll()
+    res.status(200).send(allResult) 
   },
   getOneTopics: async (req, res, next) => {
     const { id } = req.params

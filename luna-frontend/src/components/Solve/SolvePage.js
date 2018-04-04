@@ -1,9 +1,14 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import CodeEditor from './CodeEditor'
 
 import { connect } from 'react-redux'
 import { actions } from '../../ducks/reducers/solve'
+
+import TopBar from './TopBar'
+import TaskInfo from './TaskInfo'
+import CodeEditor from './CodeEditor'
+import TestcaseBar from './TestcaseBar'
+import BottomBar from './BottomBar'
 
 const SolvePage = ({ onSubmit, onRunTest, code, task }) => (
   <div>
@@ -11,20 +16,11 @@ const SolvePage = ({ onSubmit, onRunTest, code, task }) => (
       <title>{`Luna | Task: ${task.name}`}</title>
     </Helmet>
     <div>
+      <TopBar />
+      <TaskInfo />
       <CodeEditor />
+      <BottomBar />
     </div>
-    <button
-      className="btn btn-dark mt-2 ml-2"
-      onClick={() => onRunTest()}
-    >
-      {`Run Test`}
-    </button>
-    <button
-      className="btn btn-dark mt-2 ml-2"
-      onClick={() => onSubmit()}
-    >
-      {`Submit`}
-    </button>
   </div>
 )
 

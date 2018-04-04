@@ -413,7 +413,7 @@ workflows:
                 only:
                   - develop
                   - master
-       - build-docker-sandy:
+      - build-docker-sandy:
           requires:
             - install-sandy
             - test-lint-sandy

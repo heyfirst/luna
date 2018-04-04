@@ -136,7 +136,7 @@ jobs:
           command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
-          command: cd luna-frontend && yarn install
+          command: cd luna-sandy && yarn install
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
@@ -166,7 +166,7 @@ jobs:
           command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
-          command: cd luna-frontend && yarn install
+          command: cd luna-sandy && yarn install
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"

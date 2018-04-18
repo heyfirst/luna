@@ -1,28 +1,11 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
 
 import { connect } from 'react-redux'
 import { actions } from '../../ducks/reducers/solve'
 
-import TopBar from './TopBar'
-import TaskInfo from './TaskInfo'
-import CodeEditor from './CodeEditor'
-import TestcaseBar from './TestcaseBar'
-import BottomBar from './BottomBar'
+import SolveLayout from './SolveLayout'
 
-const SolvePage = ({ onSubmit, onRunTest, code, task }) => (
-  <div>
-    <Helmet>
-      <title>{`Luna | Task: ${task.name}`}</title>
-    </Helmet>
-    <div>
-      <TopBar />
-      <TaskInfo />
-      <CodeEditor />
-      <BottomBar />
-    </div>
-  </div>
-)
+import swal from 'sweetalert2'
 
 class SolvePageContainer extends React.Component {
   componentWillMount () {
@@ -31,7 +14,7 @@ class SolvePageContainer extends React.Component {
   }
 
   onRunTest = async () => {
-    this.props.runTest(this.props.task.id, this.props.code)
+  // this.props.runTest(this.props.task.id, this.props.code)
   }
 
   onSubmit = async () => {
@@ -40,7 +23,8 @@ class SolvePageContainer extends React.Component {
 
   render () {
     if (this.props.loading) return (<div>Loading ...</div>)
-    return (<SolvePage
+
+    return (<SolveLayout
       onRunTest={this.onRunTest}
       onSubmit={this.onSubmit}
       task={this.props.task}

@@ -5,8 +5,6 @@ import { actions } from '../../ducks/reducers/solve'
 
 import SolveLayout from './SolveLayout'
 
-import swal from 'sweetalert2'
-
 class SolvePageContainer extends React.Component {
   componentWillMount () {
     const taskID = this.props.match.params.taskID

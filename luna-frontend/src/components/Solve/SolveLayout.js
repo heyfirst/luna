@@ -4,8 +4,7 @@ import { Helmet } from 'react-helmet'
 
 import TopBar from './TopBar'
 import TaskInfo from './TaskInfo'
-import CodeEditor from './CodeEditor'
-import TestcaseBar from './TestcaseBar'
+import Solution from './Solution'
 import BottomBar from './BottomBar'
 
 const Layout = styled.div`
@@ -26,7 +25,7 @@ const SolveLayout = ({ onSubmit, onRunTest, code, task }) => (
     <TopBar />
     <Layout>
       <TaskInfo />
-      <CodeEditor />
+      <Solution />
     </Layout>
     <BottomBar />
   </div>

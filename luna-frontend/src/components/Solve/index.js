@@ -2,7 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 import Layout from '../Core/Layout'
-import SolvePage from './SolvePage'
+import SolvePage from './SolvePageContainer'
 
 const SolveRoutes = props => (
   <Layout>

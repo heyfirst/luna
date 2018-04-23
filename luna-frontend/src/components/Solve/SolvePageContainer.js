@@ -1,9 +1,38 @@
 import React from 'react'
+import styled from 'styled-components'
+import { Helmet } from 'react-helmet'
 
 import { connect } from 'react-redux'
 import { actions } from '../../ducks/reducers/solve'
 
-import SolveLayout from './SolveLayout'
+import TopBar from './TopBar'
+import TaskInfo from './TaskInfo'
+import Solution from './Solution'
+import BottomBar from './BottomBar'
+
+const Layout = styled.div`
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 6rem);
+
+  > div {
+    flex: 50%;
+  }
+`
+
+const SolveLayout = ({ onSubmit, onRunTest, code, task }) => (
+  <div>
+    <Helmet>
+      <title>{`Luna | Task: ${task.name}`}</title>
+    </Helmet>
+    <TopBar />
+    <Layout>
+      <TaskInfo />
+      <Solution />
+    </Layout>
+    <BottomBar />
+  </div>
+)
 
 class SolvePageContainer extends React.Component {
   componentWillMount () {
@@ -12,7 +41,7 @@ class SolvePageContainer extends React.Component {
   }
 
   onRunTest = async () => {
-  // this.props.runTest(this.props.task.id, this.props.code)
+    this.props.runTest(this.props.task.id, this.props.code)
   }
 
   onSubmit = async () => {
@@ -20,9 +49,8 @@ class SolvePageContainer extends React.Component {
   }
 
   render () {
-    if (this.props.loading) return (<div>Loading ...</div>)
-
     return (<SolveLayout
+      loading={this.props.loading}
       onRunTest={this.onRunTest}
       onSubmit={this.onSubmit}
       task={this.props.task}

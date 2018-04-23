@@ -30,7 +30,7 @@ const SolveLayout = ({ onSubmit, onRunTest, code, task }) => (
       <TaskInfo />
       <Solution />
     </Layout>
-    <BottomBar />
+    <BottomBar onRunTest={onRunTest} />
   </div>
 )
 

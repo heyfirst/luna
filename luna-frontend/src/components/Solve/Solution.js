@@ -62,7 +62,7 @@ const Solution = () => (
       <TestcaseList>
         {
           [...Array(10)].map((testcase, index) => (
-            <Testcase />
+            <Testcase key={index} />
           ))
         }
       </TestcaseList>

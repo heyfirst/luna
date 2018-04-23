@@ -32,6 +32,7 @@ const Layout = styled.div`
   li {
     z-index: 10;
     margin-right: .5rem;
+    padding: 0 .5rem;
 
     &.active {
       border-bottom: 3px solid #47C9D1;

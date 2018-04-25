@@ -8,12 +8,12 @@ const GET_USER = topicAction('GET_USER')
 
 // function get data from API
 const getTopic = async () => {
-  const resp = await axios.get('https://api.luna.codes/topics')
+  const resp = await axios.get('https://api.dev.luna.codes/topics')
   return resp.data
 }
 
 const getUser = async () => {
-    const resp = await axios.get('http://localhost:3010/topics/user/1')
+    const resp = await axios.get('http://api.dev.luna.codes/topics/user/1')
     return resp.data
 }
 

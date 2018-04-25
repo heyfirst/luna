@@ -13,7 +13,7 @@ const getTopic = async () => {
 }
 
 const getUser = async () => {
-    const resp = await axios.get('http://api.dev.luna.codes/topics/user/1')
+    const resp = await axios.get('https://api.dev.luna.codes/topics/user/1')
     return resp.data
 }
 

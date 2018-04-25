@@ -4,21 +4,21 @@ import { connect } from 'react-redux'
 import { actions as topicAction } from '../../ducks/reducers/topic'
 
 const DivCard = styled.div`
-    margin-bottom: 23px;
+    margin-bottom: 1.4375rem;
     margin-left: auto;
     margin-right: auto;
 `
 
 const DivCardInline = styled.div`
-    margin-bottom: 23px; 
+    margin-bottom: 1.4375rem; 
     width: 49%; 
-    margin-left: 3px; 
-    margin-right: 3px;
+    margin-left: 0.1875rem; 
+    margin-right: 0.1875rem;
 `
 
 const CardImage = styled.div`
     background-color: #47C9D1;
-    padding: 0px;
+    padding: 0rem;
     max-width: 100%;
     min-width: 100%;
     max-height: 100%;
@@ -30,38 +30,34 @@ const CardBody = styled.div`
 `
 
 const CardProgress = styled.div`
-    height: 10px;
+    height: 0.625rem !important;
 `
 
 const CardProgressBar = styled.div`
     width: ${({ percentage }) => `${percentage}%`};
-    height: 10px;
-    background-color: #47C9D1;
+    background-color: #47C9D1 !important;
 `
 
 const CardBodyAlignCenter = styled.div`
-    padding-left: 0px;
-    padding-bottom: 0px;
+    padding-left: 0rem !important;
+    padding-bottom: 0rem !important;
 `
 
 const PictureImg = styled.img`
-    width: 70px; 
-    height: 70px;
+    width: 4.375rem; 
+    height: 4.375rem;
 `
 
 const ImgHidden = styled.div`
-    width: 70px; 
-    height: 70px;
+    width: 4.375rem; 
+    height: 4.375rem;
     visibility: hidden;
 `
 
 const PTask = styled.div`
     text-align: center; 
-    padding-top: 13px; 
+    padding-top: 0.8125rem; 
     color: black;
-    display: flex;
-    justify-content: center;
-    flex: 1;
 `
 
 class TopicList extends React.Component {
@@ -103,16 +99,16 @@ class TopicList extends React.Component {
                     <CardProgressBar percentage={props.percentage} className="progress-bar"></CardProgressBar>
                 </CardProgress>
             </CardBody>
-            <CardBodyAlignCenter className="col-sm-2 card-body align-self-center d-flex flex-column">
+            <CardBodyAlignCenter className="col-sm-2 card-body align-self-center">
                 {props.index === 0 ?
                     <ImgHidden />
                     : this.isScoreOverNinetyNine(props.index)
                         ? null
-                        : <picture style={{ flex: 1 }}>
+                        : <picture>
                             <PictureImg className="img-fluid rounded mx-auto d-block" src={require('../../static/image/padlock.png')} />
                         </picture>
                 }
-                <PTask className="mb-0 task">{props.taskCount}/150</PTask>
+                <PTask className="mb-0 task">{ props.taskCount }/150</PTask>
             </CardBodyAlignCenter>
         </div>
     )

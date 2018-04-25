@@ -5,8 +5,8 @@ import { connect } from 'react-redux'
 import { actions as userAction } from '../../ducks/reducers/topic'
 
 const NavbarDark = styled.nav`
-    padding: 0px;
     background-color: #0F1D33;
+    padding: 0px !important; 
 ` 
 
 const NavbarUl = styled.ul`
@@ -48,7 +48,7 @@ class Navbar extends React.Component {
     }
 
     render() {
-        return  <NavbarDark className="navbar navbar-expand-sm navbar-dark">
+        return  <NavbarDark className="navbar navbar-expand-sm navbar-dark" >
             <div className="container-fluid">
             <NavbarUl className="navbar-nav">
                 <NavbarLi className="nav-item">

@@ -1,4 +1,4 @@
-const { getOne,getAll } = require('./model')
+const { getOne,getAll,getUserScore } = require('./model')
 
 module.exports = {
   getAllTopics: async (req, res, next) => {
@@ -10,5 +10,11 @@ module.exports = {
     const result = await getOne(id)
 
     res.status(200).send(result) 
-  } 
+  },
+  getUserScore: async (req, res, next) => {
+    const { userid } = req.params
+    const result = await getUserScore(userid)
+
+    res.status(200).send(result)
+  }
 }

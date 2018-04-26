@@ -9,7 +9,7 @@ jobs:
           name: Add Dependencies
           command: apk add --no-cache curl git
       - run:
-          name: Install & Build Project luna-site
+          name: Install & Build Project luna-frontend
           command: cd luna-frontend && yarn install && CI=false yarn build
   
   test-lint-site:
@@ -21,7 +21,7 @@ jobs:
           name: Add Dependencies
           command: apk add --no-cache curl git
       - run:
-          name: Install & Build Project luna-site
+          name: Install & Build Project luna-frontend
           command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-lint Project
@@ -36,7 +36,7 @@ jobs:
           name: Add Dependencies
           command: apk add --no-cache curl git
       - run:
-          name: Install & Build Project luna-site
+          name: Install & Build Project luna-frontend
           command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-unit Project
@@ -51,7 +51,7 @@ jobs:
           name: Add Dependencies
           command: apk add --no-cache curl git
       - run:
-          name: Install & Build Project luna-site
+          name: Install & Build Project luna-frontend
           command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-coverage Project
@@ -171,6 +171,63 @@ jobs:
           name: Test-coverage Project
           command: echo "This Test-coverage Space"
 
+  install-admin:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-admin
+          command: cd luna-admin && yarn install && CI=false yarn build
+  
+  test-lint-admin:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-admin
+          command: cd luna-admin && yarn install && CI=false yarn build
+      - run: 
+          name: Test-lint Project
+          command: echo "This Test-lint Space"
+
+  test-unit-admin:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-admin
+          command: cd luna-admin && yarn install && CI=false yarn build
+      - run: 
+          name: Test-unit Project
+          command: echo "This Test-unit Space"
+        
+  test-coverage-admin:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-admin
+          command: cd luna-admin && yarn install && CI=false yarn build
+      - run: 
+          name: Test-coverage Project
+          command: echo "This Test-coverage Space" 
+
   build-docker-site:
     docker:
       - image: node:8.9.4-alpine
@@ -208,8 +265,8 @@ jobs:
           name: Add Dependencies
           command: apk add --no-cache curl git
       - run:
-          name: Install & Build Project luna-site
-          command: cd luna-frontend && yarn install && CI=false yarn build
+          name: Install & Build Project luna-api
+          command: cd luna-api && yarn install
       - setup_remote_docker: 
           docker_layer_caching: true
       - run:
@@ -255,6 +312,34 @@ jobs:
             docker build -t penthaizza/lunaproject:$(echo "sandy-"$(git rev-parse --short HEAD)) ./luna-sandy
             docker tag penthaizza/lunaproject:$(echo "sandy-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:sandy-latest
             docker push penthaizza/lunaproject
+  build-docker-admin:
+    docker:
+      - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-admin
+          command: cd luna-admin && yarn install && CI=false yarn build
+      - setup_remote_docker: 
+          docker_layer_caching: true
+      - run:
+          name: Install Docker client
+          command: |
+            set -x
+            VER="17.12.0-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
+      - run: 
+          name: Build and Push Docker image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker build -t penthaizza/lunaproject:$(echo "admin-"$(git rev-parse --short HEAD)) ./luna-admin
+            docker tag penthaizza/lunaproject:$(echo "admin-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:admin-latest
+            docker push penthaizza/lunaproject
 
   deploy-to-dev:
     machine: true
@@ -270,7 +355,10 @@ jobs:
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
       - run:
           name: Deploy to DEV-Sandy-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"  
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
+      - run: 
+          name: Deploy to DEV-Admin-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-admin && sudo docker image prune -a -f && sudo docker run -d -p 3010:3010 -p 22201:22201 -p 17001:17001 --name luna-admin penthaizza/lunaproject:admin-latest"  
   deploy-to-prod-site:
     machine: true
     steps:
@@ -292,6 +380,12 @@ jobs:
       - run:
           name: Deploy to Prod-API-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
+  deploy-to-prod-admin:
+    machine: true
+    steps:
+      - run: 
+          name: Deploy to Prod-Admin-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-admin && sudo docker image prune -a -f && sudo docker run -d -p 3010:3010 -p 22201:22201 -p 17001:17001 --name luna-admin penthaizza/lunaproject:admin-latest"
 
 workflows:
   version: 2
@@ -310,6 +404,12 @@ workflows:
                   - develop
                   - master
       - install-sandy:
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
+      - install-admin:
           filters:
             branches:
                 only:
@@ -391,6 +491,31 @@ workflows:
                   - develop
                   - master
       
+      - test-lint-admin:
+          requires:
+            - install-admin
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
+      - test-unit-admin:
+          requires:
+            - test-lint-admin
+          filters:
+            branches:
+                only: 
+                  - develop
+                  - master
+      - test-coverage-admin:
+          requires:
+            - test-unit-admin
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
+      
       - build-docker-site:
           requires:
             - install-site
@@ -423,6 +548,17 @@ workflows:
             branches:
                 only:
                   - develop
+                  - master
+      - build-docker-admin:
+          requires:
+            - install-admin
+            - test-lint-admin
+            - test-unit-admin
+            - test-coverage-admin
+          filters:
+            branches:
+                only:
+                  - develop
                   - master 
 
       - deploy-to-dev:
@@ -430,11 +566,13 @@ workflows:
             - build-docker-site
             - build-docker-api
             - build-docker-sandy
+            - build-docker-admin
           filters:
             branches:
                 only:
                   - develop
                   - master
+
       - deploy-to-prod-site:
           requires:
             - deploy-to-dev
@@ -448,6 +586,12 @@ workflows:
             branches:
                 only: master
       - deploy-to-prod-sandy:
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master
+      - deploy-to-prod-admin:
           requires:
             - deploy-to-dev
           filters:

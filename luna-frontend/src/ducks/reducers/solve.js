@@ -105,9 +105,12 @@ export const actions = {
     return {
       type: RUN_TEST,
       promise: axios.post('/solve/run-test', formData)
-        .then(resp => ({
-          payload: resp.data.result
-        }))
+        .then(resp => {
+          console.log(resp)
+          return {
+            payload: resp.data.result
+          }
+        })
     }
   },
   submit: (taskID, code) => {

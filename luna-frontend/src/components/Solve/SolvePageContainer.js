@@ -49,6 +49,10 @@ class SolvePageContainer extends React.Component {
   }
 
   render () {
+    if (this.props.loading) {
+      return <div />
+    }
+
     return (<SolveLayout
       loading={this.props.loading}
       onRunTest={this.onRunTest}

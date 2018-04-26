@@ -1,5 +1,7 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
+
 import CodeEditor from './CodeEditor'
 import Testcase from './Testcase'
 
@@ -50,7 +52,7 @@ const TestcaseList = styled.div`
 
 `
 
-const Solution = () => (
+const Solution = ({ testcase, result }) => (
   <Layout>
     <div>
       <CodeEditor />
@@ -62,8 +64,14 @@ const Solution = () => (
       </ul>
       <TestcaseList>
         {
-          [...Array(10)].map((testcase, index) => (
-            <Testcase key={index} />
+          testcase.map((testcase, index) => (
+            <Testcase
+              key={index}
+              taskID={testcase.id}
+              input={testcase.input}
+              expectedValue={testcase.expectedValue}
+              result={result.find(r => r.testcaseID === testcase.id)}
+            />
           ))
         }
       </TestcaseList>
@@ -71,4 +79,10 @@ const Solution = () => (
   </Layout>
 )
 
-export default Solution
+export default connect(
+  state => ({
+    testcase: state.solve.task.testcase,
+    result: state.solve.result
+  }),
+  null
+)(Solution)

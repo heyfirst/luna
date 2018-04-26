@@ -13,12 +13,23 @@ let initialState = {
   task: {},
 
   // Editor
-  code: 'class Sandbox { public static void main(String[] args) { int result = addition(args[0], args[1]); System.out.print(result); } public int addition(int a, int b) { return a + b; } }',
+  code: `class Sandbox {
+      public static void main(String[] args) {
+          int param1 = Integer.parseInt(args[0]);
+          int param2 = Integer.parseInt(args[1]);
+          int result = Sandbox.addition(param1, param2);
+          System.out.print(result);
+      }
+      
+      public static int addition(int a, int b) {
+          return a + b;
+      }
+  }`,
 
   // Result
   loading: true,
   error: {},
-  result: {}
+  result: []
 }
 
 export default (state = initialState, action) => {
@@ -94,7 +105,9 @@ export const actions = {
     return {
       type: RUN_TEST,
       promise: axios.post('/solve/run-test', formData)
-        .then(resp => console.log(resp.data.result))
+        .then(resp => ({
+          payload: resp.data.result
+        }))
     }
   },
   submit: (taskID, code) => {

@@ -10,6 +10,7 @@ import TopicPage from './components/Topic'
 
 // Add Bootstrap.
 import './static/css/bootstrap.min.css'
+import './static/css/font-awesome.min.css'
 
 injectGlobal`
   body {

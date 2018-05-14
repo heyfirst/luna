@@ -64,7 +64,7 @@ class SolvePageContainer extends React.Component {
   }
 
   onRunTest = async () => {
-    this.props.runTest(this.props.task.id, this.props.code)
+    this.props.runTest(this.props.task.task_id, this.props.code)
   }
 
   onSubmit = async () => {

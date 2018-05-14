@@ -1,13 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
+import { connect } from 'react-redux'
 
-const TaskInfo = () => (
+const TaskInfo = ({ task }) => (
   <div className="p-4">
-    <h1>{`TaskInfo`}</h1>
-    <p>{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio eum quia velit hic necessitatibus deleniti, ab odit doloremque, rerum, debitis maiores. Tempora, nisi mollitia! Sapiente totam accusantium reiciendis ratione dicta?`}</p>
-    <p>{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio eum quia velit hic necessitatibus deleniti, ab odit doloremque, rerum, debitis maiores. Tempora, nisi mollitia! Sapiente totam accusantium reiciendis ratione dicta?`}</p>
-    <p>{`Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio eum quia velit hic necessitatibus deleniti, ab odit doloremque, rerum, debitis maiores. Tempora, nisi mollitia! Sapiente totam accusantium reiciendis ratione dicta?`}</p>
+    { console.log(task) }
+    <h1>{ task.task_name }</h1>
+    <p>{ task.detail }</p>
   </div>
 )
 
-export default TaskInfo
+export default connect(
+  state => ({
+    task: state.solve.task
+  }),
+  null
+)(TaskInfo)

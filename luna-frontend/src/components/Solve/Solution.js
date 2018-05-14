@@ -70,7 +70,7 @@ const Solution = ({ testcase, result }) => (
               taskID={testcase.task_id}
               input={testcase.input}
               expectedValue={testcase.expected_output}
-              result={result.find(r => r.testcaseID === testcase.testcase_id)}
+              result={result.find(r => r.testcase_id === testcase.testcase_id)}
             />
           ))
         }

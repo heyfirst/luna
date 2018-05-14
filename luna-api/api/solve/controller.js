@@ -4,9 +4,8 @@ const axios = require('../../libs/axios')
 module.exports = {
   runTest: async (req, res, next) => {
     try {
-      console.log(req.body)
       // Get Task
-      const task = taskModel.getOne(1)
+      const task = await taskModel.getOne(req.body.taskID)
 
       // send to [Sandbox]
       const formData = {

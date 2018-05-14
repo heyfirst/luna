@@ -85,7 +85,6 @@ export const actions = {
     type: GET_TASK,
     promise: axios.get(`/tasks/${taskID}`)
       .then(resp => {
-        console.log(resp.data)
         return {
           payload: resp.data.task
         }
@@ -106,7 +105,6 @@ export const actions = {
       type: RUN_TEST,
       promise: axios.post('/solve/run-test', formData)
         .then(resp => {
-          console.log(resp)
           return {
             payload: resp.data.result
           }

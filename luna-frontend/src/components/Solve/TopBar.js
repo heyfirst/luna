@@ -17,7 +17,7 @@ const TopBarContainer = styled.div`
 
 const TopBar = () => (
   <TopBarContainer className="text-center">
-    <h1>{`TopBar`}</h1>
+    <h1>{`Solve Page`}</h1>
   </TopBarContainer>
 )
 

@@ -67,10 +67,11 @@ const Solution = ({ testcase, result }) => (
           testcase.map((testcase, index) => (
             <Testcase
               key={index}
-              taskID={testcase.task_id}
+              taskID={testcase.testcase_id}
               input={testcase.input}
               expectedValue={testcase.expected_output}
               result={result.find(r => r.testcase_id === testcase.testcase_id)}
+              isHidden={testcase.is_hidden}
             />
           ))
         }

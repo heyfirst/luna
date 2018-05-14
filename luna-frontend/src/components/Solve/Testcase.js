@@ -1,6 +1,15 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import * as R from 'ramda'
+
+const ResultSpan = styled.span`
+  ${props => props.success && css`
+    color: green;
+  `}
+  ${props => props.fail && css`
+    color: red;
+  `}
+`
 
 const TestcaseContainer = styled.div`
   cursor: pointer;
@@ -18,14 +27,20 @@ class Testcase extends React.Component {
     isOpen: false
   }
 
-  handleOpen = () => this.setState({ isOpen: !this.state.isOpen })
+  handleOpen = () => {
+    if (this.props.isHidden === 1) {
+      return
+    }
+    this.setState({ isOpen: !this.state.isOpen })
+  }
 
   render () {
     const {
       taskID,
       input,
       expectedValue,
-      result
+      result,
+      isHidden
     } = this.props
 
     console.log(result)
@@ -40,9 +55,15 @@ class Testcase extends React.Component {
             <i className="fa fa-caret-right" />
           </Carat>
           {
-            (result !== undefined && result.status) &&
+            (result !== undefined && isHidden !== 1 && result.status) &&
             <div className="float-right">
               <i className="fa fa-check-circle" aria-hidden="true" />
+            </div>
+          }
+          {
+            (isHidden === 1) &&
+            <div className="float-right">
+              <i className="fa fa-lock" aria-hidden="true" />
             </div>
           }
           {`Testcase #${taskID}`}
@@ -58,13 +79,16 @@ class Testcase extends React.Component {
             <div className="row">
               <div className="col-4">{`Output:`}</div>
               <div className="col-8">
-                <span>
+                <ResultSpan
+                  success={result !== undefined && result.status}
+                  fail={result !== undefined && !result.status}
+                >
                   {
                     result === undefined
                       ? `Empty`
                       : result.output
                   }
-                </span>
+                </ResultSpan>
               </div>
             </div>
             <div className="row">

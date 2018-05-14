@@ -20,8 +20,31 @@ const Layout = styled.div`
   }
 `
 
-const SolveLayout = ({ onSubmit, onRunTest, code, task }) => (
+const LoadingLayout = styled.div`
+  position: absolute;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  background: rgba(0,0,0,.7);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ccc;
+`
+
+const Loading = () => (
+  <LoadingLayout>
+    <h5>{`...Loading...`}</h5>
+  </LoadingLayout>
+)
+
+const SolveLayout = ({ loading, onSubmit, onRunTest, code, task }) => (
   <div>
+    { loading && <Loading />}
     <Helmet>
       <title>{`Luna | Task: ${task.name}`}</title>
     </Helmet>
@@ -49,10 +72,6 @@ class SolvePageContainer extends React.Component {
   }
 
   render () {
-    if (this.props.loading) {
-      return <div />
-    }
-
     return (<SolveLayout
       loading={this.props.loading}
       onRunTest={this.onRunTest}

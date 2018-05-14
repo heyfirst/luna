@@ -63,7 +63,7 @@ const Solution = ({ testcase, result }) => (
         <li><a href="#">{`Console`}</a></li>
       </ul>
       <TestcaseList>
-        {
+        { testcase !== undefined &&
           testcase.map((testcase, index) => (
             <Testcase
               key={index}

@@ -111,7 +111,7 @@ export const actions = {
         })
     }
   },
-  submit: (taskID, code) => {
+  runSubmit: (taskID, code) => {
     const formData = {
       taskID,
       code
@@ -120,6 +120,11 @@ export const actions = {
     return {
       type: SUBMIT,
       promise: axios.post('/solve/submit', formData)
+        .then(resp => {
+          return {
+            payload: resp.data.result
+          }
+        })
     }
   }
 }

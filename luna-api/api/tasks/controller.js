@@ -14,7 +14,7 @@ module.exports = {
   getTask: async (req, res, next) => {
     const id = req.params.id
     try {
-      const task = await model.getOne(id)
+      const task = await model.getOne(id, true)
       res.status(200).send({
         task
       })

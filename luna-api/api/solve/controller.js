@@ -5,7 +5,8 @@ module.exports = {
   runTest: async (req, res, next) => {
     try {
       // Get Task
-      const task = await taskModel.getOne(req.body.taskID)
+      const task = await taskModel
+        .getOne(req.body.taskID, false)
 
       // send to [Sandbox]
       const formData = {
@@ -26,16 +27,22 @@ module.exports = {
   },
   submit: async (req, res, next) => {
     try {
-      console.log(req.body)
-
-      // get Task
+      // Get Task
+      const task = await taskModel
+        .getOne(req.body.taskID, true)
 
       // send to [Sandbox]
+      const formData = {
+        code: req.body.code,
+        testcase: task.testcase
+      }
 
-      // set Result on Answer
+      const result = await axios
+        .post(`${process.env.SERVICE_SANDY_PATH}/run`, formData)
+        .then(resp => resp.data.result)
 
       res.status(200).send({
-        result: {}
+        result
       })
     } catch (err) {
       next(err)

@@ -39,7 +39,7 @@ const Navigator = styled.ul`
 
 `
 
-const BottomBar = ({ onRunTest }) => (
+const BottomBar = ({ onRunTest, onSubmit }) => (
   <BottomBarContainer>
     <Navigator className="nav">
       <li className="active"><a href="#">{`Detail`}</a></li>
@@ -51,7 +51,10 @@ const BottomBar = ({ onRunTest }) => (
         className="btn btn-warning mr-2"
         onClick={() => onRunTest()}
       >{`Run Test`}</button>
-      <button className="btn btn-primary">{`Submit Code`}</button>
+      <button
+        className="btn btn-primary"
+        onClick={() => onSubmit()}
+      >{`Submit Code`}</button>
     </div>
   </BottomBarContainer>
 )

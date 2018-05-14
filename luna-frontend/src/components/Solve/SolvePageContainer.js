@@ -53,7 +53,7 @@ const SolveLayout = ({ loading, onSubmit, onRunTest, code, task }) => (
       <TaskInfo />
       <Solution />
     </Layout>
-    <BottomBar onRunTest={onRunTest} />
+    <BottomBar onRunTest={onRunTest} onSubmit={onSubmit} />
   </div>
 )
 
@@ -68,7 +68,7 @@ class SolvePageContainer extends React.Component {
   }
 
   onSubmit = async () => {
-
+    this.props.runSubmit(this.props.task.task_id, this.props.code)
   }
 
   render () {
@@ -90,6 +90,6 @@ export default connect(
   {
     getTask: actions.getTask,
     runTest: actions.runTest,
-    submit: actions.submit
+    runSubmit: actions.runSubmit
   }
 )(SolvePageContainer)

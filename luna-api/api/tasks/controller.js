@@ -11,15 +11,13 @@ module.exports = {
       next(err)
     }
   },
-  getTask: (req, res, next) => {
+  getTask: async (req, res, next) => {
     const id = req.params.id
     try {
-      const task = model.getOne(id)
-      setTimeout(() => {
-        res.status(200).send({
-          task
-        })
-      }, 1000)
+      const task = await model.getOne(id)
+      res.status(200).send({
+        task
+      })
     } catch (err) {
       next(err)
     }

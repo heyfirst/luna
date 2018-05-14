@@ -85,7 +85,7 @@ export const actions = {
     type: GET_TASK,
     promise: axios.get(`/tasks/${taskID}`)
       .then(resp => {
-        console.log(resp.data.task)
+        console.log(resp.data)
         return {
           payload: resp.data.task
         }

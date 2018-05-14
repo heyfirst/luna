@@ -56,7 +56,7 @@ const ImgHidden = styled.div`
 
 const PTask = styled.div`
     text-align: center; 
-    padding-top: 0.8125rem; 
+    padding-top: 0.521875rem; 
     color: black;
 `
 
@@ -92,7 +92,7 @@ class TopicList extends React.Component {
                 <CardImage />
             </div>
             <CardBody className="col-sm-7 card-body">
-                <h3>{props.e.title}</h3>
+                <h4>{props.e.title}</h4>
                 <p>{props.e.description}</p>
                 <br />
                 <CardProgress className="progress">

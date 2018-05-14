@@ -43,8 +43,6 @@ class Testcase extends React.Component {
       isHidden
     } = this.props
 
-    console.log(result)
-
     return (
       <TestcaseContainer
         className="testcase p-2 mb-2"

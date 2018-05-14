@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import swal from 'sweetalert2'
 import { Helmet } from 'react-helmet'
 
 import { connect } from 'react-redux'
@@ -46,7 +47,7 @@ const SolveLayout = ({ loading, onSubmit, onRunTest, code, task }) => (
   <div>
     { loading && <Loading />}
     <Helmet>
-      <title>{`Luna | Task: ${task.name}`}</title>
+      <title>{`Luna | Task: ${task.task_name || '-'}`}</title>
     </Helmet>
     <TopBar />
     <Layout>
@@ -68,7 +69,24 @@ class SolvePageContainer extends React.Component {
   }
 
   onSubmit = async () => {
-    this.props.runSubmit(this.props.task.task_id, this.props.code)
+    const result = await this.props.runSubmit(this.props.task.task_id, this.props.code)
+    if (result.type === 'luna/hello/RUN_TEST_RESOLVED') {
+      
+      if (result.payload.find(t => t.status === false)) {
+        swal(
+          'Fail!',
+          'try again',
+          'error'
+        )
+        return
+      }
+
+      swal(
+        'Success!',
+        'You do it right !!',
+        'success'
+      )
+    }
   }
 
   render () {

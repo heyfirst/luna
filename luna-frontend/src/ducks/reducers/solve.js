@@ -14,16 +14,14 @@ let initialState = {
 
   // Editor
   code: `class Sandbox {
-      public static void main(String[] args) {
-          int param1 = Integer.parseInt(args[0]);
-          int param2 = Integer.parseInt(args[1]);
-          int result = Sandbox.addition(param1, param2);
-          System.out.print(result);
-      }
-      
-      public static int addition(int a, int b) {
-          return a + b;
-      }
+    public static void main(String[] args) {
+        int param1 = Integer.parseInt(args[0]);
+        int param2 = Integer.parseInt(args[1]);
+        // code here ...
+        int result = param1 + param2;
+        // code here ...
+        System.out.print(result);
+    }
   }`,
 
   // Result

@@ -6,7 +6,7 @@ const solveAction = actionCreator('hello')
 const SET_FIELD = solveAction('SET_FIELD')
 const GET_TASK = solveAction('GET_TASK', true)
 const RUN_TEST = solveAction('RUN_TEST', true)
-const SUBMIT = solveAction('RUN_TEST', true)
+const SUBMIT = solveAction('SUBMIT', true)
 
 let initialState = {
   // Task
@@ -71,7 +71,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        error: action.error
+        error: action.error.err
 
       }
     default: return state

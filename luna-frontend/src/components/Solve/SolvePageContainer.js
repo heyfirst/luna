@@ -65,26 +65,41 @@ class SolvePageContainer extends React.Component {
   }
 
   onRunTest = async () => {
-    this.props.runTest(this.props.task.task_id, this.props.code)
+    try {
+      await this.props.runTest(this.props.task.task_id, this.props.code)
+    } catch (err) {
+      swal(
+        'Error!!!',
+        err.error.stderr,
+        'error'
+      )
+    }
   }
 
   onSubmit = async () => {
-    const result = await this.props.runSubmit(this.props.task.task_id, this.props.code)
-    if (result.type === 'luna/hello/RUN_TEST_RESOLVED') {
-      
-      if (result.payload.find(t => t.status === false)) {
-        swal(
-          'Fail!',
-          'try again',
-          'error'
-        )
-        return
-      }
+    try {
+      const result = await this.props.runSubmit(this.props.task.task_id, this.props.code)
+      if (result.type === 'luna/hello/SUBMIT_RESOLVED') {
+        if (result.payload.find(t => t.status === false)) {
+          swal(
+            'Fail!',
+            'try again',
+            'error'
+          )
+          return
+        }
 
+        swal(
+          'Success!',
+          'You do it right !!',
+          'success'
+        )
+      }
+    } catch (err) {
       swal(
-        'Success!',
-        'You do it right !!',
-        'success'
+        'Error!!!',
+        err.error.stderr,
+        'error'
       )
     }
   }
@@ -103,7 +118,8 @@ export default connect(
   state => ({
     loading: state.solve.loading,
     code: state.solve.code,
-    task: state.solve.task
+    task: state.solve.task,
+    error: state.solve.error
   }),
   {
     getTask: actions.getTask,

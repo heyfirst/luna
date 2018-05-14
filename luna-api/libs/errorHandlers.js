@@ -14,8 +14,7 @@ module.exports = (err, req, res, next) => {
     } - ${req.ip}`
   )
 
-  res.status(Status.INTERNAL_SERVER_ERROR).json({
-    type: 'InternalServerError',
-    message: 'The server failed to handle this request'
+  res.status(Status.INTERNAL_SERVER_ERROR).send({
+    ...err
   })
 }

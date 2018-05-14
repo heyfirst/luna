@@ -17,10 +17,15 @@ module.exports = {
       const result = await axios
         .post(`${process.env.SERVICE_SANDY_PATH}/run`, formData)
         .then(resp => resp.data.result)
+        .catch(err => err)
 
-      res.status(200).send({
-        result
-      })
+      if (typeof result.err === 'undefined') {
+        res.status(200).send({
+          result
+        })
+        return
+      }
+      next(result.err)
     } catch (err) {
       next(err)
     }
@@ -40,10 +45,15 @@ module.exports = {
       const result = await axios
         .post(`${process.env.SERVICE_SANDY_PATH}/run`, formData)
         .then(resp => resp.data.result)
+        .catch(err => err)
 
-      res.status(200).send({
-        result
-      })
+      if (typeof result.err === 'undefined') {
+        res.status(200).send({
+          result
+        })
+        return
+      }
+      next(result.err)
     } catch (err) {
       next(err)
     }

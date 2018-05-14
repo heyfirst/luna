@@ -70,7 +70,7 @@ const Solution = ({ testcase, result }) => (
               taskID={testcase.testcase_id}
               input={testcase.input}
               expectedValue={testcase.expected_output}
-              result={result.find(r => r.testcase_id === testcase.testcase_id)}
+              result={result !== undefined && result.find(r => r.testcase_id === testcase.testcase_id)}
               isHidden={testcase.is_hidden}
             />
           ))

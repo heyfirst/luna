@@ -39,30 +39,36 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/run', async (req, res, next) => {
-  const testcase = req.body.testcase
-  const code = req.body.code
+  try {
+    const testcase = req.body.testcase
+    const code = req.body.code
 
-  const filepath = `./judges/test.java`
-  await createJavaFile(filepath, code)
+    const filepath = `./judges/test.java`
+    await createJavaFile(filepath, code)
 
-  await compileJava(filepath)
+    await compileJava(filepath)
 
-  const result = testcase.map(async (tc, index) => {
-    const result = await runningTest(tc.input)
-    return {
-      testcase_id: tc.testcase_id,
-      output: result.stdout,
-      status: result.stdout === tc.expected_output
-    }
-  })
-
-  Promise.all(result).then((resp) => {
-    console.log(resp)
-    res.status(200).send({
-      status: 'PASS',
-      result: resp
+    const result = testcase.map(async (tc, index) => {
+      const result = await runningTest(tc.input)
+      return {
+        testcase_id: tc.testcase_id,
+        output: result.stdout,
+        status: result.stdout === tc.expected_output
+      }
     })
-  })
+
+    Promise.all(result).then((resp) => {
+      console.log(resp)
+      res.status(200).send({
+        status: 'PASS',
+        result: resp
+      })
+    })
+  } catch (err) {
+    res.status(500).send({
+      err
+    })
+  }
 })
 
 module.exports = router

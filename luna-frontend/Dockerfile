@@ -4,4 +4,4 @@ WORKDIR /app
 COPY . ./
 RUN yarn install && yarn build
 EXPOSE 3000 17000 22200
-CMD pm2 start server.js
+CMD ["pm2-runtime", "--json","server.js"]

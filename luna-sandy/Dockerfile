@@ -23,4 +23,4 @@ RUN set -x \
 
 
 EXPOSE 3030 17003 22203
-CMD pm2 start server.js
+CMD ["pm2-runtime", "--json","server.js"]

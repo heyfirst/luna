@@ -3,5 +3,5 @@ RUN npm install pm2@latest -g
 WORKDIR /app
 COPY . ./
 RUN yarn install && yarn build
-EXPOSE 3010 17001 22201
+EXPOSE 3030 17001 22201
 CMD ["pm2-runtime", "--json","server.js"]

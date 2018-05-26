@@ -22,5 +22,5 @@ RUN set -x \
         && [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
 
-EXPOSE 3030 17003 22203
+EXPOSE 3020 17003 22203
 CMD ["pm2-runtime", "--json","server.js"]

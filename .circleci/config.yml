@@ -352,13 +352,13 @@ jobs:
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
       - run:
           name: Deploy to DEV-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3010" -e "PROJECT_NAME=luna-api" -p 3010:3010 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
       - run:
           name: Deploy to DEV-Sandy-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
       - run: 
           name: Deploy to DEV-Admin-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-admin && sudo docker image prune -a -f && sudo docker run -d -p 3010:3010 -p 22201:22201 -p 17001:17001 --name luna-admin penthaizza/lunaproject:admin-latest"  
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-admin && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22201:22201 -p 17001:17001 --name luna-admin penthaizza/lunaproject:admin-latest"  
   deploy-to-prod-site:
     machine: true
     steps:
@@ -373,19 +373,19 @@ jobs:
     steps:
       - run:
           name: Deploy to Prod-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3010" -e "PROJECT_NAME=luna-api" -p 3010:3010 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
   deploy-to-prod-sandy:
     machine: true
     steps:
       - run:
           name: Deploy to Prod-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
   deploy-to-prod-admin:
     machine: true
     steps:
       - run: 
           name: Deploy to Prod-Admin-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-admin && sudo docker image prune -a -f && sudo docker run -d -p 3010:3010 -p 22201:22201 -p 17001:17001 --name luna-admin penthaizza/lunaproject:admin-latest"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-admin && sudo docker image prune -a -f && sudo docker run -d -p 3030:3030 -p 22201:22201 -p 17001:17001 --name luna-admin penthaizza/lunaproject:admin-latest"
 
 workflows:
   version: 2

@@ -1,17 +1,21 @@
 import React from 'react'
 import Navbar from './navbar'
 import TopicList from './topiclist'
+import styled from 'styled-components'
+
+const Bg = styled.div`
+    background-color: #152d46;
+`
 
 class Topic extends React.Component {
 
     render() {
-        return <div>
+        return <Bg>
                 <Navbar />
                 <br />
                 <TopicList />
-               </div>
+               </Bg>
     }
 }
-
 
 export default Topic

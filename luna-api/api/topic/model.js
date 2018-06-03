@@ -1,59 +1,4 @@
-const topic = [{
-    topicID: 1,
-    topicLevelID: 1,
-    taskTopicID: 1,
-    title: `Data Type`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-},
-{
-    topicID: 2,
-    topicLevelID: 2,
-    taskTopicID: 2,
-    title: `String`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-},
-{
-    topicID: 3,
-    topicLevelID: 3,
-    taskTopicID: 3,
-    title: `Array`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-},
-{
-    topicID: 4,
-    topicLevelID: 1,
-    taskTopicID: 1,
-    title: `Loop`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-},
-{
-    topicID: 5,
-    topicLevelID: 2,
-    taskTopicID: 2,
-    title: `Condition`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-},
-{
-    topicID: 6,
-    topicLevelID: 3,
-    taskTopicID: 3,
-    title: `Data Structure`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-},
-{
-    topicID: 7,
-    topicLevelID: 1,
-    taskTopicID: 1,
-    title: `Algorithm`,
-    description: `Lorem Ipsum is not simply random text.`,
-    timeStamp: Date()
-}]
+const knex = require('../../sql/knex')
 
 const user = {
         userID: 1,
@@ -79,11 +24,17 @@ const user = {
     }
 
 module.exports = {
-    getAll: () => {
+    getAll: async () => {
+        let topic = await knex()
+            .select()
+            .table('topic')
         return topic
     },
-    getOne: (id) => {
-        return topic.filter(t => t.topicID == id)[0]
+    getOne: async (id) => {
+        let topicid = await knex('topic')
+            .where('topic_id', id)
+        // return topic.filter(t => t.topicID == id)[0]
+        return topicid
     },
     getUserScore: (id) => {
         return user

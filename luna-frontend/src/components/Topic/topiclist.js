@@ -71,6 +71,7 @@ class TopicList extends React.Component {
 
     async componentDidMount() {
         const topic = await this.props.getTopic().payload
+        console.log(topic)
         const user = await this.props.getUser().payload
         this.setState({
             topics: topic,
@@ -88,12 +89,13 @@ class TopicList extends React.Component {
 
     topicCard = (props) => (
         <div className="row">
-            <div className="col-sm-3 card-image">
+            <div className="col-sm-3 card-image" >
                 <CardImage />
             </div>
             <CardBody className="col-sm-7 card-body">
-                <h4>{props.e.title}</h4>
-                <p>{props.e.description}</p>
+                <h4>{props.e.topic_name}</h4>
+                <p>Lorem Ipsum is not simply random text.</p>
+                {/* <p>{props.e.description}</p> */}
                 <br />
                 <CardProgress className="progress">
                     <CardProgressBar percentage={props.percentage} className="progress-bar"></CardProgressBar>
@@ -116,7 +118,7 @@ class TopicList extends React.Component {
     countTask = (e) => {
         let result = 0
         this.state.userScores.map((u) => {
-            if (u.topicID === e.topicID) {
+            if (u.topicID === e.topic_id) {
                 // result = u.Task.length 
                 result = 28 // Mock Result
             }
@@ -130,7 +132,7 @@ class TopicList extends React.Component {
     }
 
     isMustShowInline = (e) => {
-        return e.title === 'Loop' || e.title === 'Condition'
+        return e.topic_name === 'Loop' || e.topic_name === 'Condition'
     }
 
     renderTopics = () => {

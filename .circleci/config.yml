@@ -265,7 +265,7 @@ jobs:
           name: Add Dependencies
           command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
       - run:
-          name: Install & Build Project luna-api
+          name: Install & Build Project luna-api-django
           command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
       - setup_remote_docker: 
           docker_layer_caching: true
@@ -443,7 +443,7 @@ workflows:
       
       - test-lint-api-django:
           requires:
-            - install-api
+            - install-api-djano
           filters:
             branches:
                 only:
@@ -451,7 +451,7 @@ workflows:
                   - master
       - test-unit-api-django:
           requires:
-            - test-lint-api
+            - test-lint-api-django
           filters:
             branches:
                 only:
@@ -459,7 +459,7 @@ workflows:
                   - master
       - test-coverage-api-django:
           requires:
-            - test-unit-api
+            - test-unit-api-django
           filters:
             branches:
                 only:

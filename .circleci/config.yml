@@ -281,7 +281,7 @@ jobs:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api
+            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api-django
             docker tag penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:api-latest 
             docker push penthaizza/lunaproject
   # build-docker-api:

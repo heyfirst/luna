@@ -443,7 +443,7 @@ workflows:
       
       - test-lint-api-django:
           requires:
-            - install-api-djano
+            - install-api-django
           filters:
             branches:
                 only:

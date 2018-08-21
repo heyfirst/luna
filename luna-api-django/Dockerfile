@@ -5,9 +5,9 @@ RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
     apk add postgresql-dev bash
 
-RUN pip install --upgrade pip && pip install pipenv
+RUN sudo pip install --upgrade pip && sudo pip install pipenv
 ADD . /app
-RUN pipenv install --deploy --system
+RUN sudo pipenv install --deploy --system
 
 WORKDIR /app
 

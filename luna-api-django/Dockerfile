@@ -5,11 +5,13 @@ RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
     apk add postgresql-dev bash
 
-RUN pip install --upgrade pip && pip install pipenv
+RUN pip install --upgrade pip && pip install pipenv && pipenv --version
 ADD . /app
+RUN pipenv install
+RUN pipenv shell
 RUN pipenv update
 RUN pipenv install --deploy --system
-RUN pipenv shell && python --version
+
 
 WORKDIR /app
 

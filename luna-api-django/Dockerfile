@@ -7,7 +7,7 @@ RUN apk update && \
 
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
 ADD . /app
-RUN pipenv install
+RUN pwd && ls -a && pipenv install
 RUN pipenv shell
 RUN pipenv update
 RUN pipenv install --deploy --system

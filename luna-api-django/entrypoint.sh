@@ -1,5 +1,5 @@
 #!/bin/sh
-cd /app/lunaproject
+cd /app/myproject
 python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput

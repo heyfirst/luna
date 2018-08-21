@@ -4,4 +4,4 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py collectstatic --noinput
 cd /app/
-gunicorn lunaproject.wsgi --workers=3 -b 0.0.0.0:8000
+gunicorn myproject.wsgi --workers=3 -b 0.0.0.0:8000

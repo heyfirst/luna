@@ -1,3 +1,4 @@
+#!/bin/sh
 cd /app/lunaproject
 python manage.py makemigrations
 python manage.py migrate

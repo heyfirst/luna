@@ -9,13 +9,13 @@ installnode: &installnode
     docker:
         - image: node:8.9.4-alpine
     steps:
-      - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+        - checkout
+        - run:
+            name: Add Dependencies
+            command: apk add --no-cache curl git
+        - run:
+            name: Install & Build Project luna-frontend
+            command: cd luna-frontend && yarn install && CI=false yarn build
 
 version: 2
 jobs:
@@ -23,7 +23,15 @@ jobs:
     <<: *installnode
   
   test-lint-site:
-    <<: *installnode
+    <<: *nodeimage
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"

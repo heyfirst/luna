@@ -1,64 +1,67 @@
-version: 2
+version: 2.0
 
-nodeimage: &nodeimage
-  docker:
-      - image: node:8.9.4-alpine
+references:
 
-nodestepsite: &nodestepsite
-  steps:
-      - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+  nodeimage: &nodeimage
+    docker:
+        - image: node:8.9.4-alpine
 
-nodestepsandy: &nodestepsandy
-  steps:
-      - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-sandy
-          command: cd luna-sandy && yarn install
+  nodestepsite: &nodestepsite
+    steps:
+        - checkout
+        - run:
+            name: Add Dependencies
+            command: apk add --no-cache curl git
+        - run:
+            name: Install & Build Project luna-frontend
+            command: cd luna-frontend && yarn install && CI=false yarn build
 
-pythonimage: &pythonimage
-  docker:
-      - image: python:3.7-alpine
+  nodestepsandy: &nodestepsandy
+    steps:
+        - checkout
+        - run:
+            name: Add Dependencies
+            command: apk add --no-cache curl git
+        - run:
+            name: Install & Build Project luna-sandy
+            command: cd luna-sandy && yarn install
 
-pythonstep: &pythonstep
-  steps:
-      - checkout
-      - run:
-          name: Add Dependencies
-          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-      - run:
-          name: Install & Build project luna-api-django
-          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+  pythonimage: &pythonimage
+    docker:
+        - image: python:3.7-alpine
 
-installdocker: &installdocker
-  name: Install Docker client
-  command: |
-    set -x
-    VER="18.03.1-ce"
-    curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-    tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-    mv /tmp/docker/* /usr/bin
+  pythonstep: &pythonstep
+    steps:
+        - checkout
+        - run:
+            name: Add Dependencies
+            command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+        - run:
+            name: Install & Build project luna-api-django
+            command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
 
-filterrepo: &filterrepo 
-  filters:
-    branches:
-      only: 
-        - develop
-        - master
-deployprod: &deployprod
-  requires:
-    - deploy-to-dev
-  filters:
-    branches:
-        only: master
+  installdocker: &installdocker
+    name: Install Docker client
+    command: |
+      set -x
+      VER="18.03.1-ce"
+      curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+      tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+      mv /tmp/docker/* /usr/bin
+
+  filterrepo: &filterrepo 
+    filters:
+      branches:
+        only: 
+          - develop
+          - master
+
+  deployprod: &deployprod
+    requires:
+      - deploy-to-dev
+    filters:
+      branches:
+          only: master
 
 jobs:
   install-site:

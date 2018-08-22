@@ -8,6 +8,31 @@ nodedepend: &nodedepend
     run:
       name: Add Dependencies
       command: apk add --no-cache curl git
+installsite: &installsite
+    run:
+      name: Install & Build Project luna-frontend
+      command: cd luna-frontend && yarn install && CI=false yarn build
+pythondepend: &pythondepend
+    run:
+      name: Add Dependencies
+      command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+installapipython: &installapipython
+    run:
+      name: Install & Build project luna-api-django
+      command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+installsandy: &installsandy
+    run:
+      name: Install & Build Project luna-sandy
+      command: cd luna-sandy && yarn install
+installdocker: &installdocker
+    run:
+      name: Install Docker client
+      command: |
+        set -x
+        VER="18.03.1-ce"
+        curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+        tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+        mv /tmp/docker/* /usr/bin
 
 version: 2
 jobs:
@@ -16,18 +41,14 @@ jobs:
     steps:
       - checkout
       - *nodedepend
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *installsite
   
   test-lint-site:
     <<: *nodeimage
     steps:
       - checkout
       - *nodedepend
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *installsite
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
@@ -37,9 +58,7 @@ jobs:
     steps:
       - checkout
       - *nodedepend
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *installsite
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
@@ -49,9 +68,7 @@ jobs:
     steps:
       - checkout
       - *nodedepend
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *installsite
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"
@@ -60,23 +77,15 @@ jobs:
     <<: *pythonimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-      - run:
-          name: Install & Build project luna-api-django
-          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+      - *pythondepend
+      - *installapipython
    
   test-lint-api-django:
     <<: *pythonimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-      - run:
-          name: Install & Build project luna-api-django
-          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+      - *pythondepend
+      - *installapipython
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
@@ -85,12 +94,8 @@ jobs:
     <<: *pythonimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-      - run:
-          name: Install & Build project luna-api-django
-          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+      - *pythondepend
+      - *installapipython
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
@@ -99,12 +104,8 @@ jobs:
     <<: *pythonimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-      - run:
-          name: Install & Build project luna-api-django
-          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+      - *pythondepend
+      - *installapipython
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"      
@@ -113,23 +114,15 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-sandy
-          command: cd luna-sandy && yarn install
+      - *nodedepend
+      - *installsandy
   
   test-lint-sandy:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-sandy
-          command: cd luna-sandy && yarn install
+      - *nodedepend
+      - *installsandy
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
@@ -138,12 +131,8 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-sandy
-          command: cd luna-sandy && yarn install
+      - *nodedepend
+      - *installsandy
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
@@ -152,12 +141,8 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-sandy
-          command: cd luna-sandy && yarn install
+      - *nodedepend
+      - *installsandy
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"
@@ -166,22 +151,11 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-site
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *nodedepend
+      - *installsite
       - setup_remote_docker: 
           docker_layer_caching: true
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="18.03.1-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+      - *installdocker
       - run: 
           name: Build and Push Docker image
           command: |
@@ -193,22 +167,11 @@ jobs:
     <<: *pythonimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-      - run:
-          name: Install & Build Project luna-api-django
-          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+      - *pythondepend
+      - *installapipython
       - setup_remote_docker: 
           docker_layer_caching: true
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="18.03.1-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+      - *installdocker
       - run: 
           name: Build and Push Docker image
           command: |
@@ -220,22 +183,11 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-sandy
-          command: cd luna-sandy && yarn install
+      - *nodedepend
+      - *installsandy
       - setup_remote_docker: 
           docker_layer_caching: true
-      - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="18.03.1-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
+      - *installdocker
       - run: 
           name: Build and Push Docker image
           command: |

@@ -1,148 +1,192 @@
-version: 2
-jobs:
-  nodeimage: &nodeimage
+nodeimage: &nodeimage
     docker:
         - image: node:8.9.4-alpine
 
-  nodestepsite: &nodestepsite
-    steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk add --no-cache curl git
-        - run:
-            name: Install & Build Project luna-frontend
-            command: cd luna-frontend && yarn install && CI=false yarn build
-
-  nodestepsandy: &nodestepsandy
-    steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk add --no-cache curl git
-        - run:
-            name: Install & Build Project luna-sandy
-            command: cd luna-sandy && yarn install
-
-  pythonimage: &pythonimage
-    docker:
-        - image: python:3.7-alpine
-
-  pythonstep: &pythonstep
-    steps:
-        - checkout
-        - run:
-            name: Add Dependencies
-            command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
-        - run:
-            name: Install & Build project luna-api-django
-            command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
-
-  installdocker: &installdocker
-    name: Install Docker client
-    command: |
-      set -x
-      VER="18.03.1-ce"
-      curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-      tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-      mv /tmp/docker/* /usr/bin
-
-  filterrepo: &filterrepo 
-    filters:
-      branches:
-        only: 
-          - develop
-          - master
-
-  deployprod: &deployprod
-    requires:
-      - deploy-to-dev
-    filters:
-      branches:
-          only: master
-
+version: 2
+jobs:
   install-site:
     <<: *nodeimage
-    <<: *nodestepsite
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
   
   test-lint-site:
     <<: *nodeimage
-    <<: *nodestepsite
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
 
   test-unit-site:
     <<: *nodeimage
-    <<: *nodestepsite
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
         
   test-coverage-site:
     <<: *nodeimage
-    <<: *nodestepsite
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"
 
   install-api-django:
-    <<: *pythonimage
-    <<: *pythonstep
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+      - run:
+          name: Install & Build project luna-api-django
+          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
    
   test-lint-api-django:
-    <<: *pythonimage
-    <<: *pythonstep
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+      - run:
+          name: Install & Build project luna-api-django
+          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
 
   test-unit-api-django:
-    <<: *pythonimage
-    <<: *pythonstep
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+      - run:
+          name: Install & Build project luna-api-django
+          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
             
   test-coverage-api-django:
-    <<: *pythonimage
-    <<: *pythonstep
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+      - run:
+          name: Install & Build project luna-api-django
+          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"      
-        
+
   install-sandy:
     <<: *nodeimage
-    <<: *nodestepsandy
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-sandy
+          command: cd luna-sandy && yarn install
   
   test-lint-sandy:
     <<: *nodeimage
-    <<: *nodestepsandy
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-sandy
+          command: cd luna-sandy && yarn install
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
 
   test-unit-sandy:
     <<: *nodeimage
-    <<: *nodestepsandy
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-sandy
+          command: cd luna-sandy && yarn install
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
         
   test-coverage-sandy:
     <<: *nodeimage
-    <<: *nodestepsandy
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-sandy
+          command: cd luna-sandy && yarn install
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"
 
   build-docker-site:
     <<: *nodeimage
-    <<: *nodestepsite
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-site
+          command: cd luna-frontend && yarn install && CI=false yarn build
       - setup_remote_docker: 
           docker_layer_caching: true
       - run:
-          <<: *installdocker
+          name: Install Docker client
+          command: |
+            set -x
+            VER="18.03.1-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
       - run: 
           name: Build and Push Docker image
           command: |
@@ -151,12 +195,26 @@ jobs:
             docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
             docker push penthaizza/lunaproject
   build-docker-api-django:
-    <<: *pythonimage
-    <<: *pythonstep
+    docker:
+      - image: python:3.7-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+      - run:
+          name: Install & Build Project luna-api-django
+          command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
       - setup_remote_docker: 
           docker_layer_caching: true
       - run:
-          <<: *installdocker
+          name: Install Docker client
+          command: |
+            set -x
+            VER="18.03.1-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
       - run: 
           name: Build and Push Docker image
           command: |
@@ -166,11 +224,24 @@ jobs:
             docker push penthaizza/lunaproject
   build-docker-sandy:
     <<: *nodeimage
-    <<: *nodestepsandyl
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-sandy
+          command: cd luna-sandy && yarn install
       - setup_remote_docker: 
           docker_layer_caching: true
       - run:
-          <<: *installdocker
+          name: Install Docker client
+          command: |
+            set -x
+            VER="18.03.1-ce"
+            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+            mv /tmp/docker/* /usr/bin
       - run: 
           name: Build and Push Docker image
           command: |
@@ -221,50 +292,98 @@ workflows:
   build-test-deploy:
     jobs:
       - install-site:
-          <<: *filterrepo
+          filters:
+            branches:
+                only: 
+                  - develop
+                  - master
       - install-api-django:
-          <<: *filterrepo    
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master    
       - install-sandy:
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
 
       - test-lint-site:
           requires:
             - install-site
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-unit-site:
           requires:
             - test-lint-site
-          <<: *filterrepo
+          filters:
+            branches:
+                only: 
+                  - develop
+                  - master
       - test-coverage-site:
           requires:
             - test-unit-site
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       
       - test-lint-api-django:
           requires:
             - install-api-django
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-unit-api-django:
           requires:
             - test-lint-api-django
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-coverage-api-django:
           requires:
             - test-unit-api-django
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       
       - test-lint-sandy:
           requires:
             - install-sandy
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-unit-sandy:
           requires:
             - test-lint-sandy
-          <<: *filterrepo
+          filters:
+            branches:
+                only: 
+                  - develop
+                  - master
       - test-coverage-sandy:
           requires:
             - test-unit-sandy
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       
       - build-docker-site:
           requires:
@@ -272,32 +391,60 @@ workflows:
             - test-lint-site
             - test-unit-site
             - test-coverage-site
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - build-docker-api-django:
           requires:
             - install-api-django
             - test-lint-api-django
             - test-unit-api-django
             - test-coverage-api-django       
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - build-docker-sandy:
           requires:
             - install-sandy
             - test-lint-sandy
             - test-unit-sandy
             - test-coverage-sandy       
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
 
       - deploy-to-dev:
           requires:
             - build-docker-site
             - build-docker-api-django
             - build-docker-sandy
-          <<: *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
 
       - deploy-to-prod-site:
-          <<: *deployprod
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master
       - deploy-to-prod-api-django:
-          <<: *deployprod
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master
       - deploy-to-prod-sandy:
-          <<: *deployprod
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master

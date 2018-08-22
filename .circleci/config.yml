@@ -5,6 +5,7 @@ pythonimage: &pythonimage
     docker:
         - image: python:3.7-alpine
 stepsite: &stepsite
+      - checkout
       - run:
           name: Add Dependencies
           command: apk add --no-cache curl git
@@ -17,13 +18,11 @@ jobs:
   install-site:
     <<: *nodeimage
     steps:
-      - checkout
       - *stepsite
   
   test-lint-site:
     <<: *nodeimage
     steps:
-      - checkout
       - *stepsite
       - run: 
           name: Test-lint Project
@@ -32,7 +31,6 @@ jobs:
   test-unit-site:
     <<: *nodeimage
     steps:
-      - checkout
       - *stepsite
       - run: 
           name: Test-unit Project
@@ -41,7 +39,6 @@ jobs:
   test-coverage-site:
     <<: *nodeimage
     steps:
-      - checkout
       - *stepsite
       - run: 
           name: Test-coverage Project

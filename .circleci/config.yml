@@ -5,29 +5,25 @@ pythonimage: &pythonimage
     docker:
         - image: python:3.7-alpine
 
-nodedepend: &nodedepend
-      name: Add Dependencies
-   command: apk add --no-cache curl git
+installnode: &installnode
+    docker:
+        - image: node:8.9.4-alpine
+    steps:
+      - checkout
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
 
 version: 2
 jobs:
   install-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - run: *nodedepend
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+    <<: *installnode
   
   test-lint-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - run: *nodedepend
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+    <<: *installnode
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
@@ -36,7 +32,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-frontend
           command: cd luna-frontend && yarn install && CI=false yarn build
@@ -48,7 +46,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-frontend
           command: cd luna-frontend && yarn install && CI=false yarn build
@@ -113,7 +113,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
           command: cd luna-sandy && yarn install
@@ -122,7 +124,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
           command: cd luna-sandy && yarn install
@@ -134,7 +138,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
           command: cd luna-sandy && yarn install
@@ -146,7 +152,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
           command: cd luna-sandy && yarn install
@@ -158,7 +166,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-site
           command: cd luna-frontend && yarn install && CI=false yarn build
@@ -210,7 +220,9 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run: *nodedepend
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
       - run:
           name: Install & Build Project luna-sandy
           command: cd luna-sandy && yarn install

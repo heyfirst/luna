@@ -1,3 +1,4 @@
+# .circleci/config.yml
 nodeimage: &nodeimage
   docker:
       - image: node:8.9.4-alpine

@@ -4,6 +4,13 @@ nodeimage: &nodeimage
 pythonimage: &pythonimage
     docker:
         - image: python:3.7-alpine
+stepsite: &stepsite
+      - run:
+          name: Add Dependencies
+          command: apk add --no-cache curl git
+      - run:
+          name: Install & Build Project luna-frontend
+          command: cd luna-frontend && yarn install && CI=false yarn build
 
 version: 2
 jobs:
@@ -11,23 +18,13 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *stepsite
   
   test-lint-site:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *stepsite
       - run: 
           name: Test-lint Project
           command: echo "This Test-lint Space"
@@ -36,12 +33,7 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *stepsite
       - run: 
           name: Test-unit Project
           command: echo "This Test-unit Space"
@@ -50,12 +42,7 @@ jobs:
     <<: *nodeimage
     steps:
       - checkout
-      - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-frontend
-          command: cd luna-frontend && yarn install && CI=false yarn build
+      - *stepsite
       - run: 
           name: Test-coverage Project
           command: echo "This Test-coverage Space"

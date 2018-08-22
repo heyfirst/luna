@@ -1,8 +1,12 @@
+nodeimage: &nodeimage
+  docker:
+      - image: node:8.9.4-alpine
+
 version: 2
 jobs:
   install-site:
-    docker:
-      - image: node:8.9.4-alpine
+    <<: *nodeimage
+#      - image: node:8.9.4-alpine
     steps:
       - checkout
       - run:

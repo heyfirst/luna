@@ -1,6 +1,9 @@
 nodeimage: &nodeimage
     docker:
         - image: node:8.9.4-alpine
+pythonimage: &pythonimage
+    docker:
+        - image: python:3.7-alpine
 
 version: 2
 jobs:
@@ -58,8 +61,7 @@ jobs:
           command: echo "This Test-coverage Space"
 
   install-api-django:
-    docker:
-      - image: python:3.7-alpine
+    <<: *pythonimage
     steps:
       - checkout
       - run:
@@ -70,8 +72,7 @@ jobs:
           command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
    
   test-lint-api-django:
-    docker:
-      - image: python:3.7-alpine
+    <<: *pythonimage
     steps:
       - checkout
       - run:
@@ -85,8 +86,7 @@ jobs:
           command: echo "This Test-lint Space"
 
   test-unit-api-django:
-    docker:
-      - image: python:3.7-alpine
+    <<: *pythonimage
     steps:
       - checkout
       - run:
@@ -100,8 +100,7 @@ jobs:
           command: echo "This Test-unit Space"
             
   test-coverage-api-django:
-    docker:
-      - image: python:3.7-alpine
+    <<: *pythonimage
     steps:
       - checkout
       - run:
@@ -195,8 +194,7 @@ jobs:
             docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
             docker push penthaizza/lunaproject
   build-docker-api-django:
-    docker:
-      - image: python:3.7-alpine
+    <<: *pythonimage
     steps:
       - checkout
       - run:

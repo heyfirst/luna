@@ -1,7 +1,5 @@
-version: 2.0
-
-references:
-
+version: 2
+jobs:
   nodeimage: &nodeimage
     docker:
         - image: node:8.9.4-alpine
@@ -63,7 +61,6 @@ references:
       branches:
           only: master
 
-jobs:
   install-site:
     <<: *nodeimage
     <<: *nodestepsite

@@ -34,18 +34,10 @@ installdocker: &installdocker
         tar -xz -C /tmp -f /tmp/docker-$VER.tgz
         mv /tmp/docker/* /usr/bin
 filterrepo: &filterrepo
-    filters:
       branches:
         only: 
           - develop
           - master
-filterprod: &filterprod
-    filters:
-      branches:
-        only: master
-requiredev: &requiredev
-    requires:
-      - deploy-to-dev
 
 version: 2
 jobs:
@@ -251,50 +243,86 @@ workflows:
   build-test-deploy:
     jobs:
       - install-site:
-          *filterrepo
+          filters: *filterrepo
       - install-api-django:
-          *filterrepo  
+          filters: *filterrepo  
       - install-sandy:
-          *filterrepo
+          filters: *filterrepo
 
       - test-lint-site:
           requires:
             - install-site
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-unit-site:
           requires:
             - test-lint-site
-          *filterrepo
+          filters:
+            branches:
+                only: 
+                  - develop
+                  - master
       - test-coverage-site:
           requires:
             - test-unit-site
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       
       - test-lint-api-django:
           requires:
             - install-api-django
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-unit-api-django:
           requires:
             - test-lint-api-django
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-coverage-api-django:
           requires:
             - test-unit-api-django
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       
       - test-lint-sandy:
           requires:
             - install-sandy
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - test-unit-sandy:
           requires:
             - test-lint-sandy
-          *filterrepo
+          filters:
+            branches:
+                only: 
+                  - develop
+                  - master
       - test-coverage-sandy:
           requires:
             - test-unit-sandy
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       
       - build-docker-site:
           requires:
@@ -302,35 +330,60 @@ workflows:
             - test-lint-site
             - test-unit-site
             - test-coverage-site
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - build-docker-api-django:
           requires:
             - install-api-django
             - test-lint-api-django
             - test-unit-api-django
             - test-coverage-api-django       
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
       - build-docker-sandy:
           requires:
             - install-sandy
             - test-lint-sandy
             - test-unit-sandy
             - test-coverage-sandy       
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
 
       - deploy-to-dev:
           requires:
             - build-docker-site
             - build-docker-api-django
             - build-docker-sandy
-          *filterrepo
+          filters:
+            branches:
+                only:
+                  - develop
+                  - master
 
       - deploy-to-prod-site:
-          *requiredev
-          *filterprod
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master
       - deploy-to-prod-api-django:
-          *requiredev
-          *filterprod
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master
       - deploy-to-prod-sandy:
-          *requiredev
-          *filterprod
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+                only: master

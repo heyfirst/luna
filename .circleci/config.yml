@@ -218,7 +218,7 @@ jobs:
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
       - run:
           name: Deploy to DEV-API-Django-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec -e 'DB_HOST=$DB_HOST' -e 'DB_NAME=$DB_NAME' -e 'DB_PASSWORD=$DB_PASSWORD' -e 'DB_USER=$DB_USER' luna-api env"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec -e 'DB_HOST=$DB_HOST' -e 'DB_NAME=$DB_NAME' -e 'DB_PASSWORD=$DB_PASSWORD' -e 'DB_USER=$DB_USER' luna-api env && sudo docker exec luna-api env"
       - run:
           name: Deploy to DEV-Sandy-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"  

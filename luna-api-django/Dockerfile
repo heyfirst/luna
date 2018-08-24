@@ -15,9 +15,7 @@ RUN pipenv install --deploy --system
 
 EXPOSE 8000
 
-COPY ./django_nginx.conf /etc/nginx/sites-available/
-RUN ln -s /etc/nginx/sites-available/django_nginx.conf /etc/nginx/sites-enabled
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+ADD ./nginx.conf /etc/nginx/nginx.conf
 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

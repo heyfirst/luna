@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'luna',
-        'USER': 'lunaproject',
-        'PASSWORD': 'lunaproject',
-        'HOST': 'lunadb.cygao9mrn3nt.ap-southeast-1.rds.amazonaws.com',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
         'PORT': '5432',
     }
 }

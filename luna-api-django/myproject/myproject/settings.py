@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+from django.conf import settings
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -20,11 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pa(pf&n1rhh#co%sy6dkjd!-zka9s^a^yxa5@o^saz47!59@80'
+# SECRET_KEY = 'pa(pf&n1rhh#co%sy6dkjd!-zka9s^a^yxa5@o^saz47!59@80'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -79,10 +80,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'luna',
-        'USER': 'lunaproject',
-        'PASSWORD': 'lunaproject',
-        'HOST': 'lunadb.cygao9mrn3nt.ap-southeast-1.rds.amazonaws.com',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ['DB_HOST'],
         'PORT': '5432',
     }
 }
@@ -126,4 +127,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = '/app/myproject/static'

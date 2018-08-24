@@ -24,7 +24,7 @@ SECRET_KEY = 'pa(pf&n1rhh#co%sy6dkjd!-zka9s^a^yxa5@o^saz47!59@80'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = True
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -79,10 +79,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
+        'NAME': 'luna',
+        'USER': 'lunaproject',
+        'PASSWORD': 'lunaproject',
+        'HOST': 'lunadb.cygao9mrn3nt.ap-southeast-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
@@ -127,5 +127,3 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "sfiles"), )
-# STATIC_ROOT = "/app/myproject/static"

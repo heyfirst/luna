@@ -5,7 +5,7 @@ WORKDIR /app
  
 RUN apk update && \
     apk add --virtual build-deps gcc python-dev musl-dev && \
-    apk add --update nginx postgresql-dev bash
+    apk add --update nginx postgresql-dev bash openrc
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
 ADD . /app
 

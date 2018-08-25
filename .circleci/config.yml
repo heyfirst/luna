@@ -241,7 +241,7 @@ jobs:
     machine: true
     steps:
       - run:
-          name: Deploy to Prod-API-Server
+          name: Deploy to Prod-Sandy-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
 
 workflows:

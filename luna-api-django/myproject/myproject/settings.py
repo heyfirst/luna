@@ -122,4 +122,4 @@ STATIC_URL = '/static/'
 # MEDIA_URL='/media/'
 # MEDIA_ROOT=os.path.join(BASE_DIR, 'media/')
 
-STATIC_ROOT = '/var/www/test/static'
+STATIC_ROOT = '/var/www/luna/static'

@@ -1,12 +1,16 @@
-FROM python:3.7-alpine
+FROM python:3.7-slim
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
  
-RUN apk update && \
-    apk add --virtual build-deps gcc python-dev musl-dev && \
-    apk add --update nginx postgresql-dev bash openrc
+RUN apt-get update && apt-get install -y \
+		gcc \
+		gettext \
+		postgresql-client libpq-dev \
+	--no-install-recommends && rm -rf /var/lib/apt/lists/*
+    
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
+
 ADD . /app
 
 RUN pwd && ls -a
@@ -15,7 +19,7 @@ RUN pipenv install --deploy --system
 
 EXPOSE 8000
 
-ADD ./nginx.conf /etc/nginx/nginx.conf
+ADD ./nginx-django.conf /etc/nginx/conf.d
 
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

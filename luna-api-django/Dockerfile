@@ -1,12 +1,12 @@
-FROM python:3.7-slim
+FROM python:3.7
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
  
 RUN apt-get update && apt-get install -y \
-		gcc \
+		gcc nginx\
 		gettext \
-        postgresql-client-10 libpq-dev \
+        libpq-dev \
 	--no-install-recommends && rm -rf /var/lib/apt/lists/*
     
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version

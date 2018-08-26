@@ -1,16 +1,13 @@
-FROM python:3.7
+FROM python:alpine
 ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
  
-RUN apt-get update && apt-get install -y \
-		gcc nginx\
-		gettext \
-        libpq-dev \
-	--no-install-recommends && rm -rf /var/lib/apt/lists/*
-    
+RUN apk update && \
+    apk add --virtual .build-deps gcc python-dev musl-dev && \
+    apk add --update --no-cache nginx postgresql-dev bash openrc
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
-
 ADD . /app
 
 RUN pwd && ls -a

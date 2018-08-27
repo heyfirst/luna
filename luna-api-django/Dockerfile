@@ -13,14 +13,13 @@ RUN apk update && \
     apk add --virtual .build-deps gcc python-dev musl-dev && \
     apk add --update --no-cache postgresql-dev bash openrc
 
+#Copy Project
+COPY . /app
+
 # Install dependencies
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
-COPY ./Pipfile /code/Pipfile
 RUN pipenv update --outdated
 RUN pipenv install --deploy --system
-
-#Copy Project
-COPY . /app/
 
 #Ecpose port
 EXPOSE 8000

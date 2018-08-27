@@ -118,7 +118,7 @@ class TopicList extends React.Component {
     countTask = (e) => {
         let result = 0
         this.state.userScores.map((u) => {
-            if (u.topicID === e.topic_id) {
+            if (u.topicID === e.id) {
                 // result = u.Task.length 
                 result = 28 // Mock Result
             }

@@ -57,12 +57,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# CORS_ORIGIN_WHITELIST = (
-#     'localhost:3000',
-#     'api.dev.luna.codes',
-# )
-
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'dev.luna.codes',
+)
 
 ROOT_URLCONF = 'myproject.urls'
 

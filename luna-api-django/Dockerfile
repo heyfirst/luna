@@ -16,7 +16,8 @@ RUN apk update && \
 # Install dependencies
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
 COPY ./Pipfile /code/Pipfile
-RUN pipenv update --outdated && pipenv install --deploy --system
+RUN pipenv update --outdated
+RUN pipenv install --deploy --system
 
 #Copy Project
 COPY . /app/

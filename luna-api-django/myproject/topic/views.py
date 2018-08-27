@@ -4,8 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
-from topic.models import Topic
-from topic.serializers import TopicSerializer
+from .models import Topic
+from .serializers import TopicSerializer
 
 class TopicList(APIView):
     def get(self, request, format=None):

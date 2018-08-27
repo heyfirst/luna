@@ -10,6 +10,7 @@ gunicorn = "*"
 djangorestframework = "*"
 markdown = "*"
 django-filter = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

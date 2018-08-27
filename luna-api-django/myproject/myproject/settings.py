@@ -35,10 +35,19 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'topic',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
+    ]
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,6 +56,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS_ORIGIN_WHITELIST = (
+#     'localhost:3000',
+#     'api.dev.luna.codes',
+# )
+
+CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -73,11 +89,17 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
+        # 'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': os.environ.get('DB_NAME'),
+        # 'USER': os.environ.get('DB_USER'),
+        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
+        # 'HOST': os.environ.get('DB_HOST'),
+        # 'PORT': '5432',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
+        'NAME': 'luna',
+        'USER': 'lunaproject',
+        'PASSWORD': 'lunaproject',
+        'HOST': 'lunadb.cygao9mrn3nt.ap-southeast-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }

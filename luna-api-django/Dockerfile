@@ -1,22 +1,29 @@
+# Pull base image
 FROM python:alpine
+
+# Set environment varibles
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
+# Set work directory
 WORKDIR /app
  
+# Add dependencies
 RUN apk update && \
     apk add --virtual .build-deps gcc python-dev musl-dev && \
-    apk add --update --no-cache nginx postgresql-dev bash openrc
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
+    apk add --update --no-cache postgresql-dev bash openrc
+
+# Install dependencies
 RUN pip install --upgrade pip && pip install pipenv && pipenv --version
-ADD . /app
+COPY ./Pipfile /code/Pipfile
+RUN pipenv update --outdated && pipenv install --deploy --system
 
-RUN pwd && ls -a
-RUN pipenv update --outdated
-RUN pipenv install --deploy --system
+#Copy Project
+COPY . /app/
 
+#Ecpose port
 EXPOSE 8000
 
-ADD ./nginx-django.conf /etc/nginx/conf.d
-
+# Run Command in shell script
 RUN chmod +x entrypoint.sh
 ENTRYPOINT ["./entrypoint.sh"]

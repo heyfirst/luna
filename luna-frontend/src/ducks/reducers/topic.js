@@ -8,13 +8,35 @@ const GET_USER = topicAction('GET_USER')
 
 // function get data from API
 const getTopic = async () => {
-  const resp = await axios.get('https://api.dev.luna.codes/topics')
+  const resp = await axios.get('https://api.dev.luna.codes/api/topic/')
   return resp.data
 }
 
 const getUser = async () => {
-    const resp = await axios.get('https://api.dev.luna.codes/topics/user/1')
-    return resp.data
+    // const resp = await axios.get('https://api.dev.luna.codes/topics/user/1')
+    // return resp.data
+    return {
+        userID: 1,
+        fullName: `Janjie beauty`,
+        userName: `Janjie beauty`,
+        userScore: [{
+            userScoreID: 1,
+            score: 99,
+            topicID: 1,
+            topicName: "Data Type",
+            Task: [{
+                taskID: 1,
+                taskName: "Plus",
+                timeStamp: Date()
+            },
+            {
+                taskID: 2,
+                taskName: "Minus",
+                timeStamp: Date()
+            }],
+            timeStamp: Date()
+        }]
+    }
 }
 
 // initial state

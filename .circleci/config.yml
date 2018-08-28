@@ -47,116 +47,116 @@ filterprod: &filterprod
 
 version: 2
 jobs:
-  install-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsite
+  # install-site:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsite
   
-  test-lint-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsite
-      - run: 
-          name: Test-lint Project
-          command: echo "This Test-lint Space"
+  # test-lint-site:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsite
+  #     - run: 
+  #         name: Test-lint Project
+  #         command: echo "This Test-lint Space"
 
-  test-unit-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsite
-      - run: 
-          name: Test-unit Project
-          command: echo "This Test-unit Space"
+  # test-unit-site:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsite
+  #     - run: 
+  #         name: Test-unit Project
+  #         command: echo "This Test-unit Space"
         
-  test-coverage-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsite
-      - run: 
-          name: Test-coverage Project
-          command: echo "This Test-coverage Space"
+  # test-coverage-site:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsite
+  #     - run: 
+  #         name: Test-coverage Project
+  #         command: echo "This Test-coverage Space"
 
-  install-api-django:
-    <<: *pythonimage
-    steps:
-      - checkout
-      - *pythondepend
-      - *installapipython
+  # install-api-django:
+  #   <<: *pythonimage
+  #   steps:
+  #     - checkout
+  #     - *pythondepend
+  #     - *installapipython
    
-  test-lint-api-django:
-    <<: *pythonimage
-    steps:
-      - checkout
-      - *pythondepend
-      - *installapipython
-      - run: 
-          name: Test-lint Project
-          command: echo "This Test-lint Space"
+  # test-lint-api-django:
+  #   <<: *pythonimage
+  #   steps:
+  #     - checkout
+  #     - *pythondepend
+  #     - *installapipython
+  #     - run: 
+  #         name: Test-lint Project
+  #         command: echo "This Test-lint Space"
 
-  test-unit-api-django:
-    <<: *pythonimage
-    steps:
-      - checkout
-      - *pythondepend
-      - *installapipython
-      - run: 
-          name: Test-unit Project
-          command: echo "This Test-unit Space"
+  # test-unit-api-django:
+  #   <<: *pythonimage
+  #   steps:
+  #     - checkout
+  #     - *pythondepend
+  #     - *installapipython
+  #     - run: 
+  #         name: Test-unit Project
+  #         command: echo "This Test-unit Space"
             
-  test-coverage-api-django:
-    <<: *pythonimage
-    steps:
-      - checkout
-      - *pythondepend
-      - *installapipython
-      - run: 
-          name: Test-coverage Project
-          command: echo "This Test-coverage Space"      
+  # test-coverage-api-django:
+  #   <<: *pythonimage
+  #   steps:
+  #     - checkout
+  #     - *pythondepend
+  #     - *installapipython
+  #     - run: 
+  #         name: Test-coverage Project
+  #         command: echo "This Test-coverage Space"      
 
-  install-sandy:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsandy
+  # install-sandy:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsandy
   
-  test-lint-sandy:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsandy
-      - run: 
-          name: Test-lint Project
-          command: echo "This Test-lint Space"
+  # test-lint-sandy:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsandy
+  #     - run: 
+  #         name: Test-lint Project
+  #         command: echo "This Test-lint Space"
 
-  test-unit-sandy:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsandy
-      - run: 
-          name: Test-unit Project
-          command: echo "This Test-unit Space"
+  # test-unit-sandy:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsandy
+  #     - run: 
+  #         name: Test-unit Project
+  #         command: echo "This Test-unit Space"
         
-  test-coverage-sandy:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsandy
-      - run: 
-          name: Test-coverage Project
-          command: echo "This Test-coverage Space"
+  # test-coverage-sandy:
+  #   <<: *nodeimage
+  #   steps:
+  #     - checkout
+  #     - *nodedepend
+  #     - *installsandy
+  #     - run: 
+  #         name: Test-coverage Project
+  #         command: echo "This Test-coverage Space"
 
   build-docker-site:
     <<: *nodeimage
@@ -248,72 +248,72 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - install-site:
-          filters: *filterrepo
-      - install-api-django:
-          filters: *filterrepo  
-      - install-sandy:
-          filters: *filterrepo
+      # - install-site:
+      #     filters: *filterrepo
+      # - install-api-django:
+      #     filters: *filterrepo  
+      # - install-sandy:
+      #     filters: *filterrepo
 
-      - test-lint-site:
-          requires:
-            - install-site
-          filters: *filterrepo
-      - test-unit-site:
-          requires:
-            - test-lint-site
-          filters: *filterrepo
-      - test-coverage-site:
-          requires:
-            - test-unit-site
-          filters: *filterrepo
+      # - test-lint-site:
+      #     requires:
+      #       - install-site
+      #     filters: *filterrepo
+      # - test-unit-site:
+      #     requires:
+      #       - test-lint-site
+      #     filters: *filterrepo
+      # - test-coverage-site:
+      #     requires:
+      #       - test-unit-site
+      #     filters: *filterrepo
       
-      - test-lint-api-django:
-          requires:
-            - install-api-django
-          filters: *filterrepo
-      - test-unit-api-django:
-          requires:
-            - test-lint-api-django
-          filters: *filterrepo
-      - test-coverage-api-django:
-          requires:
-            - test-unit-api-django
-          filters: *filterrepo
+      # - test-lint-api-django:
+      #     requires:
+      #       - install-api-django
+      #     filters: *filterrepo
+      # - test-unit-api-django:
+      #     requires:
+      #       - test-lint-api-django
+      #     filters: *filterrepo
+      # - test-coverage-api-django:
+      #     requires:
+      #       - test-unit-api-django
+      #     filters: *filterrepo
       
-      - test-lint-sandy:
-          requires:
-            - install-sandy
-          filters: *filterrepo
-      - test-unit-sandy:
-          requires:
-            - test-lint-sandy
-          filters: *filterrepo
-      - test-coverage-sandy:
-          requires:
-            - test-unit-sandy
-          filters: *filterrepo
+      # - test-lint-sandy:
+      #     requires:
+      #       - install-sandy
+      #     filters: *filterrepo
+      # - test-unit-sandy:
+      #     requires:
+      #       - test-lint-sandy
+      #     filters: *filterrepo
+      # - test-coverage-sandy:
+      #     requires:
+      #       - test-unit-sandy
+      #     filters: *filterrepo
       
       - build-docker-site:
-          requires:
-            - install-site
-            - test-lint-site
-            - test-unit-site
-            - test-coverage-site
+          # requires:
+          #   - install-site
+            # - test-lint-site
+            # - test-unit-site
+            # - test-coverage-site
           filters: *filterrepo
       - build-docker-api-django:
-          requires:
-            - install-api-django
-            - test-lint-api-django
-            - test-unit-api-django
-            - test-coverage-api-django       
+          # requires:
+          #   - install-api-django
+            # - test-lint-api-django
+            # - test-unit-api-django
+            # - test-coverage-api-django       
           filters: *filterrepo
       - build-docker-sandy:
-          requires:
-            - install-sandy
-            - test-lint-sandy
-            - test-unit-sandy
-            - test-coverage-sandy       
+          # requires:
+          #   - install-sandy
+            # - test-lint-sandy
+            # - test-unit-sandy
+            # - test-coverage-sandy       
           filters: *filterrepo
 
       - deploy-to-dev:

@@ -7,6 +7,7 @@ const DivCard = styled.div`
     margin-bottom: 1.4375rem;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 4.9375rem !important;
 `
 
 const DivCardInline = styled.div`
@@ -14,19 +15,23 @@ const DivCardInline = styled.div`
     width: 49%; 
     margin-left: 0.1875rem; 
     margin-right: 0.1875rem;
+    border-radius: 4.9375rem !important;
 `
 
 const CardImage = styled.div`
-    background-color: #47C9D1;
+    background-color: #F2994A;
     padding: 0rem;
     max-width: 100%;
     min-width: 100%;
     max-height: 100%;
     min-height: 100%;
+    border-radius: 50%;
 `
 
 const CardBody = styled.div`
     color: black;
+    padding-right: 0.3125rem !important;
+    padding-left: 0.3125rem !important;
 `
 
 const CardProgress = styled.div`
@@ -44,8 +49,10 @@ const CardBodyAlignCenter = styled.div`
 `
 
 const PictureImg = styled.img`
+    padding-top: 1.5625rem;
     width: 4.375rem; 
     height: 4.375rem;
+    z-index: 100;
 `
 
 const ImgHidden = styled.div`
@@ -56,7 +63,8 @@ const ImgHidden = styled.div`
 
 const PTask = styled.div`
     text-align: center; 
-    padding-top: 0.521875rem; 
+    padding-top: 3.125rem;
+    padding-right: 0.9375rem; 
     color: black;
 `
 
@@ -90,18 +98,7 @@ class TopicList extends React.Component {
     topicCard = (props) => (
         <div className="row">
             <div className="col-sm-3 card-image" >
-                <CardImage />
-            </div>
-            <CardBody className="col-sm-7 card-body">
-                <h4>{props.e.topic_name}</h4>
-                <p>Lorem Ipsum is not simply random text.</p>
-                {/* <p>{props.e.description}</p> */}
-                <br />
-                <CardProgress className="progress">
-                    <CardProgressBar percentage={props.percentage} className="progress-bar"></CardProgressBar>
-                </CardProgress>
-            </CardBody>
-            <CardBodyAlignCenter className="col-sm-2 card-body align-self-center">
+                <CardImage>
                 {props.index === 0 ?
                     <ImgHidden />
                     : this.isScoreOverNinetyNine(props.index)
@@ -110,6 +107,17 @@ class TopicList extends React.Component {
                             <PictureImg className="img-fluid rounded mx-auto d-block" src={require('../../static/image/padlock.png')} />
                         </picture>
                 }
+                </CardImage>
+            </div>
+            <CardBody className="col-sm-7 card-body">
+                <h4>{props.e.topic_name}</h4>
+                <p>Lorem Ipsum is not simply random text.</p>
+                {/* <p>{props.e.description}</p> */}
+                <CardProgress className="progress">
+                    <CardProgressBar percentage={props.percentage} className="progress-bar"></CardProgressBar>
+                </CardProgress>
+            </CardBody>
+            <CardBodyAlignCenter className="col-sm-2 card-body align-self-center">
                 <PTask className="mb-0 task">{ props.taskCount }/150</PTask>
             </CardBodyAlignCenter>
         </div>
@@ -119,7 +127,7 @@ class TopicList extends React.Component {
         let result = 0
         this.state.userScores.map((u) => {
             if (u.topicID === e.id) {
-                // result = u.Task.length 
+                //result = u.Task.length 
                 result = 28 // Mock Result
             }
         })

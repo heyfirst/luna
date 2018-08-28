@@ -51,13 +51,13 @@ const CardBodyAlignCenter = styled.div`
 const PictureImg = styled.img`
     padding-top: 1.5625rem;
     width: 4.375rem; 
-    height: 4.375rem;
+    height: 5.9375rem;
     z-index: 100;
 `
 
 const ImgHidden = styled.div`
     width: 4.375rem; 
-    height: 4.375rem;
+    height: 5.9375rem;
     visibility: hidden;
 `
 

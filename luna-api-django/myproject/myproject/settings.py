@@ -58,8 +58,10 @@ MIDDLEWARE = [
 ]
 
 CORS_ORIGIN_WHITELIST = (
-    'dev.luna.codes',
+    'dev.luna.codes'
 )
+
+# CORS_ORIGIN_ALLOW_ALL = True
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -86,17 +88,11 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': os.environ.get('DB_NAME'),
-        # 'USER': os.environ.get('DB_USER'),
-        # 'PASSWORD': os.environ.get('DB_PASSWORD'),
-        # 'HOST': os.environ.get('DB_HOST'),
-        # 'PORT': '5432',
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'luna',
-        'USER': 'lunaproject',
-        'PASSWORD': 'lunaproject',
-        'HOST': 'lunadb.cygao9mrn3nt.ap-southeast-1.rds.amazonaws.com',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
         'PORT': '5432',
     }
 }
@@ -137,8 +133,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT=os.path.join(BASE_DIR, 'static/')
-
-# MEDIA_URL='/media/'
-# MEDIA_ROOT=os.path.join(BASE_DIR, 'media/')
 
 # STATIC_ROOT = '/var/www/luna/static'

@@ -1,173 +1,62 @@
 nodeimage: &nodeimage
-    docker:
-        - image: node:8.9.4-alpine
+  docker:
+    - image: node:8.9.4-alpine
 pythonimage: &pythonimage
-    docker:
-        - image: python:3.7-alpine
+  docker:
+    - image: python:3.7-alpine
 nodedepend: &nodedepend
-    run:
-      name: Add Dependencies
-      command: apk add --no-cache curl git
+  run:
+    name: Add Dependencies
+    command: apk add --no-cache curl git
 installsite: &installsite
-    run:
-      name: Install & Build Project luna-frontend
-      command: cd luna-frontend && yarn install && CI=false yarn build
+  run:
+    name: Install & Build Project luna-frontend
+    command: cd luna-frontend && yarn install && CI=false yarn build
 pythondepend: &pythondepend
-    run:
-      name: Add Dependencies
-      command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
+  run:
+    name: Add Dependencies
+    command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
 installapipython: &installapipython
-    run:
-      name: Install & Build project luna-api-django
-      command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+  run:
+    name: Install & Build project luna-api-django
+    command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
 installsandy: &installsandy
-    run:
-      name: Install & Build Project luna-sandy
-      command: cd luna-sandy && yarn install
+  run:
+    name: Install & Build Project luna-sandy
+    command: cd luna-sandy && yarn install
 installdocker: &installdocker
-    run:
-      name: Install Docker client
-      command: |
-        set -x
-        VER="18.03.1-ce"
-        curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-        tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-        mv /tmp/docker/* /usr/bin
+  run:
+    name: Install Docker client
+    command: |
+      set -x
+      VER="18.03.1-ce"
+      curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+      tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+      mv /tmp/docker/* /usr/bin
 filterrepo: &filterrepo
-    branches:
-      only: 
-        - develop
-        - master
+  branches:
+    only:
+      - develop
+      - master
 filterprod: &filterprod
-    requires:
-      - deploy-to-dev
-    filters:
-      branches:
-        only: master
+  requires:
+    - deploy-to-dev
+  filters:
+    branches:
+      only: master
 
 version: 2
 jobs:
-  # install-site:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsite
-  
-  # test-lint-site:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsite
-  #     - run: 
-  #         name: Test-lint Project
-  #         command: echo "This Test-lint Space"
-
-  # test-unit-site:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsite
-  #     - run: 
-  #         name: Test-unit Project
-  #         command: echo "This Test-unit Space"
-        
-  # test-coverage-site:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsite
-  #     - run: 
-  #         name: Test-coverage Project
-  #         command: echo "This Test-coverage Space"
-
-  # install-api-django:
-  #   <<: *pythonimage
-  #   steps:
-  #     - checkout
-  #     - *pythondepend
-  #     - *installapipython
-   
-  # test-lint-api-django:
-  #   <<: *pythonimage
-  #   steps:
-  #     - checkout
-  #     - *pythondepend
-  #     - *installapipython
-  #     - run: 
-  #         name: Test-lint Project
-  #         command: echo "This Test-lint Space"
-
-  # test-unit-api-django:
-  #   <<: *pythonimage
-  #   steps:
-  #     - checkout
-  #     - *pythondepend
-  #     - *installapipython
-  #     - run: 
-  #         name: Test-unit Project
-  #         command: echo "This Test-unit Space"
-            
-  # test-coverage-api-django:
-  #   <<: *pythonimage
-  #   steps:
-  #     - checkout
-  #     - *pythondepend
-  #     - *installapipython
-  #     - run: 
-  #         name: Test-coverage Project
-  #         command: echo "This Test-coverage Space"      
-
-  # install-sandy:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsandy
-  
-  # test-lint-sandy:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsandy
-  #     - run: 
-  #         name: Test-lint Project
-  #         command: echo "This Test-lint Space"
-
-  # test-unit-sandy:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsandy
-  #     - run: 
-  #         name: Test-unit Project
-  #         command: echo "This Test-unit Space"
-        
-  # test-coverage-sandy:
-  #   <<: *nodeimage
-  #   steps:
-  #     - checkout
-  #     - *nodedepend
-  #     - *installsandy
-  #     - run: 
-  #         name: Test-coverage Project
-  #         command: echo "This Test-coverage Space"
-
   build-docker-site:
     <<: *nodeimage
     steps:
       - checkout
       - *nodedepend
       - *installsite
-      - setup_remote_docker: 
+      - setup_remote_docker:
           docker_layer_caching: true
       - *installdocker
-      - run: 
+      - run:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -180,10 +69,10 @@ jobs:
       - checkout
       - *pythondepend
       - *installapipython
-      - setup_remote_docker: 
+      - setup_remote_docker:
           docker_layer_caching: true
       - *installdocker
-      - run: 
+      - run:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -196,10 +85,10 @@ jobs:
       - checkout
       - *nodedepend
       - *installsandy
-      - setup_remote_docker: 
+      - setup_remote_docker:
           docker_layer_caching: true
       - *installdocker
-      - run: 
+      - run:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
@@ -210,9 +99,9 @@ jobs:
   deploy-to-dev:
     machine: true
     steps:
-      - run: 
+      - run:
           name: Deploy to DEV-Site-Server
-          command: | 
+          command: |
             sudo apt-get update
             sudo apt-get install sshpass
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
@@ -221,13 +110,13 @@ jobs:
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /var/www/luna/static:/var/www/luna/static -e 'DB_HOST=$DB_HOST' -e 'DB_NAME=$DB_NAME' -e 'DB_PASSWORD=$DB_PASSWORD' -e 'DB_USER=$DB_USER' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
       - run:
           name: Deploy to DEV-Sandy-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"  
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
   deploy-to-prod-site:
     machine: true
     steps:
-      - run: 
+      - run:
           name: Deploy to Prod-Site-Server
-          command: | 
+          command: |
             sudo apt-get update
             sudo apt-get install sshpass
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
@@ -248,72 +137,13 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      # - install-site:
-      #     filters: *filterrepo
-      # - install-api-django:
-      #     filters: *filterrepo  
-      # - install-sandy:
-      #     filters: *filterrepo
-
-      # - test-lint-site:
-      #     requires:
-      #       - install-site
-      #     filters: *filterrepo
-      # - test-unit-site:
-      #     requires:
-      #       - test-lint-site
-      #     filters: *filterrepo
-      # - test-coverage-site:
-      #     requires:
-      #       - test-unit-site
-      #     filters: *filterrepo
-      
-      # - test-lint-api-django:
-      #     requires:
-      #       - install-api-django
-      #     filters: *filterrepo
-      # - test-unit-api-django:
-      #     requires:
-      #       - test-lint-api-django
-      #     filters: *filterrepo
-      # - test-coverage-api-django:
-      #     requires:
-      #       - test-unit-api-django
-      #     filters: *filterrepo
-      
-      # - test-lint-sandy:
-      #     requires:
-      #       - install-sandy
-      #     filters: *filterrepo
-      # - test-unit-sandy:
-      #     requires:
-      #       - test-lint-sandy
-      #     filters: *filterrepo
-      # - test-coverage-sandy:
-      #     requires:
-      #       - test-unit-sandy
-      #     filters: *filterrepo
-      
       - build-docker-site:
-          # requires:
-          #   - install-site
-            # - test-lint-site
-            # - test-unit-site
-            # - test-coverage-site
           filters: *filterrepo
+
       - build-docker-api-django:
-          # requires:
-          #   - install-api-django
-            # - test-lint-api-django
-            # - test-unit-api-django
-            # - test-coverage-api-django       
           filters: *filterrepo
+
       - build-docker-sandy:
-          # requires:
-          #   - install-sandy
-            # - test-lint-sandy
-            # - test-unit-sandy
-            # - test-coverage-sandy       
           filters: *filterrepo
 
       - deploy-to-dev:
@@ -323,9 +153,6 @@ workflows:
             - build-docker-sandy
           filters: *filterrepo
 
-      - deploy-to-prod-site:
-          *filterprod
-      - deploy-to-prod-api-django:
-          *filterprod
-      - deploy-to-prod-sandy:
-          *filterprod
+      - deploy-to-prod-site: *filterprod
+      - deploy-to-prod-api-django: *filterprod
+      - deploy-to-prod-sandy: *filterprod

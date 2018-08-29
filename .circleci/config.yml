@@ -18,8 +18,8 @@ pythondepend: &pythondepend
     command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
 installapipython: &installapipython
   run:
-    name: Install & Build project luna-api-django
-    command: cd luna-api-django && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
+    name: Install & Build project luna-gateway
+    command: cd luna-gateway && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
 installsandy: &installsandy
   run:
     name: Install & Build Project luna-sandy
@@ -63,7 +63,7 @@ jobs:
             docker build -t penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) ./luna-frontend
             docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
             docker push penthaizza/lunaproject
-  build-docker-api-django:
+  build-docker-gateway:
     <<: *pythonimage
     steps:
       - checkout
@@ -76,7 +76,7 @@ jobs:
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api-django
+            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-gateway
             docker tag penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:api-latest 
             docker push penthaizza/lunaproject
   build-docker-sandy:
@@ -106,8 +106,8 @@ jobs:
             sudo apt-get install sshpass
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
       - run:
-          name: Deploy to DEV-API-Django-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /var/www/luna/static:/var/www/luna/static -e 'DB_HOST=$DB_HOST' -e 'DB_NAME=$DB_NAME' -e 'DB_PASSWORD=$DB_PASSWORD' -e 'DB_USER=$DB_USER' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+          name: Deploy to DEV-Gateway-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /var/www/luna/luna-gateway/static/:/app/luna-gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
       - run:
           name: Deploy to DEV-Sandy-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
@@ -120,7 +120,7 @@ jobs:
             sudo apt-get update
             sudo apt-get install sshpass
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
-  deploy-to-prod-api-django:
+  deploy-to-prod-gateway:
     machine: true
     steps:
       - run:
@@ -140,7 +140,7 @@ workflows:
       - build-docker-site:
           filters: *filterrepo
 
-      - build-docker-api-django:
+      - build-docker-gateway:
           filters: *filterrepo
 
       - build-docker-sandy:
@@ -149,10 +149,10 @@ workflows:
       - deploy-to-dev:
           requires:
             - build-docker-site
-            - build-docker-api-django
+            - build-docker-gateway
             - build-docker-sandy
           filters: *filterrepo
 
       - deploy-to-prod-site: *filterprod
-      - deploy-to-prod-api-django: *filterprod
+      - deploy-to-prod-gateway: *filterprod
       - deploy-to-prod-sandy: *filterprod

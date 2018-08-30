@@ -1,0 +1,3 @@
+[flake8]
+exclude = */migrations/*,manage.py,__init__.py
+max-line-length = 120

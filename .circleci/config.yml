@@ -3,7 +3,7 @@ nodeimage: &nodeimage
     - image: node:8.9.4-alpine
 pythonimage: &pythonimage
   docker:
-    - image: python:3.7-alpine
+    - image: circleci/python:3.7
 nodedepend: &nodedepend
   run:
     name: Add Dependencies
@@ -107,7 +107,7 @@ jobs:
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
       - run:
           name: Deploy to DEV-Gateway-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /var/www/luna/luna-gateway/static/:/app/luna-gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/static/:/app/luna-gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
       - run:
           name: Deploy to DEV-Sandy-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"

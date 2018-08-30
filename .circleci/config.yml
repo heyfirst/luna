@@ -61,19 +61,11 @@ jobs:
       - checkout
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
-      - restore_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
       - run:
           command: |
             cd luna-gateway
             sudo pip install pipenv
             pipenv install --dev
-      - save_cache:
-          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
-          paths:
-            - ".venv"
-            - "/usr/local/bin"
-            - "/usr/local/lib/python3.7/site-packages"
       - setup_remote_docker:
           docker_layer_caching: true
       - run:

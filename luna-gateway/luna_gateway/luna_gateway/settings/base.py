@@ -46,7 +46,11 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'corsheaders',
 ]
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'topics',
+    'tasks',
+    'core',
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 

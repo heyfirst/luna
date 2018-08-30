@@ -12,10 +12,6 @@ installsite: &installsite
   run:
     name: Install & Build Project luna-frontend
     command: cd luna-frontend && yarn install && CI=false yarn build
-pythondepend: &pythondepend
-  run:
-    name: Add Dependencies
-    command: apk update && apk add --virtual build-deps gcc python-dev musl-dev && apk add --no-cache curl git postgresql-dev bash
 installapipython: &installapipython
   run:
     name: Install & Build project luna-gateway
@@ -67,11 +63,9 @@ jobs:
     <<: *pythonimage
     steps:
       - checkout
-      - *pythondepend
       - *installapipython
       - setup_remote_docker:
           docker_layer_caching: true
-      - *installdocker
       - run:
           name: Build and Push Docker image
           command: |

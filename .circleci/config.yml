@@ -12,10 +12,6 @@ installsite: &installsite
   run:
     name: Install & Build Project luna-frontend
     command: cd luna-frontend && yarn install && CI=false yarn build
-installapipython: &installapipython
-  run:
-    name: Install & Build project luna-gateway
-    command: cd luna-gateway && pip install --upgrade pip && pip install pipenv && pipenv install --deploy --system
 installsandy: &installsandy
   run:
     name: Install & Build Project luna-sandy
@@ -63,7 +59,21 @@ jobs:
     <<: *pythonimage
     steps:
       - checkout
-      - *installapipython
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
+      - restore_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+      - run:
+          command: |
+            cd luna-gateway
+            sudo pip install pipenv
+            pipenv install --dev
+      - save_cache:
+          key: deps9-{{ .Branch }}-{{ checksum "Pipfile.lock" }}
+          paths:
+            - ".venv"
+            - "/usr/local/bin"
+            - "/usr/local/lib/python3.7/site-packages"
       - setup_remote_docker:
           docker_layer_caching: true
       - run:

@@ -49,6 +49,8 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'topics',
     'tasks',
+    'accounts',
+    'answers',
     'core',
 ]
 

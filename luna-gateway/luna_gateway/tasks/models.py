@@ -11,6 +11,7 @@ class Task(Timestamp):
     )
 
     description = models.TextField(default='')
+    topics = models.ManyToManyField('topics.TopicLevel')
 
     def __str__(self):
         return f'{self.task_name}'

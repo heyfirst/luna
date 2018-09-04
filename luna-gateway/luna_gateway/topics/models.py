@@ -34,6 +34,8 @@ class TopicLevel(models.Model):
         on_delete=models.CASCADE,
     )
 
+    outcome = models.TextField(blank=True)
+
     expected_tasks = models.IntegerField(default=0)
 
     class Meta:

@@ -8,7 +8,7 @@ const GET_USER = topicAction('GET_USER')
 
 // function get data from API
 const getTopic = async () => {
-  const resp = await axios.get('https://api.dev.luna.codes/api/topic/')
+  const resp = await axios.get('https://api.dev.luna.codes/topics/')
   return resp.data
 }
 
@@ -21,7 +21,7 @@ const getUser = async () => {
         userName: `Janjie beauty`,
         userScore: [{
             userScoreID: 1,
-            score: 99,
+            score: 100,
             topicID: 1,
             topicName: "Data Type",
             Task: [{

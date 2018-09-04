@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { actions as topicAction } from '../../ducks/reducers/topic'
+import { Link } from 'react-router-dom'
 
 const DivCard = styled.div`
     margin-bottom: 1.4375rem;
@@ -155,21 +156,21 @@ class TopicList extends React.Component {
             }
             if(index === 0){
                 return (
-                    <a href="#" key={index}>
+                    <Link to={`/topic/${e.id}`} key={index}>
                         <DivCard className="card w-50">
                             {this.topicCard(topicCardProps)}
                         </DivCard>
-                    </a>
+                    </Link>
                 )
             }
             if (this.isMustShowInline(e)) {
                 if (this.isScoreOverNinetyNine(index)) {
                     return (
-                        <a href='#' key={index}>
+                        <Link to={`/topic/${e.id}`} key={index}>
                             <DivCardInline className="card d-inline-flex">
                                 {this.topicCard(topicCardProps)}
                             </DivCardInline>
-                        </a>
+                        </Link>
                     )
                 }
                 return (
@@ -180,11 +181,11 @@ class TopicList extends React.Component {
             }
             if (this.isScoreOverNinetyNine(index)) {
                 return (
-                    <a href="#" key={index}>
+                    <Link to={`/topic/${e.id}`} key={index}>
                         <DivCard className="card w-50">
                             {this.topicCard(topicCardProps)}
                         </DivCard>
-                    </a>
+                    </Link>
                 )
             }
             return (

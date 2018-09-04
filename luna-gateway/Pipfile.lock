@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "0f7c1e244c6791e418ad597b572b5d57dc8be67f4ff29e0ae9a3399de0361468"
+            "sha256": "6d40475037f42b6cc8d42bac63f10b9b5be31057275cfc239dd66269e0cdc5f9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -156,24 +156,9 @@
             ],
             "index": "pypi",
             "version": "==0.9.0"
-        },
-        "uwsgi": {
-            "hashes": [
-                "sha256:d2318235c74665a60021a4fc7770e9c2756f9fc07de7b8c22805efe85b5ab277"
-            ],
-            "index": "pypi",
-            "version": "==2.0.17.1"
         }
     },
     "develop": {
-        "appnope": {
-            "hashes": [
-                "sha256:5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0",
-                "sha256:8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"
-            ],
-            "markers": "sys_platform == 'darwin'",
-            "version": "==0.1.0"
-        },
         "astroid": {
             "hashes": [
                 "sha256:292fa429e69d60e4161e7612cb7cc8fa3609e2e309f80c224d93a76d5e7b58be",
@@ -187,6 +172,14 @@
                 "sha256:bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2"
             ],
             "version": "==0.1.0"
+        },
+        "colorama": {
+            "hashes": [
+                "sha256:463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda",
+                "sha256:48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1"
+            ],
+            "markers": "sys_platform == 'win32'",
+            "version": "==0.3.9"
         },
         "decorator": {
             "hashes": [
@@ -224,7 +217,7 @@
                 "sha256:b9c40e9750f3d77e6e4d441d8b0266cf555e7cdabdcff33c4fd06366ca761ef8",
                 "sha256:ec9ef8f4a9bc6f71eec99e1806bfa2de401650d996c59330782b89a5555c1497"
             ],
-            "markers": "python_version != '3.0.*' and python_version != '3.2.*' and python_version != '3.3.*' and python_version >= '2.7' and python_version != '3.1.*'",
+            "markers": "python_version != '3.0.*' and python_version >= '2.7' and python_version != '3.1.*' and python_version != '3.2.*' and python_version != '3.3.*'",
             "version": "==4.3.4"
         },
         "jedi": {
@@ -282,14 +275,6 @@
             ],
             "version": "==0.3.1"
         },
-        "pexpect": {
-            "hashes": [
-                "sha256:2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba",
-                "sha256:3fbd41d4caf27fa4a377bfd16fef87271099463e6fa73e92a52f92dfee5d425b"
-            ],
-            "markers": "sys_platform != 'win32'",
-            "version": "==4.6.0"
-        },
         "pickleshare": {
             "hashes": [
                 "sha256:84a9257227dfdd6fe1b4be1319096c20eb85ff1e82c7932f36efccfe1b09737b",
@@ -304,13 +289,6 @@
                 "sha256:858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917"
             ],
             "version": "==1.0.15"
-        },
-        "ptyprocess": {
-            "hashes": [
-                "sha256:923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0",
-                "sha256:d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"
-            ],
-            "version": "==0.6.0"
         },
         "pycodestyle": {
             "hashes": [

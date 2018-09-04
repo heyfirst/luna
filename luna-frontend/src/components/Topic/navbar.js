@@ -52,7 +52,7 @@ class Navbar extends React.Component {
             <div className="container-fluid">
             <NavbarUl className="navbar-nav">
                 <NavbarLi className="nav-item">
-                    <NavbarLink className="nav-link" href="/topic"> Problem </NavbarLink>
+                    <NavbarLink className="nav-link" href="/topics"> Problem </NavbarLink>
                 </NavbarLi>
                 <li className="nav-item">
                     <a className="nav-link" href="#">Challenge</a>

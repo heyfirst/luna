@@ -45,4 +45,4 @@ class TopicLevel(models.Model):
         )
 
         def __str__(self):
-            return f'{self.topic} {self.level} (expected: {self.expected_tasks)'
+            return f'{self.topic} {self.level} (expected: {self.expected_tasks})'

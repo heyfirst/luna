@@ -7,6 +7,7 @@ import HelloPage from './components/Hello'
 import BasicPage from './components/Basic'
 import SolveRoutes from './components/Solve'
 import TopicPage from './components/Topic'
+import TaskRoute from './components/Task'
 
 // Add Bootstrap.
 import './static/css/bootstrap.min.css'
@@ -23,7 +24,8 @@ const App = props => (
     <Route path="/" exact component={BasicPage} />
     <Route path="/hello" component={HelloPage} />
     <Route path="/solve" component={SolveRoutes} />
-    <Route path="/topic" component={TopicPage} />
+    <Route path="/topics" component={TopicPage} />
+    <Route path="/topic" component={TaskRoute} />
   </div>
 )
 

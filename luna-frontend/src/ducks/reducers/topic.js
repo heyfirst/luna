@@ -8,7 +8,7 @@ const GET_USER = topicAction('GET_USER')
 
 // function get data from API
 const getTopic = async () => {
-  const resp = await axios.get('https://api.dev.luna.codes/topics/')
+  const resp = await axios.get('https://api.dev.luna.codes/api/topics/')
   return resp.data
 }
 

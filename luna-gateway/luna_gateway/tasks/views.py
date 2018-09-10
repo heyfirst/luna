@@ -19,7 +19,7 @@ class TaskDetail(APIView):
             raise Http404
     
     def get(self, request, pk, format=None):
-        task = self.get_object(pk).order_by('id')
+        task = self.get_object(pk)
         serializer = TaskSerializer(task)
         return Response(serializer.data)
 

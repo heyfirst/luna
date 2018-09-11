@@ -10,7 +10,7 @@ class Account(Timestamp):
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     nickname = models.CharField(max_length=140, default='')
 
-    facebook_token = models.CharField(max_length=140, default='')
+    facebook_id = models.CharField(max_length=140, default='')
 
     def __str__(self):
         return f'User: {self.user.username}'

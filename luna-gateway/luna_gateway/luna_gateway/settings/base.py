@@ -148,5 +148,5 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-    'JWT_PAYLOAD_HANDLER': 'core.jwt.seeuchula_jwt_payload_handler'
+    'JWT_PAYLOAD_HANDLER': 'core.jwt.luna_jwt_payload_handler'
 }

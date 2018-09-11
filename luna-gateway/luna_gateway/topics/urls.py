@@ -1,10 +1,13 @@
-from django.conf.urls import url
-from rest_framework.urlpatterns import format_suffix_patterns
+from django.urls import path, include
+from rest_framework import routers
 from . import views
 
-urlpatterns = [
-    url(r'^topics/$', views.TopicList.as_view()),
-    url(r'^topics/(?P<pk>[0-9]+)/$', views.TopicDetail.as_view()),
-]
+router = routers.DefaultRouter()
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+router.register(r'topics', views.TopicViewSet)
+router.register(r'levels', views.LevelViewSet)
+router.register(r'topic-levels', views.TopicLevelViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]

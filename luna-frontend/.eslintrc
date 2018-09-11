@@ -6,7 +6,8 @@
     "space-before-function-paren": ["error", "always"],
     "react/prop-types": "off",
     "react/jsx-filename-extension": "off",
-    "jsx-quotes": "off"
+    "jsx-quotes": "off",
+    "space-before-function-paren": "off"
   },
   "globals": {
     "React": false

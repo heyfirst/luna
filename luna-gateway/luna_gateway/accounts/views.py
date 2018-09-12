@@ -1,5 +1,6 @@
 import uuid
 import requests
+from django.conf import settings
 
 from typing import Dict
 from django.contrib.auth import get_user_model
@@ -70,13 +71,13 @@ class FacebookLoginView(APIView):
         accessToken = request.data['accessToken']
         requests.get(
             'https://graph.facebook.com/oauth/access_token', {
-                'client_id': '',
-                'client_secret': '',
+                'client_id': settings.FACEBOOK_APP_ID,
+                'client_secret': settings.FACEBOOK_APP_SECRET,
                 'grant_type': 'fb_exchange_token',
                 'fb_exchange_token': accessToken
             })
 
-        fbRequest = requests.get('https://graph.facebook.com/me', {
+        fbRequest = requests.get('', {
             'fields': 'id,first_name,last_name,email',
             'access_token': accessToken
         })

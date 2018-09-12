@@ -5,7 +5,15 @@ from rest_framework import serializers
 class TaskSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Task
-        fields = ('__all__')
+        fields = (
+            'pk',
+            'url',
+            'task_name',
+            'description',
+            'topics',
+            'created',
+            'modified',
+        )
         depth = 2
 
 

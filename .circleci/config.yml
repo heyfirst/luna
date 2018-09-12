@@ -8,10 +8,6 @@ nodedepend: &nodedepend
   run:
     name: Add Dependencies
     command: apk add --no-cache curl git
-installsite: &installsite
-  run:
-    name: Install & Build Project luna-frontend
-    command: cd luna-frontend && yarn install && CI=false yarn build
 installsandy: &installsandy
   run:
     name: Install & Build Project luna-sandy
@@ -39,22 +35,6 @@ filterprod: &filterprod
 
 version: 2
 jobs:
-  build-docker-site:
-    <<: *nodeimage
-    steps:
-      - checkout
-      - *nodedepend
-      - *installsite
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - *installdocker
-      - run:
-          name: Build and Push Docker image
-          command: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) ./luna-frontend
-            docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
-            docker push penthaizza/lunaproject
   build-docker-gateway:
     <<: *pythonimage
     steps:
@@ -96,32 +76,23 @@ jobs:
     machine: true
     steps:
       - run:
-          name: Deploy to DEV-Site-Server
+          name: Deploy to DEV-Gateway-Server
           command: |
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
-      - run:
-          name: Deploy to DEV-Gateway-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
       - run:
           name: Deploy to DEV-Sandy-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 3020:3020 -p 22203:22203 -p 17003:17003 --name luna-sandy penthaizza/lunaproject:sandy-latest"
-  deploy-to-prod-site:
-    machine: true
-    steps:
-      - run:
-          name: Deploy to Prod-Site-Server
-          command: |
-            sudo apt-get update
-            sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
   deploy-to-prod-gateway:
     machine: true
     steps:
       - run:
           name: Deploy to Prod-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+          command: |
+            sudo apt-get update
+            sudo apt-get install sshpass
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -p 8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
   deploy-to-prod-sandy:
     machine: true
     steps:
@@ -133,9 +104,6 @@ workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - build-docker-site:
-          filters: *filterrepo
-
       - build-docker-gateway:
           filters: *filterrepo
 
@@ -144,11 +112,9 @@ workflows:
 
       - deploy-to-dev:
           requires:
-            - build-docker-site
             - build-docker-gateway
             - build-docker-sandy
           filters: *filterrepo
 
-      - deploy-to-prod-site: *filterprod
       - deploy-to-prod-gateway: *filterprod
       - deploy-to-prod-sandy: *filterprod

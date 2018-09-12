@@ -77,7 +77,7 @@ class FacebookLoginView(APIView):
                 'fb_exchange_token': accessToken
             })
 
-        fbRequest = requests.get('', {
+        fbRequest = requests.get('https://graph.facebook.com/me', {
             'fields': 'id,first_name,last_name,email',
             'access_token': accessToken
         })

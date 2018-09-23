@@ -13,4 +13,5 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     'localhost:3000',
     'dev.luna.codes',
+    '115.178.63.231',
 )

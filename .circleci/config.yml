@@ -81,7 +81,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ll && sudo screen -S API ./deploy-api.sh"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ll && sudo screen -S API ./deploy-api.sh && echo 'Finish'"
       - run:
           name: Deploy to DEV-Sandy-Server
           command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ll && sudo screen -S Sandy ./deploy-sandy.sh"

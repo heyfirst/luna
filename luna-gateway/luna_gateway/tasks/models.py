@@ -15,8 +15,12 @@ class Task(Timestamp):
         'topics.TopicLevel',
         on_delete=models.SET_NULL,
         null=True,
+        related_name="main_topic+",
     )
-    secondary_topics = models.ManyToManyField('topics.TopicLevel')
+    secondary_topics = models.ManyToManyField(
+        'topics.TopicLevel',
+        related_name="secondary_topics+",
+    )
 
     order = models.PositiveIntegerField(blank=True, null=True)
 

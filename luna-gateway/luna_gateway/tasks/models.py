@@ -11,10 +11,24 @@ class Task(Timestamp):
     )
 
     description = models.TextField(default='')
-    topics = models.ManyToManyField('topics.TopicLevel')
+    main_topic = models.ForeignKey(
+        'topics.TopicLevel',
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name="main_topic+",
+    )
+    secondary_topics = models.ManyToManyField(
+        'topics.TopicLevel',
+        related_name="secondary_topics+",
+    )
+
+    order = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.task_name}'
+
+    class Meta:
+        ordering = ['order']
 
 
 class Testcase(models.Model):

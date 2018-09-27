@@ -8,6 +8,8 @@ class Topic(models.Model):
         default='',
     )
 
+    description = models.TextField(default='')
+
     def __str__(self):
         return f'{self.topic_name}'
 

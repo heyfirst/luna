@@ -7,11 +7,11 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
-CSRF_TRUSTED_ORIGINS = ["115.178.63.231"]
+CSRF_TRUSTED_ORIGINS = []
 
 CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     'localhost:3000',
     'dev.luna.codes',
-    '115.178.63.231',
+    'luna.codes',
 )

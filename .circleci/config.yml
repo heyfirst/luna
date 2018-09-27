@@ -42,6 +42,7 @@ jobs:
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - run:
+          name: Install pipenv
           command: |
             cd luna-gateway
             sudo pip install pipenv
@@ -80,10 +81,10 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -p 127.0.0.1:8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S API ./deploy-api.sh"
       - run:
           name: Deploy to DEV-Sandy-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo docker rm -f luna-sandy-1 && sudo docker rm -f luna-sandy-2 && sudo docker rm -f luna-sandy-3 && sudo docker image prune -a -f && sudo docker run -d -p 127.0.0.1:3020:3020 --name luna-sandy-1 penthaizza/lunaproject:sandy-latest" && sudo docker run -d -p 127.0.0.1:17003:17003 --name luna-sandy-2 penthaizza/lunaproject:sandy-latest" && sudo docker run -d -p 127.0.0.1:22203:22203 --name luna-sandy-3 penthaizza/lunaproject:sandy-latest"
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S Sandy ./deploy-sandy.sh"
   deploy-to-prod-gateway:
     machine: true
     steps:

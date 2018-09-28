@@ -15,7 +15,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     ordering = ('pk', )
 
     @action(detail=True)
-    def testcase(self, request, pk=None):
+    def testcases(self, request, pk=None):
         testcases = Testcase.objects.filter(task__pk=pk)
         serializer = TestcaseSerializer(
             testcases,

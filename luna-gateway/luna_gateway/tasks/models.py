@@ -25,7 +25,7 @@ class Task(Timestamp):
     order = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.task_name}'
+        return f'{self.task_name} ({self.main_topic})'
 
     class Meta:
         ordering = ['order']

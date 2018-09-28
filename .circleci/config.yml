@@ -93,7 +93,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -p 127.0.0.1:8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -e 'LUNA_SANDY_URL=$LUNA_SANDY_URL' -p 127.0.0.1:8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
   deploy-to-prod-sandy:
     machine: true
     steps:

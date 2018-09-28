@@ -14,7 +14,7 @@ class TaskAdmin(admin.ModelAdmin):
 class TestcaseAdmin(admin.ModelAdmin):
     list_display = (
         'task',
-        'input',
+        'test',
         'expected_output',
         'is_hidden',
     )

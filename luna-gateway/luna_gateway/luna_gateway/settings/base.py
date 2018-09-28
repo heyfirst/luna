@@ -161,3 +161,5 @@ JWT_AUTH = {
 
 FACEBOOK_APP_ID = os.environ.get('FACEBOOK_APP_ID', '')
 FACEBOOK_APP_SECRET = os.environ.get('FACEBOOK_APP_SECRET', '')
+
+LUNA_SANDY_URL = os.environ.get('LUNA_SANDY_URL', 'http://localhost:3020')

@@ -16,7 +16,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def testcases(self, request, pk=None):
-        testcases = Testcase.objects.filter(task__pk=pk)
+        testcases = Testcase.objects.filter(task__pk=pk, is_hidden=False)
         serializer = TestcaseSerializer(
             testcases,
             many=True,

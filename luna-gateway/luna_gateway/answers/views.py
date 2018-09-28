@@ -1,7 +1,7 @@
 import requests
 from rest_framework import viewsets, views
 from rest_framework.response import Response
-from django.core import serializers
+from django.conf import settings
 
 from tasks.models import Task, Testcase
 from .models import Answer
@@ -33,7 +33,8 @@ class TestCodeView(views.APIView):
         }
 
         resp = requests.post(
-            'http://localhost:3020/submission', json={**submisison}
+            f'{settings.LUNA_SANDY_URL}/submission',
+            json={**submisison},
         )
 
         return Response({

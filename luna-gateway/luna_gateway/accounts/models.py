@@ -7,7 +7,8 @@ from core.models import Timestamp
 # Create your models here.
 class Account(Timestamp):
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
     nickname = models.CharField(max_length=140, default='')
 
     facebook_id = models.CharField(max_length=140, default='')

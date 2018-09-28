@@ -1,4 +1,6 @@
 from django.db import models
+from django.conf import settings
+
 from core.models import Timestamp
 
 
@@ -6,7 +8,8 @@ from core.models import Timestamp
 class Answer(Timestamp):
     task = models.ForeignKey('tasks.Task', on_delete=models.CASCADE)
     source_code = models.TextField()
+    duration = models.DurationField()
     owned_by = models.ForeignKey(
-        'accounts.Account',
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )

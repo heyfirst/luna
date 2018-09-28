@@ -2,7 +2,7 @@ from .models import Task, Testcase
 from rest_framework import serializers
 
 
-class TaskSerializer(serializers.HyperlinkedModelSerializer):
+class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = (
@@ -10,14 +10,15 @@ class TaskSerializer(serializers.HyperlinkedModelSerializer):
             'url',
             'task_name',
             'description',
-            'topics',
+            'main_topic',
+            'secondary_topics',
             'created',
             'modified',
         )
         depth = 2
 
 
-class TestcaseSerializer(serializers.HyperlinkedModelSerializer):
+class TestcaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testcase
         fields = ('__all__')

@@ -37,10 +37,13 @@ class TestCodeView(views.APIView):
             json={**submisison},
         )
 
-        return Response({
-            "task_id": task.id,
-            "submission": resp.json(),
-        })
+        return Response(
+            {
+                **data,
+                "task_id": task.id,
+                "submission": resp.json(),
+            }
+        )
 
 
 class SubmitCodeView(views.APIView):

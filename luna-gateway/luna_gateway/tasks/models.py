@@ -11,6 +11,8 @@ class Task(Timestamp):
     )
 
     description = models.TextField(default='')
+    default_code = models.TextField(default='')
+
     main_topic = models.ForeignKey(
         'topics.TopicLevel',
         on_delete=models.SET_NULL,

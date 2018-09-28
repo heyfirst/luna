@@ -18,7 +18,7 @@ class TopicViewSet(viewsets.ModelViewSet):
 
     @action(detail=True)
     def tasks(self, request, pk=None):
-        tasks = Task.objects.filter(main_topic__pk=pk).distinct('pk')
+        tasks = Task.objects.filter(main_topic__topic__pk=pk)
         serializer = TaskSerializer(
             tasks,
             many=True,

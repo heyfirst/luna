@@ -2,7 +2,7 @@ from .models import Topic, Level, TopicLevel
 from rest_framework import serializers
 
 
-class TopicSerializer(serializers.HyperlinkedModelSerializer):
+class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
         fields = (
@@ -12,7 +12,7 @@ class TopicSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class LevelSerializer(serializers.HyperlinkedModelSerializer):
+class LevelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Level
         fields = (
@@ -22,7 +22,7 @@ class LevelSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class TopicLevelReadSerializer(serializers.HyperlinkedModelSerializer):
+class TopicLevelReadSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicLevel
         depth = 1
@@ -36,7 +36,7 @@ class TopicLevelReadSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class TopicLevelWriteSerializer(serializers.HyperlinkedModelSerializer):
+class TopicLevelWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = TopicLevel
         fields = (

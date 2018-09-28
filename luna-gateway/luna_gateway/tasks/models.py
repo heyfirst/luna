@@ -11,6 +11,8 @@ class Task(Timestamp):
     )
 
     description = models.TextField(default='')
+    default_code = models.TextField(default='')
+
     main_topic = models.ForeignKey(
         'topics.TopicLevel',
         on_delete=models.SET_NULL,
@@ -25,7 +27,7 @@ class Task(Timestamp):
     order = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
-        return f'{self.task_name}'
+        return f'{self.task_name} ({self.main_topic})'
 
     class Meta:
         ordering = ['order']

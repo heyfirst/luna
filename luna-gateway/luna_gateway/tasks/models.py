@@ -22,6 +22,7 @@ class Task(Timestamp):
     secondary_topics = models.ManyToManyField(
         'topics.TopicLevel',
         related_name="secondary_topics+",
+        blank=True,
     )
 
     order = models.PositiveIntegerField(blank=True, null=True)
@@ -38,9 +39,9 @@ class Testcase(models.Model):
         'tasks.Task',
         on_delete=models.CASCADE,
     )
-    input = models.TextField(default='')
+    test = models.TextField(default='')
     expected_output = models.TextField(default='')
     is_hidden = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.task}: input: {self.input} | expected: {self.expected_output} | ({self.is_hidden})'
+        return f'{self.task}: test: {self.test} | expected: {self.expected_output} | ({self.is_hidden})'

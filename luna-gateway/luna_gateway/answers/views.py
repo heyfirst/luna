@@ -72,23 +72,26 @@ class SubmitCodeView(views.APIView):
             "submission": submisison,
         }
 
-        if (submisison['pass'] is True):
-            try:
-                Answer.objects.get(
-                    task=task,
-                    owned_by=request.user,
-                )
+        try:
+            if (submisison['pass'] is True):
+                try:
+                    Answer.objects.get(
+                        task=task,
+                        owned_by=request.user,
+                    )
 
-                return Response({"answered": True, **response})
+                    return Response({"answered": True, **response})
 
-            except Answer.DoesNotExist:
-                Answer.objects.create(
-                    task=task,
-                    source_code=data['code'],
-                    owned_by=request.user,
-                    duration=timedelta(seconds=duration),
-                )
+                except Answer.DoesNotExist:
+                    Answer.objects.create(
+                        task=task,
+                        source_code=data['code'],
+                        owned_by=request.user,
+                        duration=timedelta(seconds=duration),
+                    )
 
+                    return Response(response)
+            else:
                 return Response(response)
-        else:
+        except Exception:
             return Response(response)

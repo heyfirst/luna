@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from answers.models import Answer
+from answers.serializers import AnswerSerializer
 from .models import Task, Testcase
 from .serializers import TaskSerializer, TestcaseSerializer
 
@@ -21,11 +22,11 @@ class TaskViewSet(viewsets.ModelViewSet):
         user = request.user
 
         if (task.order == 1):
-            serializer = self.get_serializer(task)
-            return Response(serializer.data)
-        if (task.order is None):
-            serializer = self.get_serializer(task)
-            return Response(serializer.data)
+            return self._get_task_or_task_with_answer(task, user)
+
+        elif (task.order is None):
+            return self._get_task_or_task_with_answer(task, user)
+
         else:
             before_task = Task.objects.get(order=task.order - 1)
             try:
@@ -33,10 +34,8 @@ class TaskViewSet(viewsets.ModelViewSet):
                     owned_by=user,
                     task=before_task,
                 )
-                serializer = self.get_serializer(task)
-                return Response(serializer.data)
+                return self._get_task_or_task_with_answer(task, user)
             except Answer.DoesNotExist:
-                serializer = self.get_serializer(task)
                 return Response(
                     {
                         "messages": "You should to solve the before task"
@@ -53,6 +52,23 @@ class TaskViewSet(viewsets.ModelViewSet):
             context={'request': request},
         )
         return Response(serializer.data)
+
+    def _get_task_or_task_with_answer(self, task, user):
+        task_json = self.get_serializer(task).data
+        try:
+            answer_data = Answer.objects.get(
+                owned_by=user,
+                task=task,
+            )
+            answer = AnswerSerializer(answer_data).data
+            return Response({
+                **task_json,
+                "answer": answer,
+            })
+        except Answer.DoesNotExist:
+            return Response({
+                **task_json,
+            })
 
 
 class TescaseViewSet(viewsets.ModelViewSet):

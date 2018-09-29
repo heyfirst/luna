@@ -9,6 +9,7 @@ class TopicSerializer(serializers.ModelSerializer):
             'pk',
             'url',
             'topic_name',
+            'description',
         )
 
 

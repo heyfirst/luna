@@ -1,4 +1,6 @@
+from datetime import timedelta
 import requests
+
 from rest_framework import viewsets, views
 from rest_framework.response import Response
 from django.conf import settings
@@ -48,6 +50,7 @@ class SubmitCodeView(views.APIView):
         data = request.data.copy()
         username = request.user.username
         task_id = data['taskID']
+        duration = data['duration']
 
         task = Task.objects.get(id=task_id)
         testcases = Testcase.objects.filter(task=task)
@@ -64,16 +67,28 @@ class SubmitCodeView(views.APIView):
         )
         submisison = resp.json()
 
+        response = {
+            "task_id": task.id,
+            "submission": submisison,
+        }
+
         if (submisison['pass'] is True):
-            Answer.objects.create(
-                task=task, source_code=data['code'], owned_by=request.user
-            )
-            return Response({
-                "task_id": task.id,
-                "submission": submisison,
-            })
+            try:
+                Answer.objects.get(
+                    task=task,
+                    owned_by=request.user,
+                )
+
+                return Response({"answered": True, **response})
+
+            except Answer.DoesNotExist:
+                Answer.objects.create(
+                    task=task,
+                    source_code=data['code'],
+                    owned_by=request.user,
+                    duration=timedelta(seconds=duration),
+                )
+
+                return Response(response)
         else:
-            return Response({
-                "task_id": task.id,
-                "submission": submisison,
-            })
+            return Response(response)

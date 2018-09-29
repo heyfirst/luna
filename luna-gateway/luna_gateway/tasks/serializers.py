@@ -5,16 +5,7 @@ from rest_framework import serializers
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = (
-            'pk',
-            'url',
-            'task_name',
-            'description',
-            'main_topic',
-            'secondary_topics',
-            'created',
-            'modified',
-        )
+        fields = '__all__'
         depth = 2
 
 

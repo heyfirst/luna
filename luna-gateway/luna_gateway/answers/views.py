@@ -37,15 +37,43 @@ class TestCodeView(views.APIView):
             json={**submisison},
         )
 
-        return Response(
-            {
-                **data,
-                "task_id": task.id,
-                "submission": resp.json(),
-            }
-        )
+        return Response({
+            "task_id": task.id,
+            "submission": resp.json(),
+        })
 
 
 class SubmitCodeView(views.APIView):
-    def post():
-        pass
+    def post(self, request):
+        data = request.data.copy()
+        username = request.user.username
+        task_id = data['taskID']
+
+        task = Task.objects.get(id=task_id)
+        testcases = Testcase.objects.filter(task=task)
+
+        submisison = {
+            "username": username,
+            "code": data['code'],
+            "testcases": list(testcases.values()),
+        }
+
+        resp = requests.post(
+            f'{settings.LUNA_SANDY_URL}/submission',
+            json={**submisison},
+        )
+        submisison = resp.json()
+
+        if (submisison['pass'] is True):
+            Answer.objects.create(
+                task=task, source_code=data['code'], owned_by=request.user
+            )
+            return Response({
+                "task_id": task.id,
+                "submission": submisison,
+            })
+        else:
+            return Response({
+                "task_id": task.id,
+                "submission": submisison,
+            })

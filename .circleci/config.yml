@@ -113,9 +113,13 @@ workflows:
 
       - deploy-to-dev:
           requires:
-            - build-docker-gateway
-            - build-docker-sandy
-          filters: *filterrepo
-
-      - deploy-to-prod-gateway: *filterprod
-      - deploy-to-prod-sandy: *filterprod
+            - build
+          filters:
+            branches:
+              only: develop
+      - deploy-to-prod:
+          requires:
+            - deploy-to-dev
+          filters:
+            branches:
+              only: develop

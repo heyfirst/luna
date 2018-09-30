@@ -1,5 +1,6 @@
 import uuid
 import requests
+import arrow
 from django.conf import settings
 
 from typing import Dict
@@ -15,7 +16,7 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework_jwt.utils import jwt_payload_handler, jwt_encode_handler
 
 from tasks.models import Task
-from topics.models import TopicLevel
+from topics.models import TopicLevel, Level
 from answers.models import Answer
 from topics.serializers import TopicLevelReadSerializer
 
@@ -195,21 +196,51 @@ class SkillImprovementDataView(APIView):
         user = request.user
         total_answer = None
 
+        if 'start_date' not in request.GET and 'end_date' not in request.GET:
+            return Response(
+                {
+                    "message": "please define 'start_date' and 'end_date'"
+                }
+            )
+
         if 'topic_id' in request.GET:
             total_answer = Answer.objects.filter(
                 owned_by=user,
-                task__main_topic__topic__pk=request.GET['topic']
+                task__main_topic__topic__pk=request.GET['topic_id']
             )
         else:
             total_answer = Answer.objects.filter(owned_by=user, )
 
+        # get All Aswers
         total_answer = total_answer.extra(
             select={
                 'day': 'date(answers_answer.created)',
             }
         ).values(
             'day',
-            'task__main_topic__level',
+            'task__main_topic__level__level_name',
+            'task__main_topic__level__score',
         ).annotate(total=Count('created'))
 
-        return Response(total_answer)
+        # Manipulate data
+        levels = Level.objects.all().values()
+        resp = {}
+
+        start = arrow.get(request.GET['start_date'])
+        end = arrow.get(request.GET['end_date'])
+
+        for r in arrow.Arrow.range('day', start, end):
+            date = r.format('YYYY-MM-DD')
+            resp[date] = {}
+            for level in levels:
+                resp[date][level['level_name']] = 0
+
+        for result in total_answer:
+            date = result['day'].strftime('%Y-%m-%d')
+            score = result['total'] * result['task__main_topic__level__score']
+
+            if date in resp:
+                level = result['task__main_topic__level__level_name']
+                resp[date][level] = score
+
+        return Response(resp)

@@ -1,6 +1,12 @@
 from django.urls import path
 
-from .views import MeView, FacebookLoginView, LearningProgressDataView
+from .views import (
+    MeView,
+    FacebookLoginView,
+    LearningProgressDataView,
+    FrequencyPracticsDataView,
+    SkillImprovementDataView,
+)
 
 app_name = 'accounts'
 urlpatterns = [
@@ -10,5 +16,15 @@ urlpatterns = [
         'learning-progress/',
         LearningProgressDataView.as_view(),
         name='learning-progress'
+    ),
+    path(
+        'frequency-practics/',
+        FrequencyPracticsDataView.as_view(),
+        name='frequency-practics'
+    ),
+    path(
+        'skill-improvement/',
+        SkillImprovementDataView.as_view(),
+        name='skill-improvement'
     ),
 ]

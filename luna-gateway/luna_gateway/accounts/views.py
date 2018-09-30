@@ -6,6 +6,7 @@ from typing import Dict
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
+from django.db.models import Count
 
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
@@ -175,9 +176,40 @@ class LearningProgressDataView(APIView):
         }
 
 
+class FrequencyPracticsDataView(APIView):
+    def get(self, request):
+        user = request.user
+
+        total_answer = Answer.objects.filter(owned_by=user).extra(
+            select={
+                'day': 'date(created)'
+            }
+        ).values('day').annotate(total=Count('created'))
+
+        return Response(total_answer)
+
+
 class SkillImprovementDataView(APIView):
-    pass
+    def get(self, request):
 
+        user = request.user
+        total_answer = None
 
-class FrequencypracticsDataView(APIView):
-    pass
+        if 'topic_id' in request.GET:
+            total_answer = Answer.objects.filter(
+                owned_by=user,
+                task__main_topic__topic__pk=request.GET['topic']
+            )
+        else:
+            total_answer = Answer.objects.filter(owned_by=user, )
+
+        total_answer = total_answer.extra(
+            select={
+                'day': 'date(answers_answer.created)',
+            }
+        ).values(
+            'day',
+            'task__main_topic__level',
+        ).annotate(total=Count('created'))
+
+        return Response(total_answer)

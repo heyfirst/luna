@@ -1,80 +1,120 @@
+nodeimage: &nodeimage
+  docker:
+    - image: node:8.9.4-alpine
+pythonimage: &pythonimage
+  docker:
+    - image: circleci/python:3.7
+nodedepend: &nodedepend
+  run:
+    name: Add Dependencies
+    command: apk add --no-cache curl git
+installsandy: &installsandy
+  run:
+    name: Install & Build Project luna-sandy
+    command: cd luna-sandy && yarn install
+installdocker: &installdocker
+  run:
+    name: Install Docker client
+    command: |
+      set -x
+      VER="18.03.1-ce"
+      curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
+      tar -xz -C /tmp -f /tmp/docker-$VER.tgz
+      mv /tmp/docker/* /usr/bin
+filterrepo: &filterrepo
+  branches:
+    only:
+      - develop
+      - master
+filterprod: &filterprod
+  requires:
+    - deploy-to-dev
+  filters:
+    branches:
+      only: master
+
 version: 2
 jobs:
-  build:
-    docker:
-      - image: node:8.9.4-alpine
+  build-docker-gateway:
+    <<: *pythonimage
     steps:
       - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
       - run:
-          name: Add Dependencies
-          command: apk add --no-cache curl git
-      - run:
-          name: Install & Build Project luna-site
-          command: cd luna-frontend && yarn install && CI=false yarn build 
-      - run:
-          name: Install & Build project luna-api
-          command: cd luna-api && yarn install
-      - run: 
-          name: Test Project
-          command: echo "This Test Space"
-      - setup_remote_docker: 
+          name: Install pipenv
+          command: |
+            cd luna-gateway
+            sudo pip install pipenv
+            pipenv install --dev
+      - setup_remote_docker:
           docker_layer_caching: true
       - run:
-          name: Install Docker client
-          command: |
-            set -x
-            VER="17.12.0-ce"
-            curl -L -o /tmp/docker-$VER.tgz https://download.docker.com/linux/static/stable/x86_64/docker-$VER.tgz
-            tar -xz -C /tmp -f /tmp/docker-$VER.tgz
-            mv /tmp/docker/* /usr/bin
-      - run: 
           name: Build and Push Docker image
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
-            docker build -t penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) ./luna-frontend
-            docker tag penthaizza/lunaproject:$(echo "site-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:site-latest
-            docker push penthaizza/lunaproject
-            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-api
+            docker build -t penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) ./luna-gateway
             docker tag penthaizza/lunaproject:$(echo "api-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:api-latest 
             docker push penthaizza/lunaproject
+  build-docker-sandy:
+    <<: *nodeimage
+    steps:
+      - checkout
+      - *nodedepend
+      - *installsandy
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - *installdocker
+      - run:
+          name: Build and Push Docker image
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            docker build -t penthaizza/lunaproject:$(echo "sandy-"$(git rev-parse --short HEAD)) ./luna-sandy
+            docker tag penthaizza/lunaproject:$(echo "sandy-"$(git rev-parse --short HEAD)) penthaizza/lunaproject:sandy-latest
+            docker push penthaizza/lunaproject
+
   deploy-to-dev:
     machine: true
     steps:
-      - run: 
-          name: Deploy to DEV-Site-Server
-          command: | 
+      - run:
+          name: Deploy to DEV-Gateway-Server
+          command: |
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S API ./deploy-api.sh"
       - run:
-          name: Deploy to DEV-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$SERVER_HOST "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
-  deploy-to-prod:
+          name: Deploy to DEV-Sandy-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S Sandy ./deploy-sandy.sh"
+  deploy-to-prod-gateway:
     machine: true
     steps:
-      - run: 
-          name: Deploy to Prod-Site-Server
-          command: | 
-            sudo apt-get update
-            sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-site && sudo docker image prune -a -f && sudo docker run -d -p 3000:3000 -p 22200:22200 -p 17000:17000 --name luna-site penthaizza/lunaproject:site-latest"
       - run:
           name: Deploy to Prod-API-Server
-          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -e "PORT=3020" -e "PROJECT_NAME=luna-api" -p 3020:3020 -p 22202:22202 -p 17002:17002 --name luna-api penthaizza/lunaproject:api-latest"
+          command: |
+            sudo apt-get update
+            sudo apt-get install sshpass
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-api && sudo docker image prune -a -f && sudo docker run -d -v /home/centos/luna/luna/luna-gateway/luna_gateway/static/:/app/luna_gateway/static/ -e 'DATABASE_URL=postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:5432/$DB_NAME' -e 'FACEBOOK_APP_ID=$FACEBOOK_APP_ID' -e 'FACEBOOK_APP_SECRET=$FACEBOOK_APP_SECRET' -e 'LUNA_SANDY_URL=$LUNA_SANDY_URL' -p 127.0.0.1:8000:8000 --name luna-api penthaizza/lunaproject:api-latest && sudo docker exec luna-api env"
+  deploy-to-prod-sandy:
+    machine: true
+    steps:
+      - run:
+          name: Deploy to Prod-Sandy-Server
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_SERVER@$PROD_SERVER "ls -a && sudo docker rm -f luna-sandy && sudo docker image prune -a -f && sudo docker run -d -p 127.0.0.1:3020:3020 --name luna-sandy-1 penthaizza/lunaproject:sandy-latest" && sudo docker run -d -p 127.0.0.1:17003:17003 --name luna-sandy-2 penthaizza/lunaproject:sandy-latest" && sudo docker run -d -p 127.0.0.1:22203:22203 --name luna-sandy-3 penthaizza/lunaproject:sandy-latest"
+
 workflows:
   version: 2
   build-test-deploy:
     jobs:
-      - build
+      - build-docker-gateway:
+          filters: *filterrepo
+
+      - build-docker-sandy:
+          filters: *filterrepo
+
       - deploy-to-dev:
           requires:
-            - build
-          filters:
-            branches:
-                only: develop
-      - deploy-to-prod:
-          requires:
-            - deploy-to-dev
-          filters:
-            branches:
-                only: develop
+            - build-docker-gateway
+            - build-docker-sandy
+          filters: *filterrepo
+      - deploy-to-prod-gateway: *filterprod
+      - deploy-to-prod-sandy: *filterprod

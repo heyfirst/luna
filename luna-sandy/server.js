@@ -35,4 +35,4 @@ const app = server.listen(process.env.PORT, (err) => {
   logger.info(`${chalk.bgRed(` ${process.env.PROJECT_NAME} `)} READY ON http://localhost:${chalk.inverse(process.env.PORT)}`)
 })
 
-module.exports = server
+module.exports = app

@@ -5,16 +5,45 @@ const fs = require('fs')
 const Router = require('express').Router
 const router = Router()
 
-const createJavaFile = (filepath, data) => {
+const createJavaFile = (filepath, data, testcases) => {
   return new Promise((resolve, reject) => {
-    fs.writeFile(filepath, data, function (err) {
+    const defaultClass = `
+      class Main {
+        static ${data}
+
+        public static void main(String[] args){
+          ${testcases.map(t => `System.out.println(${t.test});`).join('\n')}
+        }
+
+      }
+    `
+
+    fs.writeFile(filepath, defaultClass, err => {
       if (err) reject(err)
-      else resolve(data)
+      else resolve(defaultClass)
     })
   })
 }
 
-const compileJava = async (filepath) => {
+const removeUserFolder = async username => {
+  const compileCmd = `cd submissions && rm -rf user-${username}`
+  const { stdout, stderr } = await exec(compileCmd)
+  return {
+    stdout,
+    stderr
+  }
+}
+
+const createUserFolder = async username => {
+  const compileCmd = `cd submissions && mkdir user-${username}`
+  const { stdout, stderr } = await exec(compileCmd)
+  return {
+    stdout,
+    stderr
+  }
+}
+
+const compileJava = async filepath => {
   const compileCmd = `javac ${filepath}`
   const { stdout, stderr } = await exec(compileCmd)
   return {
@@ -23,8 +52,8 @@ const compileJava = async (filepath) => {
   }
 }
 
-const runningTest = async (input) => {
-  const runCmd = `cd judges && java Sandbox ${input}`
+const runningTest = async classFilepath => {
+  const runCmd = `cd ${classFilepath} && java Main`
   const { stdout, stderr } = await exec(runCmd)
   return {
     stdout,
@@ -38,31 +67,64 @@ router.get('/', async (req, res) => {
   })
 })
 
-router.post('/run', async (req, res, next) => {
-  const testcase = req.body.testcase
+router.post('/submission', async (req, res, next) => {
+  const username = req.body.username
+  const testcases = req.body.testcases
   const code = req.body.code
 
-  const filepath = `./judges/test.java`
-  await createJavaFile(filepath, code)
+  try {
+    await removeUserFolder(username)
+    // Creat Folder
+    await createUserFolder(username)
+    const filepath = `./submissions/user-${username}/submission-${username}.java`
+    const classFilepath = `./submissions/user-${username}/`
 
-  await compileJava(filepath)
+    // Create File Java
+    await createJavaFile(filepath, code, testcases)
 
-  const result = testcase.map(async (tc, index) => {
-    const result = await runningTest(tc.input)
-    return {
-      testcaseID: tc.id,
-      output: result.stdout,
-      status: result.stdout === tc.expectedValue
-    }
-  })
+    // Compile File Java to Main.class
+    await compileJava(filepath)
+    const output = await runningTest(classFilepath)
 
-  Promise.all(result).then((resp) => {
-    console.log(resp)
-    res.status(200).send({
-      status: 'PASS',
-      result: resp
+    // Compare Input and Output
+    const result = await output.stdout
+      .trim()
+      .split('\n')
+      .map((result, index) => {
+        return {
+          testcase_id: testcases[index].id,
+          output: result,
+          expected_output: testcases[index].expected_output,
+          status: result === testcases[index].expected_output
+        }
+      })
+
+    Promise.all(result).then(async result => {
+      // Remove all files of user
+      await removeUserFolder(username)
+      let pass = true
+
+      // Check pass or not
+      if (result.filter(r => r.status === false).length > 0) {
+        pass = false
+      } else {
+        pass = true
+      }
+
+      res.status(200).send({
+        pass,
+        result
+      })
+      return null
     })
-  })
+  } catch (err) {
+    // Remove all files of user
+    await removeUserFolder(username)
+    res.status(500).send({
+      err
+    })
+    return null
+  }
 })
 
 module.exports = router

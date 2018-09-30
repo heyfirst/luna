@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+"psycopg2" = "*"
+"psycopg2-binary" = "*"
+djangorestframework = "*"
+django-filter = "*"
+django-cors-headers = "*"
+dj-database-url = "*"
+uwsgi = "*"
+toolz = "*"
+djangorestframework-jwt = "*"
+requests = "*"
+arrow = "*"
+
+[dev-packages]
+pylint = "*"
+yapf = "*"
+pylint-django = "*"
+"flake8" = "*"
+ipython = "*"
+
+[requires]
+python_version = "3.7"

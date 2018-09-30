@@ -7,7 +7,6 @@ class TopicSerializer(serializers.ModelSerializer):
         model = Topic
         fields = (
             'pk',
-            'url',
             'topic_name',
             'description',
         )
@@ -18,8 +17,8 @@ class LevelSerializer(serializers.ModelSerializer):
         model = Level
         fields = (
             'pk',
-            'url',
             'level_name',
+            'score',
         )
 
 
@@ -29,7 +28,6 @@ class TopicLevelReadSerializer(serializers.ModelSerializer):
         depth = 1
         fields = (
             'pk',
-            'url',
             'level',
             'topic',
             'outcome',
@@ -42,7 +40,6 @@ class TopicLevelWriteSerializer(serializers.ModelSerializer):
         model = TopicLevel
         fields = (
             'pk',
-            'url',
             'level',
             'topic',
             'outcome',

@@ -77,23 +77,29 @@ jobs:
     machine: true
     steps:
       - run:
-          name: Deploy to DEV-Gateway&Sandy-Server
+          name: Deploy to DEV-Gateway&Sandy-Server BangmodCloud
           command: |
             sudo apt-get update
             sudo apt-get install sshpass
             sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S Gateway /root/luna-api/swarm/deploy-swarm.sh"
-      # - run:
-      #     name: Deploy to DEV-Sandy-Server
-      #     command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S Sandy ./deploy-sandy.sh"
   deploy-to-prod-gateway:
     machine: true
     steps:
+      # - run:
+      #     name: Deploy to Prod-Gateway&Sandy-Server
+      #     command: |
+      #       sudo apt-get update
+      #       sudo apt-get install sshpass
+      #       sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S Gateway /root/luna-api/swarm/deploy-swarm.sh"
       - run:
-          name: Deploy to Prod-Gateway&Sandy-Server
+          name: Deploy to DEV-Gateway Metrabyte
           command: |
             sudo apt-get update
             sudo apt-get install sshpass
-            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $LUNA_USER@$LUNA_SERVER "ls -a && sudo screen -d -m -S Gateway /root/luna-api/swarm/deploy-swarm.sh"
+            sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_ADMIN@$SERVER "ls -a && sudo screen -d -m -S API ./deploy-api.sh"
+      - run:
+          name: Deploy to DEV-Sandy Metrabyte
+          command: sudo sshpass -p $PASS_SERVER ssh -o StrictHostKeyChecking=no $USER_ADMIN@$SERVER "ls -a && sudo screen -d -m -S Sandy ./deploy-sandy.sh"
   # deploy-to-prod-sandy:
   #   machine: true
   #   steps:

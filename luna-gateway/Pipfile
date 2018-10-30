@@ -15,6 +15,7 @@ uwsgi = "*"
 toolz = "*"
 djangorestframework-jwt = "*"
 requests = "*"
+arrow = "*"
 
 [dev-packages]
 pylint = "*"

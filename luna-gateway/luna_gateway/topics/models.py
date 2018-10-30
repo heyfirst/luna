@@ -20,6 +20,7 @@ class Level(models.Model):
         blank=True,
         default='',
     )
+    score = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return f'{self.level_name}'

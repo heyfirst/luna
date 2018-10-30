@@ -26,5 +26,5 @@ RUN set -x \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& [ "$JAVA_HOME" = "$(docker-java-home)" ]
 
-EXPOSE 3020 17003 22203
+EXPOSE 3020
 CMD ["pm2-runtime", "--json","server.js"]

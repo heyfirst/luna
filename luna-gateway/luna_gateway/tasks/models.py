@@ -10,7 +10,12 @@ class Task(Timestamp):
         default='',
     )
 
-    description = models.TextField(default='')
+    task_desc = models.TextField(default='')
+    input_desc = models.TextField(default='')
+    output_desc = models.TextField(default='')
+    constrain_desc = models.TextField(default='')
+    examples = models.TextField(default='')
+
     default_code = models.TextField(default='')
 
     main_topic = models.ForeignKey(

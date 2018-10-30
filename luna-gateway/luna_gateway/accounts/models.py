@@ -4,12 +4,23 @@ from django.conf import settings
 from core.models import Timestamp
 
 
+def _get_image_name(instance, filename):
+    fn = 'avatars/%s.jpg' % instance.user.username
+    return fn
+
+
 # Create your models here.
 class Account(Timestamp):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
-    nickname = models.CharField(max_length=140, default='')
+
+    avatar = models.ImageField(
+        null=True, blank=True, upload_to=_get_image_name
+    )
+    school = models.CharField(max_length=140, default='')
+    city = models.CharField(max_length=140, default='')
+    bio = models.TextField(default='')
 
     facebook_id = models.CharField(max_length=140, default='')
 

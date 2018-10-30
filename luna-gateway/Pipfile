@@ -16,6 +16,9 @@ toolz = "*"
 djangorestframework-jwt = "*"
 requests = "*"
 arrow = "*"
+pillow = "*"
+django-storages = "*"
+"boto3" = "*"
 
 [dev-packages]
 pylint = "*"

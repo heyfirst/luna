@@ -10,7 +10,12 @@ class Task(Timestamp):
         default='',
     )
 
-    description = models.TextField(default='')
+    task_desc = models.TextField(default='')
+    input_desc = models.TextField(default='')
+    output_desc = models.TextField(default='')
+    constrain_desc = models.TextField(default='')
+    examples = models.TextField(default='')
+
     default_code = models.TextField(default='')
 
     main_topic = models.ForeignKey(
@@ -25,13 +30,15 @@ class Task(Timestamp):
         blank=True,
     )
 
+    enable = models.BooleanField(default=True)
+
     order = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):
         return f'{self.task_name} ({self.main_topic})'
 
     class Meta:
-        ordering = ['order']
+        ordering = ['main_topic', 'order']
 
 
 class Testcase(models.Model):

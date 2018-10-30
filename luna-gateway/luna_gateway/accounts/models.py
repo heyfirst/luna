@@ -9,7 +9,11 @@ class Account(Timestamp):
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
-    nickname = models.CharField(max_length=140, default='')
+
+    avatar = models.ImageField(null=True, blank=True)
+    school = models.CharField(max_length=140, default='')
+    city = models.CharField(max_length=140, default='')
+    bio = models.TextField(default='')
 
     facebook_id = models.CharField(max_length=140, default='')
 

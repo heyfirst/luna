@@ -31,7 +31,7 @@ class Task(Timestamp):
         return f'{self.task_name} ({self.main_topic})'
 
     class Meta:
-        ordering = ['order']
+        ordering = ['main_topic', 'order']
 
 
 class Testcase(models.Model):

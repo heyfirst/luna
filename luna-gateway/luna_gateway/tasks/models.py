@@ -25,6 +25,8 @@ class Task(Timestamp):
         blank=True,
     )
 
+    enable = models.BooleanField(default=True)
+
     order = models.PositiveIntegerField(blank=True, null=True)
 
     def __str__(self):

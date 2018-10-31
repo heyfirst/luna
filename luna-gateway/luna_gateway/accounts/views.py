@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from django.db.models import Count
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -16,6 +17,7 @@ from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework_jwt.utils import jwt_payload_handler, jwt_encode_handler
 
 from tasks.models import Task
+from tasks.serializers import TaskSerializer
 from topics.models import TopicLevel, Level
 from answers.models import Answer
 from topics.serializers import TopicLevelReadSerializer
@@ -192,7 +194,6 @@ class FrequencyPracticsDataView(APIView):
 
 class SkillImprovementDataView(APIView):
     def get(self, request):
-
         user = request.user
         total_answer = None
 
@@ -248,3 +249,33 @@ class SkillImprovementDataView(APIView):
                 resp[date][level] = score
 
         return Response(resp)
+
+
+class SuggestionTasksView(APIView):
+    def get(self, request):
+        user = request.user
+        queryset = Task.objects.filter(
+            order__isnull=True,
+            main_topic__isnull=False,
+        )
+
+        answered_task_pks = Answer.objects.filter(
+            owned_by=user,
+            task__order__isnull=True,
+        ).values_list(
+            'task', flat=True
+        )
+
+        tasks_data = TaskSerializer(queryset, many=True).data
+
+        tasks = [
+            self._add_answered_status(task, answered_task_pks)
+            for task in tasks_data
+        ]
+
+        return Response(tasks)
+
+    def _add_answered_status(self, task, answered_task_pks):
+        if task['id'] in answered_task_pks:
+            task['answered'] = True
+        return task

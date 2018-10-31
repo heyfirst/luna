@@ -6,6 +6,7 @@ from .views import (
     LearningProgressDataView,
     FrequencyPracticsDataView,
     SkillImprovementDataView,
+    SuggestionTasksView,
 )
 
 app_name = 'accounts'
@@ -26,5 +27,10 @@ urlpatterns = [
         'skill-improvement/',
         SkillImprovementDataView.as_view(),
         name='skill-improvement'
+    ),
+    path(
+        'suggestion-tasks/',
+        SuggestionTasksView.as_view(),
+        name='suggestion-tasks'
     ),
 ]

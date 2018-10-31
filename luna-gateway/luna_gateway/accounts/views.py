@@ -137,33 +137,27 @@ class LearningProgressDataView(APIView):
 
         resp = {}
         for result in topic_level_with_user_stats:
-            stats = 2
-
-            # Check Exist stats
-            if (
-                result['topic']['id'] in resp and
-                'stats' in resp[result['topic']['id']]
-            ):
-                stats = resp[result['topic']['id']]['stats']
-
-            # Calculate Stats of Topic
-            try:
-                stats = stats + (
-                    (result['total_answer'] / result['total_tasks'] * 20) - 2
-                )
-            except ZeroDivisionError:
-                stats = stats
-
-            resp[result['topic']['id']] = {
+            topic = result['topic']['id']
+            resp[topic] = {
                 "topic_name": result['topic']['topic_name'],
-                "stats": stats
             }
+
+        for result in topic_level_with_user_stats:
+            topic = result['topic']['id']
+            level_name = result['level']['level_name']
+
+            try:
+                resp[topic][level_name] = result['total_answer']
+            except ZeroDivisionError:
+                resp[topic][level_name] = 0
 
         return Response({**resp})
 
     def _add_user_stats(self, topic_level, user):
         total_answer = Answer.objects.filter(
-            owned_by=user, task__main_topic__pk=topic_level['pk']
+            owned_by=user,
+            task__main_topic__pk=topic_level['pk'],
+            task__order__isnull=False,
         ).count()
 
         total_tasks = Task.objects.filter(

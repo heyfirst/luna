@@ -28,7 +28,10 @@ class TaskViewSet(viewsets.ModelViewSet):
             return self._get_task_or_task_with_answer(task, user)
 
         else:
-            before_task = Task.objects.get(order=task.order - 1)
+            before_task = Task.objects.get(
+                main_topic=task.main_topic,
+                order=task.order - 1,
+            )
             try:
                 Answer.objects.get(
                     owned_by=user,

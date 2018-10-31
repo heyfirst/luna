@@ -37,7 +37,7 @@ class TopicViewSet(viewsets.ModelViewSet):
         # Get Answered tasks from Answer that User've solved
         answered_task_pks = Answer.objects.filter(
             owned_by=user,
-            task__main_topic__pk=pk,
+            task__main_topic__topic__pk=pk,
         ).values_list(
             'task', flat=True
         )
@@ -86,7 +86,10 @@ class TopicViewSet(viewsets.ModelViewSet):
 
 
 class ChallengeTaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.filter(order__isnull=True)
+    queryset = Task.objects.filter(
+        order__isnull=True,
+        main_topic__isnull=False,
+    )
     serializer_class = TaskSerializer
     filter_fields = ('__all__')
     ordering_fields = '__all__'

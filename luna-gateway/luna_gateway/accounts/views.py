@@ -206,10 +206,14 @@ class SkillImprovementDataView(APIView):
         if 'topic_id' in request.GET:
             total_answer = Answer.objects.filter(
                 owned_by=user,
-                task__main_topic__topic__pk=request.GET['topic_id']
+                task__main_topic__topic__pk=request.GET['topic_id'],
+                task__order__isnull=True
             )
         else:
-            total_answer = Answer.objects.filter(owned_by=user, )
+            total_answer = Answer.objects.filter(
+                owned_by=user,
+                task__order__isnull=True,
+            )
 
         # get All Aswers
         total_answer = total_answer.extra(

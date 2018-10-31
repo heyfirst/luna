@@ -71,7 +71,7 @@ class TopicViewSet(viewsets.ModelViewSet):
     def _get_topic_detail_by_user(self, topic, user):
         completed_task = Answer.objects.filter(
             owned_by=user,
-            task__main_topic__pk=topic['pk'],
+            task__main_topic__topic__pk=topic['pk'],
         ).count()
         total_tasks = Task.objects.filter(
             main_topic__topic__pk=topic['pk'],

@@ -85,6 +85,39 @@ class TopicViewSet(viewsets.ModelViewSet):
         }
 
 
+class ChallengeTaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.filter(order__isnull=True)
+    serializer_class = TaskSerializer
+    filter_fields = ('__all__')
+    ordering_fields = '__all__'
+    ordering = ('pk', )
+
+    def list(self, request, *args, **kwargs):
+        user = request.user
+        queryset = self.filter_queryset(self.get_queryset())
+
+        answered_task_pks = Answer.objects.filter(
+            owned_by=user,
+            task__order__isnull=True,
+        ).values_list(
+            'task', flat=True
+        )
+
+        tasks_data = self.get_serializer(queryset, many=True).data
+
+        tasks = [
+            self._add_answered_status(task, answered_task_pks)
+            for task in tasks_data
+        ]
+
+        return Response(tasks)
+
+    def _add_answered_status(self, task, answered_task_pks):
+        if task['id'] in answered_task_pks:
+            task['answered'] = True
+        return task
+
+
 class LevelViewSet(viewsets.ModelViewSet):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer

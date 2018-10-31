@@ -4,6 +4,9 @@ from . import views
 
 router = routers.DefaultRouter()
 
+router.register(
+    r'challenge_tasks', views.ChallengeTaskViewSet, base_name='challenge_task'
+)
 router.register(r'topics', views.TopicViewSet, base_name='topic')
 router.register(r'levels', views.LevelViewSet)
 router.register(r'topic-levels', views.TopicLevelViewSet)

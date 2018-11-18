@@ -98,20 +98,27 @@ class ChallengeTaskViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         user = request.user
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset()
+
+        topic = request.GET.get('topic')
+        level = request.GET.get('level')
 
         answered_task_pks = Answer.objects.filter(
             owned_by=user,
             task__order__isnull=True,
-        ).values_list(
-            'task', flat=True
         )
 
-        tasks_data = self.get_serializer(queryset, many=True).data
+        if (topic != 'All'):
+            queryset = queryset.filter(main_topic__topic__topic_name=topic)
 
+        if (level != 'All'):
+            queryset = queryset.filter(main_topic__level__level_name=level)
+
+        tasks_data = self.get_serializer(queryset, many=True).data
         tasks = [
-            self._add_answered_status(task, answered_task_pks)
-            for task in tasks_data
+            self._add_answered_status(
+                task, answered_task_pks.values_list('task', flat=True)
+            ) for task in tasks_data
         ]
 
         return Response(tasks)

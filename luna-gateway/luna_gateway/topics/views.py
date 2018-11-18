@@ -90,7 +90,8 @@ class ChallengeTaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.filter(
         order__isnull=True,
         main_topic__isnull=False,
-    )
+    ).order_by('-id')
+
     serializer_class = TaskSerializer
     filter_fields = ('__all__')
     ordering_fields = '__all__'

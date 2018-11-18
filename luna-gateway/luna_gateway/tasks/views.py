@@ -90,9 +90,6 @@ class TaskCompletedView(views.APIView):
         )
 
         tasks = Task.objects.filter(pk__in=answer_pks)
-
         data = TaskSerializer(tasks, many=True).data
-
-        print(data)
 
         return Response(data)

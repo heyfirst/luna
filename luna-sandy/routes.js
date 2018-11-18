@@ -8,6 +8,15 @@ const router = Router()
 const createJavaFile = (filepath, data, testcases) => {
   return new Promise((resolve, reject) => {
     const defaultClass = `
+      import java.math.*;
+      import java.util.regex.*;
+      import java.util.stream.*;
+      import java.text.*;
+      import java.security.SecureRandom;
+      import java.util.function.*;
+      import java.util.concurrent.*;
+      import groovy.json.*;
+
       class Main {
         static ${data}
 

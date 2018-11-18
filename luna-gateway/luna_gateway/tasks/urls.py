@@ -9,4 +9,7 @@ router.register(r'testcases', views.TescaseViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path(
+        'completed/', views.TaskCompletedView.as_view(), name='task-completed'
+    )
 ]

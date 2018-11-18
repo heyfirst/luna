@@ -1,5 +1,5 @@
 # from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, views
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
@@ -80,3 +80,19 @@ class TescaseViewSet(viewsets.ModelViewSet):
     filter_fields = ('__all__')
     ordering_fields = '__all__'
     ordering = ('pk', )
+
+
+class TaskCompletedView(views.APIView):
+    def get(self, request):
+        user = request.user
+        answer_pks = Answer.objects.filter(owned_by=user).values_list(
+            'task', flat=True
+        )
+
+        tasks = Task.objects.filter(pk__in=answer_pks)
+
+        data = TaskSerializer(tasks, many=True).data
+
+        print(data)
+
+        return Response(data)

@@ -7,11 +7,15 @@ from .views import (
     FrequencyPracticsDataView,
     SkillImprovementDataView,
     SuggestionTasksView,
+    UploadAvatarView,
 )
 
 app_name = 'accounts'
 urlpatterns = [
     path('me/', MeView.as_view(), name='my-user'),
+    path(
+        'me/upload-avatar/', UploadAvatarView.as_view(), name='upload-avatar'
+    ),
     path('fb-login/', FacebookLoginView.as_view(), name='fb-login'),
     path(
         'learning-progress/',

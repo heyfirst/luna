@@ -22,7 +22,7 @@ from topics.models import TopicLevel, Level
 from answers.models import Answer
 from topics.serializers import TopicLevelReadSerializer
 
-from .serializers import UserSerializer, FacebookLoginSerializer
+from .serializers import UserSerializer, FacebookLoginSerializer, AccountSerializer
 from .models import Account
 
 
@@ -47,11 +47,47 @@ class MeView(RetrieveUpdateAPIView):
         permissions = self._get_user_permissions(instance)
         account_role = self._get_account_role(instance)
 
-        return Response({
-            **serializer.data,
-            **permissions,
-            **account_role,
-        })
+        account = Account.objects.get(user=instance)
+
+        account_data = AccountSerializer(account).data
+
+        return Response(
+            {
+                **serializer.data,
+                **permissions,
+                **account_role,
+                **account_data
+            }
+        )
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        data = request.data
+
+        instance.first_name = data['firstName']
+        instance.last_name = data['lastName']
+        instance.save()
+
+        account = Account.objects.get(user=instance)
+        account.school = data['school']
+        account.city = data['city']
+        account.bio = data['bio']
+        account.save()
+
+        serializer = self.get_serializer(instance)
+        permissions = self._get_user_permissions(instance)
+        account_role = self._get_account_role(instance)
+
+        account_data = AccountSerializer(account).data
+
+        return Response(
+            {
+                **serializer.data,
+                **permissions,
+                **account_role,
+                **account_data
+            }
+        )
 
     def _get_user_permissions(self, user: User) -> Dict[str, Dict[str, str]]:
         permissions = {}
@@ -66,6 +102,18 @@ class MeView(RetrieveUpdateAPIView):
         return {
             'role': user.account.role,
         }
+
+
+class UploadAvatarView(APIView):
+    def post(self, request):
+        user = request.user
+        data = request.data
+        account = Account.objects.get(user__username=user.username)
+        account.avatar = data['avatar']
+        account.save()
+        return Response({
+            'avatar': account.avatar.url,
+        })
 
 
 class FacebookLoginView(APIView):

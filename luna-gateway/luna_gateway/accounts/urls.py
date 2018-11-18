@@ -8,6 +8,7 @@ from .views import (
     SkillImprovementDataView,
     SuggestionTasksView,
     UploadAvatarView,
+    RankingView,
 )
 
 app_name = 'accounts'
@@ -37,4 +38,5 @@ urlpatterns = [
         SuggestionTasksView.as_view(),
         name='suggestion-tasks'
     ),
+    path('ranking/', RankingView.as_view(), name='ranking'),
 ]

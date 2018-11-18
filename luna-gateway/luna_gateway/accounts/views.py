@@ -321,3 +321,37 @@ class SuggestionTasksView(APIView):
         if task['id'] in answered_task_pks:
             task['answered'] = True
         return task
+
+
+class RankingView(APIView):
+    def get(self, request):
+        users = User.objects.all()
+
+        ranks = []
+
+        for user in users:
+            total_answer = Answer.objects.filter(
+                owned_by=user,
+                task__order__isnull=True,
+            )
+            score = 0
+            for result in total_answer:
+                score += result.task.main_topic.level.score
+
+            user_data = UserSerializer(user).data
+            try:
+                account = Account.objects.get(user=user)
+                account_data = AccountSerializer(account).data
+
+                ranks.append([{
+                    **user_data,
+                    **account_data,
+                }, score])
+            except Account.DoesNotExist:
+                continue
+
+        ranks = sorted(ranks, key=lambda user: user[1], reverse=True)
+        return Response(ranks)
+
+    def takeSecond(self, elem):
+        return elem[1]

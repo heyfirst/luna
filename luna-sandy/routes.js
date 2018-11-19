@@ -15,7 +15,6 @@ const createJavaFile = (filepath, data, testcases) => {
       import java.security.SecureRandom;
       import java.util.function.*;
       import java.util.concurrent.*;
-      import groovy.json.*;
 
       class Main {
         static ${data}

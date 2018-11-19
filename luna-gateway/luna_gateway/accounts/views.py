@@ -1,8 +1,9 @@
 import uuid
 import requests
 import arrow
-from django.conf import settings
+from collections import OrderedDict
 
+from django.conf import settings
 from typing import Dict
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -296,26 +297,39 @@ class SkillImprovementDataView(APIView):
 class SuggestionTasksView(APIView):
     def get(self, request):
         user = request.user
+
+        total_answer = Answer.objects.filter(
+            owned_by=user,
+            task__order__isnull=True,
+        )
+
+        score = {
+            'Data Structure': 0,
+            'Condition': 0,
+            'Loop': 0,
+            'Array': 0,
+            'Data Type': 0,
+            'String': 0
+        }
+
+        for result in total_answer:
+            topic_name = result.task.main_topic.topic.topic_name
+            score[topic_name] += result.task.main_topic.level.score
+
+        score = OrderedDict(sorted(score.items()))
+
+        task_name = next(iter(score.keys()))
+        print(task_name)
+
         queryset = Task.objects.filter(
             order__isnull=True,
             main_topic__isnull=False,
-        )
+            main_topic__topic__topic_name=task_name
+        )[:2]
 
-        answered_task_pks = Answer.objects.filter(
-            owned_by=user,
-            task__order__isnull=True,
-        ).values_list(
-            'task', flat=True
-        )
+        task = TaskSerializer(queryset, many=True).data
 
-        tasks_data = TaskSerializer(queryset, many=True).data
-
-        tasks = [
-            self._add_answered_status(task, answered_task_pks)
-            for task in tasks_data
-        ]
-
-        return Response(tasks)
+        return Response(task)
 
     def _add_answered_status(self, task, answered_task_pks):
         if task['id'] in answered_task_pks:

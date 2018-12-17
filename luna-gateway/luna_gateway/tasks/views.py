@@ -7,15 +7,21 @@ from rest_framework import status
 from answers.models import Answer
 from answers.serializers import AnswerSerializer
 from .models import Task, Testcase
-from .serializers import TaskSerializer, TestcaseSerializer
+from .serializers import TaskReadSerializer, TaskWriteSerializer, TestcaseSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
-    serializer_class = TaskSerializer
     filter_fields = ('__all__')
     ordering_fields = '__all__'
     ordering = ('pk', )
+
+    def get_serializer_class(self):
+        if self.action in ['list', 'retrieve']:
+            return TaskReadSerializer
+        if self.action in ['create', 'update', 'partial_update']:
+            return TaskWriteSerializer
+        return TaskReadSerializer
 
     def retrieve(self, request, *args, **kwargs):
         task = self.get_object()
@@ -90,6 +96,6 @@ class TaskCompletedView(views.APIView):
         )
 
         tasks = Task.objects.filter(pk__in=answer_pks)
-        data = TaskSerializer(tasks, many=True).data
+        data = TaskReadSerializer(tasks, many=True).data
 
         return Response(data)

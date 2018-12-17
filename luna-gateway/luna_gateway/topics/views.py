@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from answers.models import Answer
 from tasks.models import Task
-from tasks.serializers import TaskSerializer
+from tasks.serializers import TaskReadSerializer
 from .models import Topic, Level, TopicLevel
 from .serializers import TopicSerializer, LevelSerializer, TopicLevelReadSerializer, TopicLevelWriteSerializer
 
@@ -47,7 +47,7 @@ class TopicViewSet(viewsets.ModelViewSet):
             order__isnull=False,
         )
 
-        tasks_data = TaskSerializer(
+        tasks_data = TaskReadSerializer(
             tasks,
             many=True,
             context={
@@ -92,7 +92,7 @@ class ChallengeTaskViewSet(viewsets.ModelViewSet):
         main_topic__isnull=False,
     ).order_by('-id')
 
-    serializer_class = TaskSerializer
+    serializer_class = TaskReadSerializer
     filter_fields = ('__all__')
     ordering_fields = '__all__'
     ordering = ('pk', )

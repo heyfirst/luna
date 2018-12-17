@@ -27,6 +27,9 @@ class TaskViewSet(viewsets.ModelViewSet):
         task = self.get_object()
         user = request.user
 
+        if (user.groups.all()[0].name == 'admin'):
+            return self._get_task_or_task_with_answer(task, user)
+
         if (task.order == 1):
             return self._get_task_or_task_with_answer(task, user)
 

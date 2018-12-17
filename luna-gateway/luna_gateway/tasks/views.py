@@ -23,6 +23,29 @@ class TaskViewSet(viewsets.ModelViewSet):
             return TaskWriteSerializer
         return TaskReadSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        topic = request.GET.get('topic')
+        level = request.GET.get('level')
+        has_order = request.GET.get('has_order')
+
+        if (topic != 'All'):
+            queryset = queryset.filter(main_topic__topic_id=topic)
+
+        if (level != 'All'):
+            queryset = queryset.filter(main_topic__level_id=level)
+
+        if (has_order == 'True'):
+            queryset = queryset.filter(order__isnull=False)
+        elif (has_order == 'False'):
+            queryset = queryset.filter(order__isnull=True)
+        else:
+            pass
+
+        tasks = self.get_serializer(queryset, many=True).data
+        return Response(tasks)
+
     def retrieve(self, request, *args, **kwargs):
         task = self.get_object()
         user = request.user

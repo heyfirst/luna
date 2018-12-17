@@ -11,5 +11,10 @@ urlpatterns = [
     path('', include(router.urls)),
     path(
         'completed/', views.TaskCompletedView.as_view(), name='task-completed'
+    ),
+    path(
+        'last-order/',
+        views.TaskLastOfOrderView.as_view(),
+        name='task-completed'
     )
 ]

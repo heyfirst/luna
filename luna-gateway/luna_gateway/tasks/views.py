@@ -99,3 +99,16 @@ class TaskCompletedView(views.APIView):
         data = TaskReadSerializer(tasks, many=True).data
 
         return Response(data)
+
+
+class TaskLastOfOrderView(views.APIView):
+    def get(self, request):
+        main_topic = request.GET.get('main_topic')
+
+        task = Task.objects.filter(
+            main_topic_id=main_topic,
+            order__isnull=False,
+        ).order_by('-order')
+
+        data = TaskReadSerializer(task[0]).data
+        return Response(data)

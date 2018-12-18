@@ -49,13 +49,14 @@ class TaskViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         task = self.get_object()
         user = request.user
+
         if (
             user.is_superuser or user.is_staff or
             self._is_admin(user) == 'admin'
         ):
             return self._get_task_or_task_with_answer(task, user)
 
-        if (task.order == 1):
+        elif (task.order == 1):
             return self._get_task_or_task_with_answer(task, user)
 
         elif (task.order is None):
@@ -91,10 +92,13 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def _is_admin(self, user):
-        groups = user.groups.all()
-        if (groups[0]):
-            return groups[0].name
-        else:
+        try:
+            groups = user.groups.all()
+            if (groups[0]):
+                return groups[0].name
+            else:
+                return ''
+        except:
             return ''
 
     def _get_task_or_task_with_answer(self, task, user):

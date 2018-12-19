@@ -1,6 +1,11 @@
 from django.db import models
 
 
+def _get_image_topic(instance, filename):
+    fn = 'topics/%s.jpg' % instance.topic_name
+    return fn
+
+
 class Topic(models.Model):
     topic_name = models.CharField(
         max_length=30,
@@ -8,6 +13,7 @@ class Topic(models.Model):
         default='',
     )
 
+    logo = models.ImageField(null=True, blank=True, upload_to=_get_image_topic)
     description = models.TextField(default='')
 
     def __str__(self):

@@ -8,6 +8,7 @@ class TopicSerializer(serializers.ModelSerializer):
         fields = (
             'pk',
             'topic_name',
+            'logo',
             'description',
         )
 

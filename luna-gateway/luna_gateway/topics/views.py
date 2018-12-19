@@ -13,7 +13,6 @@ from .serializers import TopicSerializer, LevelSerializer, TopicLevelReadSeriali
 class TopicViewSet(viewsets.ModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
-    filter_fields = ('__all__')
     ordering_fields = '__all__'
     ordering = ('pk', )
 

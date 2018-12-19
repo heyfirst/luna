@@ -3,6 +3,8 @@ from rest_framework import viewsets, views
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 from answers.models import Answer
 from answers.serializers import AnswerSerializer
@@ -98,7 +100,7 @@ class TaskViewSet(viewsets.ModelViewSet):
                 return groups[0].name
             else:
                 return ''
-        except:
+        except Exception:
             return ''
 
     def _get_task_or_task_with_answer(self, task, user):
@@ -129,7 +131,13 @@ class TescaseViewSet(viewsets.ModelViewSet):
 
 class TaskCompletedView(views.APIView):
     def get(self, request):
-        user = request.user
+        username = request.GET.get('username')
+        queryset = get_user_model()
+        filter_kwargs = {
+            'username': username,
+        }
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        user = obj
         answer_pks = Answer.objects.filter(owned_by=user).values_list(
             'task', flat=True
         )

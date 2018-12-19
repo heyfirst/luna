@@ -14,7 +14,7 @@ from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.generics import RetrieveUpdateAPIView, RetrieveAPIView
 from rest_framework_jwt.utils import jwt_payload_handler, jwt_encode_handler
 
 from tasks.models import Task
@@ -78,6 +78,50 @@ class MeView(RetrieveUpdateAPIView):
         serializer = self.get_serializer(instance)
         permissions = self._get_user_permissions(instance)
         account_role = self._get_account_role(instance)
+
+        account_data = AccountSerializer(account).data
+
+        return Response(
+            {
+                **serializer.data,
+                **permissions,
+                **account_role,
+                **account_data
+            }
+        )
+
+    def _get_user_permissions(self, user: User) -> Dict[str, Dict[str, str]]:
+        permissions = {}
+        for perm_name in user.get_all_permissions():
+            permissions[perm_name.split('.')[1]] = True
+
+        return {
+            'permissions': permissions,
+        }
+
+    def _get_account_role(self, user: User) -> Dict[str, str]:
+        return {
+            'role': user.account.role,
+        }
+
+
+class AccountView(RetrieveAPIView):
+    queryset = get_user_model()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        username = request.GET.get('username')
+        queryset = self.filter_queryset(self.get_queryset())
+        filter_kwargs = {'username': username}
+        obj = get_object_or_404(queryset, **filter_kwargs)
+
+        instance = obj
+        serializer = self.get_serializer(instance)
+        permissions = self._get_user_permissions(instance)
+        account_role = self._get_account_role(instance)
+
+        account = Account.objects.get(user=instance)
 
         account_data = AccountSerializer(account).data
 
@@ -169,7 +213,13 @@ class FacebookLoginView(APIView):
 
 class LearningProgressDataView(APIView):
     def get(self, request):
-        user = request.user
+        username = request.GET.get('username')
+        queryset = get_user_model()
+        filter_kwargs = {
+            'username': username,
+        }
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        user = obj
 
         topic_levels = TopicLevelReadSerializer(
             TopicLevel.objects.all(),
@@ -224,7 +274,13 @@ class LearningProgressDataView(APIView):
 
 class FrequencyPracticsDataView(APIView):
     def get(self, request):
-        user = request.user
+        username = request.GET.get('username')
+        queryset = get_user_model()
+        filter_kwargs = {
+            'username': username,
+        }
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        user = obj
 
         total_answer = Answer.objects.filter(owned_by=user).extra(
             select={
@@ -237,7 +293,13 @@ class FrequencyPracticsDataView(APIView):
 
 class SkillImprovementDataView(APIView):
     def get(self, request):
-        user = request.user
+        username = request.GET.get('username')
+        queryset = get_user_model()
+        filter_kwargs = {
+            'username': username,
+        }
+        obj = get_object_or_404(queryset, **filter_kwargs)
+        user = obj
         total_answer = None
 
         if 'start_date' not in request.GET and 'end_date' not in request.GET:

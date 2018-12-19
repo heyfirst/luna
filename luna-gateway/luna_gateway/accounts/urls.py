@@ -2,6 +2,7 @@ from django.urls import path
 
 from .views import (
     MeView,
+    AccountView,
     FacebookLoginView,
     LearningProgressDataView,
     FrequencyPracticsDataView,
@@ -14,6 +15,7 @@ from .views import (
 app_name = 'accounts'
 urlpatterns = [
     path('me/', MeView.as_view(), name='my-user'),
+    path('account/', AccountView.as_view(), name='account'),
     path(
         'me/upload-avatar/', UploadAvatarView.as_view(), name='upload-avatar'
     ),

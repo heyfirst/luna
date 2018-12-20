@@ -20,5 +20,4 @@ class TopicLevelAdmin(admin.ModelAdmin):
         'pk',
         'topic',
         'level',
-        'expected_tasks',
     )

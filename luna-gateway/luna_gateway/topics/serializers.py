@@ -31,8 +31,6 @@ class TopicLevelReadSerializer(serializers.ModelSerializer):
             'pk',
             'level',
             'topic',
-            'outcome',
-            'expected_tasks',
         )
 
 
@@ -43,6 +41,4 @@ class TopicLevelWriteSerializer(serializers.ModelSerializer):
             'pk',
             'level',
             'topic',
-            'outcome',
-            'expected_tasks',
         )

@@ -1,11 +1,15 @@
 FROM node:8.9.4-alpine
+
 RUN npm install pm2@latest -g
 WORKDIR /app
 COPY . ./
 RUN yarn install
 
+# Default to UTF-8 file.encoding
 ENV LANG C.UTF-8
 
+# add a simple script that can auto-detect the appropriate JAVA_HOME value
+# based on whether the JDK or only the JRE is installed
 RUN { \
 	echo '#!/bin/sh'; \
 	echo 'set -e'; \
